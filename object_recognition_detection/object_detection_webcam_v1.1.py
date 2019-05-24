@@ -42,9 +42,12 @@ PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 
 NUM_CLASSES = 90
 
-#%%
+#%% Function
 
-
+def create_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 #%%
 # ## Download Model
 
@@ -153,15 +156,19 @@ with detection_graph.as_default():
     now = datetime.datetime.now()
     count = 0
 #    filename = strftime("%Y-%m-%d (%H:%M:%S)", gmtime()) + ".avi"
-    filename = now.strftime("%Y-%m-%d %Hh%Mp%Ss") + ".avi"
-    print(filename)
+    day = now.strftime("%Y-%m-%d")
+    create_dir('./'+ day +'/')
+    filename = "./" + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"
+    #Create folder by date
+    
+
     while (ret):
       ret,image_np = cap.read()
       frame_width = int(cap.get(3))
       frame_height = int(cap.get(4))
       if out == None:       
-          out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(
-                'M', 'J', 'P', 'G'), 5, (frame_width, frame_height))
+          #MJPG là chuẩn video
+          out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'MJPG'), 10, (frame_width, frame_height))
           result = sum(item['name'] == "person" for item in categories)
           count += result
           print(result)
@@ -201,22 +208,11 @@ with detection_graph.as_default():
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7, (255, 255, 255), 2)
         
-      cv2.imshow('Video',cv2.resize(image_np,(2736,1824)))
+      cv2.imshow('Video',cv2.resize(image_np,(1024,720)))
       
       keypress = cv2.waitKey(1) & 0xFF
       if keypress == ord('q'):
-#        cv2.destroyAllWindows()
          break
-    
-#      if keypress == ord('c'):
-#        if out == None:
-#            out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc(
-#                'M', 'J', 'P', 'G'), 6, (frame_width, frame_height))
-#        if capturing: 
-#            capturing = False
-#        else:
-#            capturing = True
-
 if out != None:
     out.release()
 cap.release()
