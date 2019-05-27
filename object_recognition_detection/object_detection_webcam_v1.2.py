@@ -153,6 +153,7 @@ with detection_graph.as_default():
     out = None
     capturing = True
     cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture("input_video/video.mp4")
     now = datetime.datetime.now()
     count = 0
 #    filename = strftime("%Y-%m-%d (%H:%M:%S)", gmtime()) + ".avi"
