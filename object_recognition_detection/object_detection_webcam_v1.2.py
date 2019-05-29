@@ -152,6 +152,7 @@ with detection_graph.as_default():
     ret = True
     out = None
     capturing = True
+    #cap = cv2.VideoCapture('rtsp://admin:Admin@123@192.168.1.64/1')
     cap = cv2.VideoCapture(0)
     #cap = cv2.VideoCapture("input_video/video.mp4")
     now = datetime.datetime.now()
