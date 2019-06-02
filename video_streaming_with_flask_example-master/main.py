@@ -15,7 +15,8 @@
 # 3. Navigate the browser to the local webpage.
 from flask import Flask, render_template, Response
 from camera import VideoCamera
-
+from threading import Thread
+from time import sleep
 
 app = Flask(__name__)
 
@@ -24,12 +25,18 @@ def index():
     return render_template('index.html')
 
 def gen(camera):
+    thread = Thread(target = count_people, args=[camera])
+    thread.start()
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
+def count_people(camera):
+    while True:
+        camera.count_people()
 
+    
 @app.route('/video_feed')
 def video_feed():
     return Response(gen(VideoCamera()),
@@ -38,3 +45,4 @@ def video_feed():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+    

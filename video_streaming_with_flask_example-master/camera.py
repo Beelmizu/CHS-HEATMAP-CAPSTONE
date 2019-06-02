@@ -73,10 +73,13 @@ class VideoCamera(object):
         self.video.release()
     
     def get_frame(self):
-        #success, image = self.video.read()
+        success, image = self.video.read()
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.
+        ret, jpeg = cv2.imencode('.jpg', image)
+        return jpeg.tobytes() 
+    def count_people(self):
         cap = self.video
         with detection_graph.as_default():
           with tf.Session(graph=detection_graph) as sess:
@@ -117,11 +120,4 @@ class VideoCamera(object):
                                                                                                  targeted_objects='person',
                                                                                                  use_normalized_coordinates=True,
                                                                                                  line_thickness=4)
-              font = cv2.FONT_HERSHEY_SIMPLEX
-              if(len(the_result) == 0):
-                  cv2.putText(image_np, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
-              else:
-                  cv2.putText(image_np, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
               
-              ret, jpeg = cv2.imencode('.jpg', image_np)
-              return jpeg.tobytes()
