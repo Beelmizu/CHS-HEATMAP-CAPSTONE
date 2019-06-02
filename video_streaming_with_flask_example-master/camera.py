@@ -59,12 +59,15 @@ category_index = label_map_util.create_category_index(categories)
 
 
 
+
+
 class VideoCamera(object):
     def __init__(self):
         # Using OpenCV to capture from device 0. If you have trouble capturing
         # from a webcam, comment the line below out and use a video file
         # instead.
         self.video = cv2.VideoCapture(0)
+        self.people_num = ""
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
         # self.video = cv2.VideoCapture('video.mp4')
@@ -77,8 +80,15 @@ class VideoCamera(object):
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.
+        
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        if(self.people_num == ""):
+          cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
+        else:
+          cv2.putText(image, self.people_num, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes() 
+
     def count_people(self):
         cap = self.video
         with detection_graph.as_default():
@@ -120,4 +130,4 @@ class VideoCamera(object):
                                                                                                  targeted_objects='person',
                                                                                                  use_normalized_coordinates=True,
                                                                                                  line_thickness=4)
-              
+              self.people_num = the_result
