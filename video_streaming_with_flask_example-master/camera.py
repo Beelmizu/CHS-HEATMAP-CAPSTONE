@@ -3,7 +3,7 @@ import numpy as np
 import os
 import urllib as urllib
 import datetime
-
+import time
 import tarfile
 import tensorflow as tf
 
@@ -66,7 +66,8 @@ class VideoCamera(object):
         # Using OpenCV to capture from device 0. If you have trouble capturing
         # from a webcam, comment the line below out and use a video file
         # instead.
-        self.video = cv2.VideoCapture(0)
+        #self.video = cv2.VideoCapture(0)
+        self.video = cv2.VideoCapture("rtsp://admin:Admin@123@192.168.1.64/1")
         self.people_num = ""
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
@@ -101,7 +102,7 @@ class VideoCamera(object):
             
         
             while (ret):
-              
+              time.sleep(5)
               ret,image_np = cap.read()
               
               image_np_expanded = np.expand_dims(image_np, axis=0)
