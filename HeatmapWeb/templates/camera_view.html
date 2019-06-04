@@ -1,0 +1,23 @@
+
+
+<html>
+  <header>
+      <link rel="stylesheet" href="/static/camera_view_style.css" type="text/css">
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css" id="bootstrap-css">
+      <script src="/static/js/bootstrap.min.js"></script>
+      <script src="/static/jquery/jquery.min.js"></script>
+  </header>
+  <body>
+      <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+          <div class="col-sm-3 float-right">
+            <form action="/logout">
+              <input type="submit" value="Log Out" class="btn btn-primary btn-large btn-block"></button>
+            </form>
+          </div>
+       </nav>
+    <div>
+    <img id="bg" src="{{ url_for('video_feed') }}">
+    </div>
+    
+  </body>
+</html>
