@@ -19,12 +19,18 @@ print(str(addr)+"と接続完了")
 cam = cv2.VideoCapture(0)#カメラオブジェクト作成
 
 while (True):
-
+    
     flag,img = cam.read()       #カメラから画像データを受け取る
 
     img = img.tostring()        #numpy行列からバイトデータに変換
-
-    soc.send(img)              # ソケットにデータを送信
+    try:
+        soc.send(img) # ソケットにデータを送信
+    except:
+        print(str(addr)+"と終了")
+        soc, addr = s.accept()
+        print(str(addr)+"と接続完了") 
+        pass
+                  
 
     #time.sleep(0.5)            #フリーズするなら#を外す。
 
