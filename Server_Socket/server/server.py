@@ -16,10 +16,10 @@ soc, addr = s.accept()          # 要求が来るまでブロック
 
 print(str(addr)+"と接続完了")  
 
-cam = cv2.VideoCapture(0)#カメラオブジェクト作成
+#cam = cv2.VideoCapture(0)#カメラオブジェクト作成
 
 while (True):
-    
+    cam = cv2.VideoCapture('rtsp://admin:Admin@123@192.168.1.64/1')
     flag,img = cam.read()       #カメラから画像データを受け取る
 
     img = img.tostring()        #numpy行列からバイトデータに変換
