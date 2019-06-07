@@ -8,7 +8,13 @@ soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)#ソケットオブジェ
 soc.connect((socket.gethostname(), 80))#サーバー側のipと使用するポート(ポートはサーバーと同じにする。)
 
 print("接続完了")
+port = "192.168.1.64/1"
+user = "admin"
+password = "Admin@123"
 
+portCamera = "rtsp://"+user+":"+password+"@"+port
+
+soc.sendall(portCamera.encode('utf-8'))
 while(1):
     data = soc.recv(2764800)#引数は下記注意点参照
 
