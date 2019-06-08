@@ -4,12 +4,13 @@ import cv2
 import time
 
 
-def runCamera(soc, portCamera):
+def runCamera(portCamera):
     while (True):
         cam = cv2.VideoCapture(portCamera)
         flag,img = cam.read()       #カメラから画像データを受け取る
 
         img = img.tostring()        #numpy行列からバイトデータに変換
+        print("camera_1 is running")
         #try:
             #soc.send(img) # ソケットにデータを送信
         #except:
@@ -29,7 +30,10 @@ def runCamera(soc, portCamera):
 
 def viewCamera(soc, portCamera):
     while (True):
+        if(portCamera == "webcam"):
+            portCamera = 0
         cam = cv2.VideoCapture(portCamera)
+        print(portCamera)
         flag,img = cam.read()       #カメラから画像データを受け取る
 
         img = img.tostring()        #numpy行列からバイトデータに変換
