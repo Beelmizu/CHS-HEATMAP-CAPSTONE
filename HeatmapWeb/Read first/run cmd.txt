@@ -1,2 +1,0 @@
-set FLASK_APP=[ten app].py
-python -m flask run
