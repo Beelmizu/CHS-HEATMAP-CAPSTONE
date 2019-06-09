@@ -118,8 +118,10 @@ def viewCamera(socketio, portCamera):
                                                                                                        np.squeeze(scores),
                                                                                                        category_index,
                                                                                                        targeted_objects='person',
-                                                                                                       use_normalized_coordinates=True,
-                                                                                                       line_thickness=4)
+                                                                                                       use_normalized_coordinates=False,
+                                                                                                       line_thickness=4,
+                                                                                                       max_boxes_to_draw=None,
+                                                                                                       min_score_thresh=0.4)
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     if(the_result == ""):
                         cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
