@@ -118,7 +118,7 @@ def viewCamera(socketio, portCamera):
                                                                                                        np.squeeze(scores),
                                                                                                        category_index,
                                                                                                        targeted_objects='person',
-                                                                                                       use_normalized_coordinates=False,
+                                                                                                       use_normalized_coordinates=True,
                                                                                                        line_thickness=4,
                                                                                                        max_boxes_to_draw=None,
                                                                                                        min_score_thresh=0.4)
