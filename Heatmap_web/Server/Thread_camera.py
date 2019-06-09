@@ -62,29 +62,48 @@ categories = label_map_util.convert_label_map_to_categories(label_map, max_num_c
 category_index = label_map_util.create_category_index(categories)
 
 
-def runCamera(socketio, portCamera):
-    while (True):
-        cam = cv2.VideoCapture(portCamera)
-        flag,img = cam.read()       #カメラから画像データを受け取る
+def runCamera(portCamera):
+    cam = cv2.VideoCapture(portCamera)
+    with detection_graph.as_default():
+        with tf.Session(graph=detection_graph) as sess:
+            ret = True
+            while True:
+                try:
+                    retval, image = cam.read()
+                    image_np_expanded = np.expand_dims(image, axis=0)
+                    image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+                    # Each box represents a part of the image where a particular object was detected.
+                    boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+                    # Each score represent how level of confidence for each of the objects.
+                    # Score is shown on the result image, together with the class label.
+                    scores = detection_graph.get_tensor_by_name('detection_scores:0')
+                    classes = detection_graph.get_tensor_by_name('detection_classes:0')
+                    num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+                    # Actual detection.
+                    (boxes, scores, classes, num_detections) = sess.run(
+                        [boxes, scores, classes, num_detections],
+                        feed_dict={image_tensor: image_np_expanded})
+                    # Visualization of the results of a detection.
+                    is_color_recognition_enabled = 0
+                    counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(cam.get(1),
+                                                                                                       image,
+                                                                                                       1,
+                                                                                                       is_color_recognition_enabled,
+                                                                                                       np.squeeze(boxes),
+                                                                                                       np.squeeze(classes).astype(np.int32),
+                                                                                                       np.squeeze(scores),
+                                                                                                       category_index,
+                                                                                                       targeted_objects='person',
+                                                                                                       use_normalized_coordinates=True,
+                                                                                                       line_thickness=4,
+                                                                                                       max_boxes_to_draw=None,
+                                                                                                       min_score_thresh=0.4)
+                                                                                                       
+                except:
+                    pass
+                
 
-        img = img.tostring()
-        print("1")        #numpy行列からバイトデータに変換
-        #try:
-            #soc.send(img) # ソケットにデータを送信
-        #except:
-            #print(str(addr)+"と終了")
-            #soc, addr = s.accept()
-            #print(str(addr)+"と接続完了") 
-            #pass
-                  
-
-        #time.sleep(0.5)            #フリーズするなら#を外す。
-
-        k = cv2.waitKey(1)         #↖ 
-        if k== 27:                #←　ENTERキーで終了
-            break                  #↙
-
-    cam.releace()                  #カメラオブジェクト破棄
+    cam.releace()     
 
 def viewCamera(socketio, portCamera):
     cam = cv2.VideoCapture(portCamera)

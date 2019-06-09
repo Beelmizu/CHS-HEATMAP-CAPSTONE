@@ -32,8 +32,13 @@ def connected(data):
 	# 	#jpg_as_text = image.tostring()
 	# 	socketio.emit('image', image_text)
 
-    
+
+def setupApp(app):
+	data = 0
+	camera = threading.Thread(target=runCamera, args=(data,))
+	camera.start()
     
 
 if __name__ == '__main__':
+	setupApp(app)
 	socketio.run(app)
