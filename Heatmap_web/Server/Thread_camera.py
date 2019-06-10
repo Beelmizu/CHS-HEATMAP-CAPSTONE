@@ -105,8 +105,10 @@ def runCamera(portCamera):
 
     cam.releace()     
 
-def viewCamera(socketio, portCamera):
+def viewCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
+    #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
+    #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -150,7 +152,8 @@ def viewCamera(socketio, portCamera):
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
-                    socketio.emit('image', image_text)
+                    #truyền về id camera ở html
+                    socketio.emit(idCamera, image_text)
                 except:
                     pass
                 

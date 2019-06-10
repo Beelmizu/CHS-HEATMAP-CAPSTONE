@@ -18,10 +18,15 @@ def handleMessage(msg):
 
 @socketio.on('stream_camera')
 def connected(data):
-	print("Connect to PORT: "+data)
-	if(data == "webcam"):
-		data = 0
-	camera_1 = threading.Thread(target=viewCamera, args=(socketio, data,))
+	index_port = data.find(':')
+	id_camera = data[0:index_port]
+	port = data[index_port+1:len(data)]
+	print("Connect to Camera: "+id_camera)
+	print("Connect to PORT: "+port)
+	
+	if(port == "webcam"):
+		port = 0
+	camera_1 = threading.Thread(target=viewCamera, args=(socketio, id_camera, port,))
 	camera_1.start()
 	# while True:
 
@@ -34,11 +39,11 @@ def connected(data):
 
 
 def setupApp(app):
-	data = 0
-	camera = threading.Thread(target=runCamera, args=(data,))
+	port = 0
+	camera = threading.Thread(target=runCamera, args=(port,))
 	camera.start()
     
 
 if __name__ == '__main__':
-	setupApp(app)
+	#setupApp(app)
 	socketio.run(app)
