@@ -112,6 +112,7 @@ def viewCamera(socketio, idCamera, portCamera):
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
+            timewait = 0
             while True:
                 try:
                     retval, image = cam.read()
@@ -148,14 +149,32 @@ def viewCamera(socketio, idCamera, portCamera):
                         cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
                     else:
                         cv2.putText(image, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
-                    ret, jpeg = cv2.imencode('.jpg', image)
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
-                    socketio.emit(idCamera, image_text)
+                    if(timewait == 2):
+                        socketio.emit(idCamera, image_text)
+                        timewait = 0
+                    #socketio.emit(idCamera, image_text)
+                    timewait = timewait + 1 
                 except:
                     pass
                 
 
     cam.releace()                  #カメラオブジェクト破棄
+
+def viewRawCamera(socketio, idCamera, portCamera):
+    cam = cv2.VideoCapture(portCamera)
+    while True:
+        try:
+
+            retval, image = cam.read()
+            retval, buffer = cv2.imencode('.jpg', image)
+            jpg_as_text = base64.b64encode(buffer)
+            image_text = str(jpg_as_text, "utf-8")
+            socketio.emit(idCamera, image_text)
+        except:
+            pass
+
+    cam.releace() #カメラオブジェクト破棄
