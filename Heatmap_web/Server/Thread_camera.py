@@ -112,7 +112,6 @@ def viewCamera(socketio, idCamera, portCamera):
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
-            timewait = 0
             while True:
                 try:
                     retval, image = cam.read()
@@ -153,11 +152,7 @@ def viewCamera(socketio, idCamera, portCamera):
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
-                    if(timewait == 2):
-                        socketio.emit(idCamera, image_text)
-                        timewait = 0
-                    #socketio.emit(idCamera, image_text)
-                    timewait = timewait + 1 
+                    socketio.emit(idCamera, image_text)
                 except:
                     pass
                 
