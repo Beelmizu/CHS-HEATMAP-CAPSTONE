@@ -9,7 +9,7 @@ $(document).ready(function() {
 		// id camera + port
 		socket.emit('stream_camera', "1:webcam");
 		//rtsp://admin:Admin@123@192.168.1.64/1
-		socket.emit('stream_camera', "2:rtsp://admin:Admin@123@192.168.1.64/1");
+		//socket.emit('stream_camera', "2:rtsp://admin:Admin@123@192.168.1.64/1");
 	});
 	//Đón message từ server
 	socket.on('message', function(msg) {

@@ -148,12 +148,26 @@ def viewCamera(socketio, idCamera, portCamera):
                         cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
                     else:
                         cv2.putText(image, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
+
+                    box = np.squeeze(boxes)
+                    width = 640
+                    height = 480
+                    for i in range(len(boxes)):
+                        ymin = (int(box[i,0]*height))
+                        xmin = (int(box[i,1]*width))
+                        ymax = (int(box[i,2]*height))
+                        xmax = (int(box[i,3]*width))
+                        print("ymin : "+ymin+ ",xmin: " +xmin+",ymax: " +ymax+",xmax: "+ xmax)
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
                     socketio.emit(idCamera, image_text)
-                except:
+                except Exception as e:
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
                     pass
                 
 
