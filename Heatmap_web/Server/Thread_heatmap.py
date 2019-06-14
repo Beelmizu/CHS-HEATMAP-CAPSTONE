@@ -29,7 +29,7 @@ def viewHeatmapCamera(socketio, matrix_heatmap, box, width, height):
             plt.figure()
             # YlOrRd là mã style của seaborn
             # sns.heatmap(matrix_heatmap, cmap='YlOrRd')
-            hmap = sns.heatmap(matrix_heatmap, cmap='YlOrRd')
+            hmap = sns.heatmap(matrix_heatmap, cmap='YlOrRd', xticklabels=False, yticklabels=False)
             #Đảo ngược trục y để 0 đếm từ dưới cùng lên trên
             # hmap.invert_yaxis()
             plt.savefig(img, format='jpg')
