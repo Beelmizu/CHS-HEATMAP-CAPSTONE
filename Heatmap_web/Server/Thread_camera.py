@@ -25,8 +25,6 @@ from utils import visualization_utils as vis_util
 import io
 import threading
 from Thread_heatmap import *
-width = 640
-height = 480
 #%%
 # # Model preparation 
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
@@ -112,15 +110,20 @@ def runCamera(portCamera):
 
 def viewCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
-    #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
-    #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
-    #Tạo Matrix
+    width = int(cam.get(3)) #width camera
+    height = int(cam.get(4)) #height camera
+    # print(width,height)
+    # width = 1000
+    # height = 1000
     matrix_heatmap = [[0 for x in range(width)] for y in range(height)] 
+    #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
+    countdown_heatmap = 1
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
             while True:
                 try:
+                    countdown_heatmap = countdown_heatmap - 1
                     retval, image = cam.read()
                     image_np_expanded = np.expand_dims(image, axis=0)
                     image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
@@ -158,24 +161,17 @@ def viewCamera(socketio, idCamera, portCamera):
                         cv2.putText(image, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
 
                     box = np.squeeze(boxes)
-                    # lấy tọa độ frame object
-                    # for i in range(len(box)):
-                    #     ymin = (int(box[i,0]*height))
-                    #     xmin = (int(box[i,1]*width))
-                    #     ymax = (int(box[i,2]*height))
-                    #     xmax = (int(box[i,3]*width))
-                    #     if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
-                    #         break
-                        # print(ymin,xmin,ymax,xmax)
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
                     socketio.emit(idCamera, image_text)
-                    viewHeatmapCamera(socketio, matrix_heatmap, box)
-                    # heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box,))
-                    # heatmap.start()
-                    socketio.sleep(0.05)
+                    if countdown_heatmap == 0:
+                        #Chạy heatmap sau khi chạy xong 50 frame
+                        countdown_heatmap = 100
+                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box, width, height,))
+                        heatmap.start()
+                    socketio.sleep(0.1)
                 except Exception as e:
                     if hasattr(e, 'message'):
                         print(e.message)
@@ -200,45 +196,7 @@ def viewRawCamera(socketio, idCamera, portCamera):
 
     cam.releace() #カメラオブジェクト破棄
 
-def viewHeatmapCamera(socketio, matrix_heatmap, box):
-    try:
-        img = io.BytesIO()
-        # sns.set_style("dark") #E.G.
-
-        # y = [1,2,3,4,5]
-        # x = [0,2,1,3,4]
-
-        # plt.plot(x,y)
-        # list_2d = [[0, 1, 2], [3, 4, 5]]
-        # list_2d = np.random.rand(1280,720)
-        for i in range(len(box)):
-            ymin = (int(box[i,0]*height))
-            xmin = (int(box[i,1]*width))
-            ymax = (int(box[i,2]*height))
-            xmax = (int(box[i,3]*width))
-            if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
-                break
-
-            for ymin in range(ymax):
-                for xmin in range(xmax):
-                    matrix_heatmap[ymin][xmin] = matrix_heatmap[ymin][xmin]+1
 
 
-        
-        plt.figure()
-        # YlOrRd là mã style của seaborn
-        sns.heatmap(matrix_heatmap, cmap='YlOrRd')
-        # sns.heatmap(matrix_heatmap, cmap='YlOrRd', xticklabels=True, yticklabels=True)
-        plt.savefig(img, format='jpg')
-        plt.close()
-        img.seek(0)
 
-        plot_url = base64.b64encode(img.getvalue())
-        image_text = str(plot_url, "utf-8")
-        socketio.emit("2", image_text)
-    except Exception as e:
-        if hasattr(e, 'message'):
-            print(e.message)
-        else:
-            print(e)
-        pass
+

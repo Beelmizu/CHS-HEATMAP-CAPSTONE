@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, send
 import cv2
 import base64
 from Thread_camera import *
+from Thread_heatmap import *
 import threading
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -26,11 +27,9 @@ def connected(data):
 	
 	if(port == "webcam"):
 		port = 0
+
 	camera_1 = threading.Thread(target=viewCamera, args=(socketio, id_camera, port,))
 	camera_1.start()
-
-	# heat = threading.Thread(target=viewHeatmapCamera, args=(socketio,))
-	# heat.start()
 	# while True:
 
 	# 	retval, image = cap.read()
