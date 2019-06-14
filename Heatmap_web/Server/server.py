@@ -28,6 +28,9 @@ def connected(data):
 		port = 0
 	camera_1 = threading.Thread(target=viewCamera, args=(socketio, id_camera, port,))
 	camera_1.start()
+
+	# heat = threading.Thread(target=viewHeatmapCamera, args=(socketio,))
+	# heat.start()
 	# while True:
 
 	# 	retval, image = cap.read()

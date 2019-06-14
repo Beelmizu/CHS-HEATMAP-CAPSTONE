@@ -10,23 +10,28 @@ import urllib as urllib
 import datetime
 import tarfile
 import tensorflow as tf
-
 from time import gmtime, strftime
 from collections import defaultdict
 from io import StringIO
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 from PIL import Image
-
-
+import seaborn as sns
+import pandas as pd
+import matplotlib as mpl
+mpl.use('Agg')
 from utils import label_map_util
-
 from utils import visualization_utils as vis_util
-
+import io
+import threading
+from Thread_heatmap import *
+width = 640
+height = 480
 #%%
 # # Model preparation 
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
 # By default we use an "SSD with Mobilenet" model here. See the [detection model zoo](https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
+# Màu của seaborn
 
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
@@ -109,6 +114,8 @@ def viewCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
     #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
     #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
+    #Tạo Matrix
+    matrix_heatmap = [[0 for x in range(width)] for y in range(height)] 
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -143,6 +150,7 @@ def viewCamera(socketio, idCamera, portCamera):
                                                                                                        line_thickness=4,
                                                                                                        max_boxes_to_draw=None,
                                                                                                        min_score_thresh=0.4)
+                    # Đặt count vào màn hình
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     if(the_result == ""):
                         cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
@@ -150,19 +158,24 @@ def viewCamera(socketio, idCamera, portCamera):
                         cv2.putText(image, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
 
                     box = np.squeeze(boxes)
-                    width = 640
-                    height = 480
-                    for i in range(len(boxes)):
-                        ymin = (int(box[i,0]*height))
-                        xmin = (int(box[i,1]*width))
-                        ymax = (int(box[i,2]*height))
-                        xmax = (int(box[i,3]*width))
-                        print("ymin : "+ymin+ ",xmin: " +xmin+",ymax: " +ymax+",xmax: "+ xmax)
+                    # lấy tọa độ frame object
+                    # for i in range(len(box)):
+                    #     ymin = (int(box[i,0]*height))
+                    #     xmin = (int(box[i,1]*width))
+                    #     ymax = (int(box[i,2]*height))
+                    #     xmax = (int(box[i,3]*width))
+                    #     if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
+                    #         break
+                        # print(ymin,xmin,ymax,xmax)
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
                     socketio.emit(idCamera, image_text)
+                    viewHeatmapCamera(socketio, matrix_heatmap, box)
+                    # heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box,))
+                    # heatmap.start()
+                    socketio.sleep(0.05)
                 except Exception as e:
                     if hasattr(e, 'message'):
                         print(e.message)
@@ -177,7 +190,6 @@ def viewRawCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
     while True:
         try:
-
             retval, image = cam.read()
             retval, buffer = cv2.imencode('.jpg', image)
             jpg_as_text = base64.b64encode(buffer)
@@ -187,3 +199,46 @@ def viewRawCamera(socketio, idCamera, portCamera):
             pass
 
     cam.releace() #カメラオブジェクト破棄
+
+def viewHeatmapCamera(socketio, matrix_heatmap, box):
+    try:
+        img = io.BytesIO()
+        # sns.set_style("dark") #E.G.
+
+        # y = [1,2,3,4,5]
+        # x = [0,2,1,3,4]
+
+        # plt.plot(x,y)
+        # list_2d = [[0, 1, 2], [3, 4, 5]]
+        # list_2d = np.random.rand(1280,720)
+        for i in range(len(box)):
+            ymin = (int(box[i,0]*height))
+            xmin = (int(box[i,1]*width))
+            ymax = (int(box[i,2]*height))
+            xmax = (int(box[i,3]*width))
+            if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
+                break
+
+            for ymin in range(ymax):
+                for xmin in range(xmax):
+                    matrix_heatmap[ymin][xmin] = matrix_heatmap[ymin][xmin]+1
+
+
+        
+        plt.figure()
+        # YlOrRd là mã style của seaborn
+        sns.heatmap(matrix_heatmap, cmap='YlOrRd')
+        # sns.heatmap(matrix_heatmap, cmap='YlOrRd', xticklabels=True, yticklabels=True)
+        plt.savefig(img, format='jpg')
+        plt.close()
+        img.seek(0)
+
+        plot_url = base64.b64encode(img.getvalue())
+        image_text = str(plot_url, "utf-8")
+        socketio.emit("2", image_text)
+    except Exception as e:
+        if hasattr(e, 'message'):
+            print(e.message)
+        else:
+            print(e)
+        pass
