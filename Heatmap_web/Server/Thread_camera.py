@@ -115,7 +115,14 @@ def viewCamera(socketio, idCamera, portCamera):
     # print(width,height)
     # width = 1000
     # height = 1000
-    matrix_heatmap = [[0 for x in range(width)] for y in range(height)] 
+    # height , width , layers =  img.shape
+    #Resize ảnh còn 1 nửa
+    new_h=height/2
+    new_w=width/2
+    new_h = int(new_h)
+    new_w = int(new_w)
+    # print(new_h,new_w)
+    matrix_heatmap = [[0 for x in range(new_w)] for y in range(new_h)] 
     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     with detection_graph.as_default():
@@ -124,7 +131,8 @@ def viewCamera(socketio, idCamera, portCamera):
             while True:
                 try:
                     countdown_heatmap = countdown_heatmap - 1
-                    retval, image = cam.read()
+                    retval, image_read = cam.read()
+                    image = cv2.resize(image_read, (new_w, new_h))
                     image_np_expanded = np.expand_dims(image, axis=0)
                     image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
                     # Each box represents a part of the image where a particular object was detected.
@@ -150,15 +158,15 @@ def viewCamera(socketio, idCamera, portCamera):
                                                                                                        category_index,
                                                                                                        targeted_objects='person',
                                                                                                        use_normalized_coordinates=True,
-                                                                                                       line_thickness=4,
+                                                                                                       line_thickness=2,
                                                                                                        max_boxes_to_draw=None,
                                                                                                        min_score_thresh=0.4)
                     # Đặt count vào màn hình
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     if(the_result == ""):
-                        cv2.putText(image, "...", (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
+                        cv2.putText(image, "...", (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
                     else:
-                        cv2.putText(image, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
+                        cv2.putText(image, the_result, (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
 
                     box = np.squeeze(boxes)
                     retval, buffer = cv2.imencode('.jpg', image)
@@ -167,9 +175,9 @@ def viewCamera(socketio, idCamera, portCamera):
                     #truyền về id camera ở html
                     socketio.emit(idCamera, image_text)
                     if countdown_heatmap == 0:
-                        #Chạy heatmap sau khi chạy xong 50 frame
-                        countdown_heatmap = 100
-                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box, width, height,))
+                        #Chạy heatmap sau khi chạy xong 25 frame
+                        countdown_heatmap = 25
+                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box, new_w, new_h,))
                         heatmap.start()
                     socketio.sleep(0.1)
                 except Exception as e:
