@@ -25,6 +25,8 @@ from utils import visualization_utils as vis_util
 import io
 import threading
 from Thread_heatmap import *
+import signal
+import sys
 #%%
 # # Model preparation 
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
@@ -106,7 +108,7 @@ def runCamera(portCamera):
                     pass
                 
 
-    cam.releace()     
+    cam.release()     
 
 def viewCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
@@ -125,6 +127,12 @@ def viewCamera(socketio, idCamera, portCamera):
     matrix_heatmap = [[0 for x in range(new_w)] for y in range(new_h)] 
     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
+    now = datetime.datetime.now()
+    count = 0
+    day = now.strftime("%Y-%m-%d")
+    create_dir('./streaming_data/video/'+ day +'/')
+    filename = "./streaming_data/video/" + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"    
+    out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -167,18 +175,20 @@ def viewCamera(socketio, idCamera, portCamera):
                         cv2.putText(image, "...", (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
                     else:
                         cv2.putText(image, the_result, (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
-
+                    #record video
                     box = np.squeeze(boxes)
                     retval, buffer = cv2.imencode('.jpg', image)
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
                     socketio.emit(idCamera, image_text)
+                    
                     if countdown_heatmap == 0:
                         #Chạy heatmap sau khi chạy xong 25 frame
                         countdown_heatmap = 25
                         heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box, new_w, new_h,))
                         heatmap.start()
+                    out.write(image)
                     socketio.sleep(0.1)
                 except Exception as e:
                     if hasattr(e, 'message'):
@@ -186,9 +196,7 @@ def viewCamera(socketio, idCamera, portCamera):
                     else:
                         print(e)
                     pass
-                
-
-    cam.releace()                  #カメラオブジェクト破棄
+    cam.release()
 
 def viewRawCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
@@ -202,9 +210,12 @@ def viewRawCamera(socketio, idCamera, portCamera):
         except:
             pass
 
-    cam.releace() #カメラオブジェクト破棄
+    cam.release() #カメラオブジェクト破棄
 
 
-
+def create_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 

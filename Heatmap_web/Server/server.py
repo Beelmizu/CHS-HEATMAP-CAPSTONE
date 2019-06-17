@@ -45,7 +45,10 @@ def setupApp(app):
 	camera = threading.Thread(target=runCamera, args=(port,))
 	camera.start()
     
-
+def signal_handler(sig, frame):
+    print("-----END-----")
+    sys.exit(0)
 if __name__ == '__main__':
 	#setupApp(app)
+	signal.signal(signal.SIGINT, signal_handler)
 	socketio.run(app)
