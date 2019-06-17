@@ -32,7 +32,7 @@ import sys
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
 # By default we use an "SSD with Mobilenet" model here. See the [detection model zoo](https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
 # Màu của seaborn
-
+retake_heatmap_count = 25
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
@@ -65,52 +65,9 @@ with detection_graph.as_default():
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
+ 
 
-
-def runCamera(portCamera):
-    cam = cv2.VideoCapture(portCamera)
-    with detection_graph.as_default():
-        with tf.Session(graph=detection_graph) as sess:
-            ret = True
-            while True:
-                try:
-                    retval, image = cam.read()
-                    image_np_expanded = np.expand_dims(image, axis=0)
-                    image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-                    # Each box represents a part of the image where a particular object was detected.
-                    boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-                    # Each score represent how level of confidence for each of the objects.
-                    # Score is shown on the result image, together with the class label.
-                    scores = detection_graph.get_tensor_by_name('detection_scores:0')
-                    classes = detection_graph.get_tensor_by_name('detection_classes:0')
-                    num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-                    # Actual detection.
-                    (boxes, scores, classes, num_detections) = sess.run(
-                        [boxes, scores, classes, num_detections],
-                        feed_dict={image_tensor: image_np_expanded})
-                    # Visualization of the results of a detection.
-                    is_color_recognition_enabled = 0
-                    counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(cam.get(1),
-                                                                                                       image,
-                                                                                                       1,
-                                                                                                       is_color_recognition_enabled,
-                                                                                                       np.squeeze(boxes),
-                                                                                                       np.squeeze(classes).astype(np.int32),
-                                                                                                       np.squeeze(scores),
-                                                                                                       category_index,
-                                                                                                       targeted_objects='person',
-                                                                                                       use_normalized_coordinates=True,
-                                                                                                       line_thickness=4,
-                                                                                                       max_boxes_to_draw=None,
-                                                                                                       min_score_thresh=0.4)
-                                                                                                       
-                except:
-                    pass
-                
-
-    cam.release()     
-
-def viewCamera(socketio, idCamera, portCamera):
+def runCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
     width = int(cam.get(3)) #width camera
     height = int(cam.get(4)) #height camera
@@ -128,11 +85,13 @@ def viewCamera(socketio, idCamera, portCamera):
     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     now = datetime.datetime.now()
-    count = 0
     day = now.strftime("%Y-%m-%d")
-    create_dir('./streaming_data/video/'+ day +'/')
-    filename = "./streaming_data/video/" + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"    
-    out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
+    create_dir('./Server_data/Save_data/Camera/'+ idCamera +'/'+ day +'/')
+    save_file_location = "./Server_data/Save_data/Camera/"+ idCamera + '/' + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"
+    save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
+
+    # filename = "./Server_data/Save_data/Camera/"+ idCamera +".avi"    
+    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -181,15 +140,17 @@ def viewCamera(socketio, idCamera, portCamera):
                     jpg_as_text = base64.b64encode(buffer)
                     image_text = str(jpg_as_text, "utf-8")
                     #truyền về id camera ở html
-                    socketio.emit(idCamera, image_text)
+                    # socketio.emit(idCamera, image_text)
                     
                     if countdown_heatmap == 0:
                         #Chạy heatmap sau khi chạy xong 25 frame
-                        countdown_heatmap = 25
-                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, matrix_heatmap, box, new_w, new_h,))
+                        countdown_heatmap = retake_heatmap_count
+                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, idCamera, matrix_heatmap, box, new_w, new_h,))
                         heatmap.start()
-                    out.write(image)
-                    socketio.sleep(0.1)
+                    save_camera.write(image)
+                    cv2.imwrite(save_frame_location, image)
+                    time.sleep(0.1) 
+                    # socketio.sleep(0.5)
                 except Exception as e:
                     if hasattr(e, 'message'):
                         print(e.message)
@@ -212,6 +173,34 @@ def viewRawCamera(socketio, idCamera, portCamera):
 
     cam.release() #カメラオブジェクト破棄
 
+def getFrameCamera(socketio, idCamera):
+    # cap = cv2.VideoCapture('./streaming_data/video/1.avi')
+    save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
+    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/"+ idCamera + ".jpg"
+    countdown_heatmap = 1
+    while True:
+        try:
+            countdown_heatmap = countdown_heatmap - 1
+            # get stream camera
+            image_camera = cv2.imread(save_frame_location)
+            retval_camera, jpg_camera = cv2.imencode('.jpg', image_camera)
+            jpg_camera_as_text = base64.b64encode(jpg_camera)
+            stream_camera_text = str(jpg_camera_as_text, "utf-8")
+            # print(image)
+            socketio.sleep(0.1)
+            socketio.emit("stream_camera", stream_camera_text)
+            if countdown_heatmap == 0:
+                countdown_heatmap = retake_heatmap_count
+                #get heatmap
+                image_heatmap = cv2.imread(save_heatmap_location)
+                retval_heatmap, jpg_heatmap = cv2.imencode('.jpg', image_heatmap)
+                jpg_heatmap_as_text = base64.b64encode(jpg_heatmap)
+                stream_heatmap_text = str(jpg_heatmap_as_text, "utf-8")
+                # print(image)
+                socketio.sleep(0.1)
+                socketio.emit("stream_heatmap", stream_heatmap_text)
+        except:
+            pass
 
 def create_dir(file_path):
     directory = os.path.dirname(file_path)

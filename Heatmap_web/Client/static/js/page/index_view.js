@@ -15,12 +15,16 @@ $(document).ready(function() {
 	socket.on('message', function(msg) {
 		
 	});
-	socket.on('1', (image) => {
+	socket.on('disconnect', function() {
+		console.log("Camera DISSSSSSSSSSSSSSSSSSSSSSSSs");
+		// socket.emit('stream_camera', "1:webcam");
+	});
+	socket.on('stream_camera', (image) => {
 		img = document.getElementById('frame_1');
 		console.log("Camera 111111111111111111111111111");
 		img.src = `data:image/jpeg;base64,${image}`;
 	});
-	socket.on('2', (image) => {
+	socket.on('stream_heatmap', (image) => {
 		img = document.getElementById('frame_2');
 		console.log("Camera 2222222222222222222222222222");
 		img.src = `data:image/jpeg;base64,${image}`;

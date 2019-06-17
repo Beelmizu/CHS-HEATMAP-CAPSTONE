@@ -27,9 +27,8 @@ def connected(data):
 	
 	if(port == "webcam"):
 		port = 0
-
-	camera_1 = threading.Thread(target=viewCamera, args=(socketio, id_camera, port,))
-	camera_1.start()
+	camera_2 = threading.Thread(target=getFrameCamera, args=(socketio, id_camera,))
+	camera_2.start()
 	# while True:
 
 	# 	retval, image = cap.read()
@@ -41,14 +40,16 @@ def connected(data):
 
 
 def setupApp(app):
+	id_camera = "1"
 	port = 0
-	camera = threading.Thread(target=runCamera, args=(port,))
-	camera.start()
+	camera_1 = threading.Thread(target=runCamera, args=(socketio, id_camera, port,))
+	camera_1.start()
     
 def signal_handler(sig, frame):
-    print("-----END-----")
-    sys.exit(0)
+	# cleanup_stop_thread()
+	print("-----END-----")
+	# sys.exit(0)
 if __name__ == '__main__':
-	#setupApp(app)
+	setupApp(app)
 	signal.signal(signal.SIGINT, signal_handler)
 	socketio.run(app)

@@ -6,9 +6,10 @@ import matplotlib as mpl
 import base64
 from flask_socketio import SocketIO, send
 from matplotlib import pyplot as plt
-def viewHeatmapCamera(socketio, matrix_heatmap, box, width, height):
+def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
     try:
         img = io.BytesIO()
+        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/"+ idCamera + ".jpg"
         # print(box)
         for i in range(len(box)):
             ymin = (int(box[i,0]*height))
@@ -32,13 +33,13 @@ def viewHeatmapCamera(socketio, matrix_heatmap, box, width, height):
             hmap = sns.heatmap(matrix_heatmap, cmap='YlOrRd', xticklabels=False, yticklabels=False)
             #Đảo ngược trục y để 0 đếm từ dưới cùng lên trên
             # hmap.invert_yaxis()
-            plt.savefig(img, format='jpg')
+            plt.savefig(save_heatmap_location)
             plt.close()
-            img.seek(0)
+            # img.seek(0)
 
-            plot_url = base64.b64encode(img.getvalue())
-            image_text = str(plot_url, "utf-8")
-            socketio.emit("2", image_text)
+            # plot_url = base64.b64encode(img.getvalue())
+            # image_text = str(plot_url, "utf-8")
+            # socketio.emit("2", image_text)
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)
