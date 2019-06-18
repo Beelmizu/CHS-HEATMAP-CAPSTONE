@@ -115,13 +115,21 @@ def runCamera(socketio, idCamera, portCamera):
                         feed_dict={image_tensor: image_np_expanded})
                     # Visualization of the results of a detection.
                     is_color_recognition_enabled = 0
+                    boxes = np.squeeze(boxes)
+                    scores = np.squeeze(scores)
+                    classes = np.squeeze(classes)
+                    # chỉ check lấy người
+                    indices = np.argwhere(classes == 1)
+                    boxes = np.squeeze(boxes[indices])
+                    scores = np.squeeze(scores[indices])
+                    classes = np.squeeze(classes[indices])
                     counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(cam.get(1),
                                                                                                        image,
                                                                                                        1,
                                                                                                        is_color_recognition_enabled,
-                                                                                                       np.squeeze(boxes),
-                                                                                                       np.squeeze(classes).astype(np.int32),
-                                                                                                       np.squeeze(scores),
+                                                                                                       boxes,
+                                                                                                       classes.astype(np.int32),
+                                                                                                       scores,
                                                                                                        category_index,
                                                                                                        targeted_objects='person',
                                                                                                        use_normalized_coordinates=True,
@@ -149,7 +157,7 @@ def runCamera(socketio, idCamera, portCamera):
                         heatmap.start()
                     save_camera.write(image)
                     cv2.imwrite(save_frame_location, image)
-                    time.sleep(0.1) 
+                    time.sleep(0.05) 
                     # socketio.sleep(0.5)
                 except Exception as e:
                     if hasattr(e, 'message'):
@@ -187,9 +195,10 @@ def getFrameCamera(socketio, idCamera):
             jpg_camera_as_text = base64.b64encode(jpg_camera)
             stream_camera_text = str(jpg_camera_as_text, "utf-8")
             # print(image)
-            socketio.sleep(0.1)
+            socketio.sleep(0.05)
             socketio.emit("stream_camera", stream_camera_text)
             if countdown_heatmap == 0:
+                # print(countdown_heatmap)
                 countdown_heatmap = retake_heatmap_count
                 #get heatmap
                 image_heatmap = cv2.imread(save_heatmap_location)
@@ -197,7 +206,7 @@ def getFrameCamera(socketio, idCamera):
                 jpg_heatmap_as_text = base64.b64encode(jpg_heatmap)
                 stream_heatmap_text = str(jpg_heatmap_as_text, "utf-8")
                 # print(image)
-                socketio.sleep(0.1)
+                socketio.sleep(0.05)
                 socketio.emit("stream_heatmap", stream_heatmap_text)
         except:
             pass
