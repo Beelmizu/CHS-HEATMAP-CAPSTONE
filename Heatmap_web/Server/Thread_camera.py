@@ -24,6 +24,7 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import io
 import threading
+from main import *
 from Thread_heatmap import *
 import signal
 import sys
@@ -89,7 +90,7 @@ def runCamera(socketio, idCamera, portCamera):
     create_dir('./Server_data/Save_data/Camera/'+ idCamera +'/'+ day +'/')
     save_file_location = "./Server_data/Save_data/Camera/"+ idCamera + '/' + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"
     save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
-
+    
     # filename = "./Server_data/Save_data/Camera/"+ idCamera +".avi"    
     save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
     with detection_graph.as_default():
@@ -209,7 +210,9 @@ def getFrameCamera(socketio, idCamera):
                 socketio.sleep(0.05)
                 socketio.emit("stream_heatmap", stream_heatmap_text)
         except:
+            uploadFile(idCamera + ".jpg", "./Server_data/Streaming_data/Camera/" + idCamera + ".jpg", 'image/jpg')
             pass
+    
 
 def create_dir(file_path):
     directory = os.path.dirname(file_path)
