@@ -5,6 +5,8 @@ import base64
 from Thread_camera import *
 from Thread_heatmap import *
 import threading
+from urllib.request import urlopen
+import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 socketio = SocketIO(app)
@@ -40,6 +42,13 @@ def connected(data):
 
 
 def setupApp(app):
+	jsonurl = urlopen("http://localhost:8080/api/cameras/getAll")
+	text = json.loads(jsonurl.read())
+	#Lấy id đầu tiên
+	# print(text[0]['id'])
+	# print(text)
+	# for camera in text:
+	# 	print(camera['account'])
 	id_camera = "1"
 	port = 0
 	camera_1 = threading.Thread(target=runCamera, args=(socketio, id_camera, port,))
