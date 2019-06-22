@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
     try:
         img = io.BytesIO()
-        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/"+ idCamera + ".jpg"
+        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".jpg"
         # print(box)
         for i in range(len(box)):
             ymin = (int(box[i,0]*height))
@@ -46,3 +46,4 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
         else:
             print(e)
         pass
+

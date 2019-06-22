@@ -24,7 +24,7 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import io
 import threading
-from main import *
+# from main import *
 from Thread_heatmap import *
 import signal
 import sys
@@ -77,8 +77,8 @@ def runCamera(socketio, idCamera, portCamera):
     # height = 1000
     # height , width , layers =  img.shape
     #Resize ảnh còn 1 nửa
-    new_h=height/2
-    new_w=width/2
+    new_h=height/2.5
+    new_w=width/2.5
     new_h = int(new_h)
     new_w = int(new_w)
     # print(new_h,new_w)
@@ -100,73 +100,77 @@ def runCamera(socketio, idCamera, portCamera):
                 try:
                     countdown_heatmap = countdown_heatmap - 1
                     retval, image_read = cam.read()
-                    image = cv2.resize(image_read, (new_w, new_h))
-                    image_np_expanded = np.expand_dims(image, axis=0)
-                    image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-                    # Each box represents a part of the image where a particular object was detected.
-                    boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-                    # Each score represent how level of confidence for each of the objects.
-                    # Score is shown on the result image, together with the class label.
-                    scores = detection_graph.get_tensor_by_name('detection_scores:0')
-                    classes = detection_graph.get_tensor_by_name('detection_classes:0')
-                    num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-                    # Actual detection.
-                    (boxes, scores, classes, num_detections) = sess.run(
-                        [boxes, scores, classes, num_detections],
-                        feed_dict={image_tensor: image_np_expanded})
-                    # Visualization of the results of a detection.
-                    is_color_recognition_enabled = 0
-                    boxes = np.squeeze(boxes)
-                    scores = np.squeeze(scores)
-                    classes = np.squeeze(classes)
-                    # chỉ check lấy người
-                    indices = np.argwhere(classes == 1)
-                    boxes = np.squeeze(boxes[indices])
-                    scores = np.squeeze(scores[indices])
-                    classes = np.squeeze(classes[indices])
-                    counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(cam.get(1),
-                                                                                                       image,
-                                                                                                       1,
-                                                                                                       is_color_recognition_enabled,
-                                                                                                       boxes,
-                                                                                                       classes.astype(np.int32),
-                                                                                                       scores,
-                                                                                                       category_index,
-                                                                                                       targeted_objects='person',
-                                                                                                       use_normalized_coordinates=True,
-                                                                                                       line_thickness=2,
-                                                                                                       max_boxes_to_draw=None,
-                                                                                                       min_score_thresh=0.4)
-                    # Đặt count vào màn hình
-                    font = cv2.FONT_HERSHEY_SIMPLEX
-                    if(the_result == ""):
-                        cv2.putText(image, "...", (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
+                    if image_read is not None:
+                        image = cv2.resize(image_read, (new_w, new_h))
+                        image_np_expanded = np.expand_dims(image, axis=0)
+                        image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+                        # Each box represents a part of the image where a particular object was detected.
+                        boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+                        # Each score represent how level of confidence for each of the objects.
+                        # Score is shown on the result image, together with the class label.
+                        scores = detection_graph.get_tensor_by_name('detection_scores:0')
+                        classes = detection_graph.get_tensor_by_name('detection_classes:0')
+                        num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+                        # Actual detection.
+                        (boxes, scores, classes, num_detections) = sess.run(
+                            [boxes, scores, classes, num_detections],
+                            feed_dict={image_tensor: image_np_expanded})
+                        # Visualization of the results of a detection.
+                        is_color_recognition_enabled = 0
+                        boxes = np.squeeze(boxes)
+                        scores = np.squeeze(scores)
+                        classes = np.squeeze(classes)
+                        # chỉ check lấy người
+                        indices = np.argwhere(classes == 1)
+                        boxes = np.squeeze(boxes[indices])
+                        scores = np.squeeze(scores[indices])
+                        classes = np.squeeze(classes[indices])
+                        counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(cam.get(1),
+                                                                                                        image,
+                                                                                                        1,
+                                                                                                        is_color_recognition_enabled,
+                                                                                                        boxes,
+                                                                                                        classes.astype(np.int32),
+                                                                                                        scores,
+                                                                                                        category_index,
+                                                                                                        targeted_objects='person',
+                                                                                                        use_normalized_coordinates=True,
+                                                                                                        line_thickness=2,
+                                                                                                        max_boxes_to_draw=None,
+                                                                                                        min_score_thresh=0.4)
+                        # Đặt count vào màn hình
+                        font = cv2.FONT_HERSHEY_SIMPLEX
+                        if(the_result == ""):
+                            cv2.putText(image, "...", (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
+                        else:
+                            cv2.putText(image, the_result, (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
+                        #record video
+                        box = np.squeeze(boxes)
+                        retval, buffer = cv2.imencode('.jpg', image)
+                        jpg_as_text = base64.b64encode(buffer)
+                        image_text = str(jpg_as_text, "utf-8")
+                        #truyền về id camera ở html
+                        # socketio.emit(idCamera, image_text)
+                        
+                        if countdown_heatmap == 0:
+                            #Chạy heatmap sau khi chạy xong 25 frame
+                            countdown_heatmap = retake_heatmap_count
+                            heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, idCamera, matrix_heatmap, box, new_w, new_h,))
+                            heatmap.start()
+                        save_camera.write(image)
+                        cv2.imwrite(save_frame_location, image)
+                        time.sleep(0.1) 
+                        # socketio.sleep(0.5)
                     else:
-                        cv2.putText(image, the_result, (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
-                    #record video
-                    box = np.squeeze(boxes)
-                    retval, buffer = cv2.imencode('.jpg', image)
-                    jpg_as_text = base64.b64encode(buffer)
-                    image_text = str(jpg_as_text, "utf-8")
-                    #truyền về id camera ở html
-                    # socketio.emit(idCamera, image_text)
-                    
-                    if countdown_heatmap == 0:
-                        #Chạy heatmap sau khi chạy xong 25 frame
-                        countdown_heatmap = retake_heatmap_count
-                        heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, idCamera, matrix_heatmap, box, new_w, new_h,))
-                        heatmap.start()
-                    save_camera.write(image)
-                    cv2.imwrite(save_frame_location, image)
-                    time.sleep(0.05) 
-                    # socketio.sleep(0.5)
+                        cam = cv2.VideoCapture(portCamera)
                 except Exception as e:
                     if hasattr(e, 'message'):
                         print(e.message)
                     else:
                         print(e)
+                        
                     pass
-    cam.release()
+    # cam.release()
 
 def viewRawCamera(socketio, idCamera, portCamera):
     cam = cv2.VideoCapture(portCamera)
@@ -185,7 +189,7 @@ def viewRawCamera(socketio, idCamera, portCamera):
 def getFrameCamera(socketio, idCamera):
     # cap = cv2.VideoCapture('./streaming_data/video/1.avi')
     save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
-    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/"+ idCamera + ".jpg"
+    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".jpg"
     countdown_heatmap = 1
     while True:
         try:
@@ -196,7 +200,7 @@ def getFrameCamera(socketio, idCamera):
             jpg_camera_as_text = base64.b64encode(jpg_camera)
             stream_camera_text = str(jpg_camera_as_text, "utf-8")
             # print(image)
-            socketio.sleep(0.05)
+            socketio.sleep(0.1)
             socketio.emit("stream_camera", stream_camera_text)
             if countdown_heatmap == 0:
                 # print(countdown_heatmap)
@@ -207,10 +211,10 @@ def getFrameCamera(socketio, idCamera):
                 jpg_heatmap_as_text = base64.b64encode(jpg_heatmap)
                 stream_heatmap_text = str(jpg_heatmap_as_text, "utf-8")
                 # print(image)
-                socketio.sleep(0.05)
+                socketio.sleep(0.1)
                 socketio.emit("stream_heatmap", stream_heatmap_text)
         except:
-            uploadFile(idCamera + ".jpg", "./Server_data/Streaming_data/Camera/" + idCamera + ".jpg", 'image/jpg')
+            # uploadFile(idCamera + ".jpg", "./Server_data/Streaming_data/Camera/" + idCamera + ".jpg", 'image/jpg')
             pass
     
 
