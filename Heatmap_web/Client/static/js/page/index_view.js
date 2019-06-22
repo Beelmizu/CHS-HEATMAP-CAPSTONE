@@ -27,7 +27,7 @@ $(document).ready(function() {
 	socket.on('stream_heatmap', (image) => {
 		img = document.getElementById('frame_2');
 		console.log("Camera 2222222222222222222222222222");
-		img.src = `data:image/jpeg;base64,${image}`;
+		img.src = `data:image/png;base64,${image}`;
 	});
 
 });

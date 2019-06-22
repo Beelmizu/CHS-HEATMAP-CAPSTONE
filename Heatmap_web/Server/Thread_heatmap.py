@@ -1,15 +1,15 @@
 
 import io
-import seaborn as sns
-import pandas as pd
-import matplotlib as mpl
 import base64
 from flask_socketio import SocketIO, send
-from matplotlib import pyplot as plt
+from heatmappy import Heatmapper
+from PIL import Image
+import cv2
 def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
     try:
         img = io.BytesIO()
-        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".jpg"
+        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".png"
+        save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
         # print(box)
         for i in range(len(box)):
             ymin = (int(box[i,0]*height))
@@ -18,23 +18,30 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
             xmax = (int(box[i,3]*width))
             if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
                 break
-                        
+
+            y = (ymin+ymax)//2
+            x = (xmin+xmax)//2
             # print(ymin, xmin, ymax, xmax)
-            for y in range(ymin, ymax):
-                for x in range(xmin, xmax):
-                    # print(y,x)
-                    matrix_heatmap[y][x] = matrix_heatmap[y][x]+1
-
-
-                    
-            plt.figure()
-            # YlOrRd là mã style của seaborn
-            # sns.heatmap(matrix_heatmap, cmap='YlOrRd')
-            hmap = sns.heatmap(matrix_heatmap, cmap='YlOrRd', xticklabels=False, yticklabels=False)
-            #Đảo ngược trục y để 0 đếm từ dưới cùng lên trên
-            # hmap.invert_yaxis()
-            plt.savefig(save_heatmap_location)
-            plt.close()
+            # for y in range(ymin, ymax):
+            #     for x in range(xmin, xmax):
+            #         # print(y,x)
+            #         matrix_heatmap[y][x] = matrix_heatmap[y][x]+1
+            # point = [(x, y)]
+            matrix_heatmap.append((x,y))
+            heatmapper = Heatmapper(
+                point_diameter=50,  # the size of each point to be drawn
+                point_strength=0.05,  # the strength, between 0 and 1, of each point to be drawn
+                opacity=0.5,  # the opacity of the heatmap layer
+                colours='default',  # 'default' or 'reveal'
+                                    # OR a matplotlib LinearSegmentedColorMap object 
+                                    # OR the path to a horizontal scale image
+                grey_heatmapper='PIL'  # The object responsible for drawing the points
+                                    # Pillow used by default, 'PySide' option available if installed
+            )
+            img = Image.open(save_frame_location)
+            heatmap = heatmapper.heatmap_on_img(matrix_heatmap, img)
+            heatmap.save(save_heatmap_location)
+            # plt.close()
             # img.seek(0)
 
             # plot_url = base64.b64encode(img.getvalue())
