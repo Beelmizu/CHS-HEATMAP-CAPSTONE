@@ -42,15 +42,16 @@ def connected(data):
 
 
 def setupApp(app):
-	jsonurl = urlopen("http://localhost:8080/api/cameras/getAll")
-	text = json.loads(jsonurl.read())
+	# jsonurl = urlopen("http://localhost:8080/api/cameras/getAll")
+	# text = json.loads(jsonurl.read())
 	#Lấy id đầu tiên
 	# print(text[0]['id'])
 	# print(text)
 	# for camera in text:
 	# 	print(camera['account'])
 	id_camera = "1"
-	port = 0
+	# port = 0
+	port = "rtsp://admin:Admin@123@192.168.1.64/1"
 	camera_1 = threading.Thread(target=runCamera, args=(socketio, id_camera, port,))
 	camera_1.start()
     
