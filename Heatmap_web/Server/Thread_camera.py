@@ -206,8 +206,8 @@ def getFrameCamera(socketio, idCamera):
             if countdown_heatmap == 0:
                 # print(countdown_heatmap)
                 countdown_heatmap = retake_heatmap_count
-                #get heatmap
-                image_heatmap = cv2.imread(save_heatmap_location)
+                #get heatmap và ko có nó tự thêm background
+                image_heatmap = cv2.imread(save_heatmap_location, cv2.IMREAD_UNCHANGED)
                 retval_heatmap, jpg_heatmap = cv2.imencode('.png', image_heatmap)
                 jpg_heatmap_as_text = base64.b64encode(jpg_heatmap)
                 stream_heatmap_text = str(jpg_heatmap_as_text, "utf-8")

@@ -33,7 +33,7 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
             matrix_heatmap.append((x,y))
             heatmapper = Heatmapper(
                 point_diameter=50,  # the size of each point to be drawn
-                point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
+                point_strength=0.05,  # the strength, between 0 and 1, of each point to be drawn
                 opacity=0.5,  # the opacity of the heatmap layer
                 colours='default',  # 'default' or 'reveal'
                                     # OR a matplotlib LinearSegmentedColorMap object 
@@ -44,7 +44,7 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
             try:
                 background = Image.open(save_background_location)
             except:
-                background_image = Image.new('RGBA', (width, height), (0,0,0,0))
+                background_image = Image.new('RGBA', (width, height), (255,255,255,0))
                 background_image.save(save_background_location)
                 background = Image.open(save_background_location)
             # background_image = Image.new('RGBA', (width, height), (0,0,0,0))
