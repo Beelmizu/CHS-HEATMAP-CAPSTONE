@@ -76,13 +76,14 @@ def runCamera(socketio, idCamera, portCamera):
     # width = 1000
     # height = 1000
     # height , width , layers =  img.shape
-    #Resize ảnh còn 1 nửa
-    new_h=height/2.5
-    new_w=width/2.5
+    #Resize ảnh vaà lấy phần nguyên
+    new_h=height//2.5
+    new_w=width//2.5
     new_h = int(new_h)
     new_w = int(new_w)
     # print(new_h,new_w)
-    matrix_heatmap = [[0 for x in range(new_w)] for y in range(new_h)] 
+    # matrix_heatmap = [[0 for x in range(new_w)] for y in range(new_h)]
+    matrix_heatmap = [] 
     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     now = datetime.datetime.now()
@@ -189,7 +190,7 @@ def viewRawCamera(socketio, idCamera, portCamera):
 def getFrameCamera(socketio, idCamera):
     # cap = cv2.VideoCapture('./streaming_data/video/1.avi')
     save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
-    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".jpg"
+    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Live/"+ idCamera + ".png"
     countdown_heatmap = 1
     while True:
         try:
@@ -207,7 +208,7 @@ def getFrameCamera(socketio, idCamera):
                 countdown_heatmap = retake_heatmap_count
                 #get heatmap
                 image_heatmap = cv2.imread(save_heatmap_location)
-                retval_heatmap, jpg_heatmap = cv2.imencode('.jpg', image_heatmap)
+                retval_heatmap, jpg_heatmap = cv2.imencode('.png', image_heatmap)
                 jpg_heatmap_as_text = base64.b64encode(jpg_heatmap)
                 stream_heatmap_text = str(jpg_heatmap_as_text, "utf-8")
                 # print(image)

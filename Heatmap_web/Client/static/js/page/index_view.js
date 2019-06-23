@@ -21,13 +21,13 @@ $(document).ready(function() {
 	});
 	socket.on('stream_camera', (image) => {
 		img = document.getElementById('frame_1');
-		console.log("Camera 111111111111111111111111111");
+		// console.log(image);
 		img.src = `data:image/jpeg;base64,${image}`;
 	});
 	socket.on('stream_heatmap', (image) => {
 		img = document.getElementById('frame_2');
-		console.log("Camera 2222222222222222222222222222");
-		img.src = `data:image/jpeg;base64,${image}`;
+		console.log(image);
+		img.src = `data:image/png;base64,${image}`;
 	});
 
 });
