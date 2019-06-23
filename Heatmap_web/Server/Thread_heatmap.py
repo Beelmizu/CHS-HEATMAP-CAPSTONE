@@ -7,9 +7,12 @@ from PIL import Image
 import cv2
 def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
     try:
-        img = io.BytesIO()
-        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Report/"+ idCamera + ".png"
+        # img = io.BytesIO()
+        strW = str(width)
+        strH = str(height)
+        save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Live/"+ idCamera + ".png"
         save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
+        save_background_location = "./Server_data/Streaming_data/Heatmap/Background/"+ strW +"x" + strH + ".png"
         # print(box)
         for i in range(len(box)):
             ymin = (int(box[i,0]*height))
@@ -30,7 +33,7 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
             matrix_heatmap.append((x,y))
             heatmapper = Heatmapper(
                 point_diameter=50,  # the size of each point to be drawn
-                point_strength=0.05,  # the strength, between 0 and 1, of each point to be drawn
+                point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
                 opacity=0.5,  # the opacity of the heatmap layer
                 colours='default',  # 'default' or 'reveal'
                                     # OR a matplotlib LinearSegmentedColorMap object 
@@ -38,8 +41,16 @@ def viewHeatmapCamera(socketio, idCamera, matrix_heatmap, box, width, height):
                 grey_heatmapper='PIL'  # The object responsible for drawing the points
                                     # Pillow used by default, 'PySide' option available if installed
             )
-            img = Image.open(save_frame_location)
-            heatmap = heatmapper.heatmap_on_img(matrix_heatmap, img)
+            try:
+                background = Image.open(save_background_location)
+            except:
+                background_image = Image.new('RGBA', (width, height), (0,0,0,0))
+                background_image.save(save_background_location)
+                background = Image.open(save_background_location)
+            # background_image = Image.new('RGBA', (width, height), (0,0,0,0))
+            # background_image.save(save_background_location)
+            # background = Image.open(save_frame_location)
+            heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
             heatmap.save(save_heatmap_location)
             # plt.close()
             # img.seek(0)
