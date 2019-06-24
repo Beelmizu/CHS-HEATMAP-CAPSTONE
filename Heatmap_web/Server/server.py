@@ -1,4 +1,4 @@
-from flask import Flask ,request
+﻿from flask import Flask ,request
 from flask_socketio import SocketIO, send
 import cv2
 import base64
