@@ -47,15 +47,29 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store deleteStore(Store store) {
+    public Store inactiveStore(Store store) {
+        store.setUpdateDate(LocalDateTime.now().toString());
+        store.setUpdatedBy("cuongdq");
         store.setStatus("inactive");
         return storeRepository.save(store);
     }
 
     @Override
+    public Store activeStore(Store store) {
+        store.setUpdateDate(LocalDateTime.now().toString());
+        store.setUpdatedBy("cuongdq");
+        store.setStatus("active");
+        return storeRepository.save(store);
+    }
+
+
+    @Override
     public List<Store> getAllStoreByAccountId(int id) {
         return storeRepository.findStoreByAccountID(id);
     }
+
+    @Override
+    public List<Store> getAllStoreByAccountIdWithoutStatus(int id) { return storeRepository.findStoreByAccountIDWithoutStatus(id); }
 
 
 }

@@ -28,8 +28,11 @@ public class StoreController {
     @GetMapping("/stores/search/{searchValue}")
     public List<Store> searchStore(@PathVariable(value = "searchValue") String searchValue) { return storeService.getStoreByName(searchValue); }
 
-    @PostMapping("/stores/delete")
-    public Store deleteStore(@RequestBody Store store) { return storeService.deleteStore(store); }
+    @PostMapping("/stores/inactive")
+    public Store inactiveStore(@RequestBody Store store) { return storeService.inactiveStore(store); }
+
+    @PostMapping("/stores/active")
+    public Store activeStore(@RequestBody Store store) { return storeService.activeStore(store); }
 
     @PostMapping("/stores/update")
     public Store updateStore(@RequestBody Store store) { return storeService.updateStore(store); }
@@ -39,4 +42,7 @@ public class StoreController {
 
     @GetMapping("/stores/getStoreByAccount/{id}")
     public List<Store> getStoreByAccount(@PathVariable(value = "id") int id){ return storeService.getAllStoreByAccountId(id); }
+
+    @GetMapping("/stores/getStoreByAccountWithoutStatus/{id}")
+    public List<Store> getStoreByAccountWithoutStatus(@PathVariable(value = "id") int id){ return storeService.getAllStoreByAccountIdWithoutStatus(id); }
 }

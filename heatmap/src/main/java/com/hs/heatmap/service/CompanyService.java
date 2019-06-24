@@ -16,6 +16,8 @@ public interface CompanyService {
 
     Company updateCompany(Company company);
 
-    Company deleteCompany(Company company);
+    Company inactiveCompany(Company company);
+
+    Company activeCompany(Company company);
 
 }

@@ -27,13 +27,19 @@ public class AreaController {
     @GetMapping("/areas/search/{searchValue}")
     public List<Area> searchArea(@PathVariable(value="searchValue") int searchValue){return areaService.getAreasByFloor(searchValue); }
 
-    @PostMapping("/areas/delete")
-    public Area deleteArea(@RequestBody Area area) { return areaService.deleteArea(area); }
+    @PostMapping("/areas/inactive")
+    public Area inactiveArea(@RequestBody Area area) { return areaService.inactiveArea(area); }
+
+    @PostMapping("/areas/active")
+    public Area activeArea(@RequestBody Area area) { return areaService.activeArea(area); }
 
     @PostMapping("/areas/update")
     public Area updateArea(@RequestBody Area area) { return areaService.updateArea(area); }
 
     @PostMapping("/areas/create")
     public Area createArea(@RequestBody Area area) { return areaService.createNewArea(area); }
+
+    @GetMapping("/areas/getActiveAreaByStoID/{id}")
+    public List<Area> getActiveAreaByStoID(@PathVariable(value = "id") int id){ return areaService.getActiveAreaByStoreID(id); }
 
 }

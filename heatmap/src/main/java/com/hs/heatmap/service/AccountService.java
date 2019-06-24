@@ -9,6 +9,8 @@ public interface AccountService {
 
     List<Account> getAllAccount();
 
+    List<Account> getAccountByCompany(int id);
+
     Account getDetailAccount(int id);
 
     List<Account> getAccountsByUsername(String searchValue);
@@ -17,6 +19,7 @@ public interface AccountService {
 
     Account updateAccount(Account account);
 
-    Account deleteAccount(Account account);
+    Account inactiveAccount(Account account);
 
+    Account activeAccount(Account account);
 }

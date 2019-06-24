@@ -26,6 +26,9 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
+    public List<Area> getActiveAreaByStoreID(int id) { return areaRepository.findActiveAreaByStoID(id); }
+
+    @Override
     public List<Area> getAreaInStore(int id) { return areaRepository.getAreaInStore(id); }
 
 
@@ -52,8 +55,18 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area deleteArea(Area area) {
+    public Area inactiveArea(Area area) {
+        area.setUpdateDate(LocalDateTime.now().toString());
+        area.setUpdatedBy("cuongdq");
         area.setStatus("inactive");
+        return areaRepository.save(area);
+    }
+
+    @Override
+    public Area activeArea(Area area) {
+        area.setUpdateDate(LocalDateTime.now().toString());
+        area.setUpdatedBy("cuongdq");
+        area.setStatus("active");
         return areaRepository.save(area);
     }
 }

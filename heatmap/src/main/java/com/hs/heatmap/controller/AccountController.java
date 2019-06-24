@@ -19,14 +19,20 @@ public class AccountController {
     @GetMapping("/accounts/getAll")
     public List<Account> getAllAccounts(){ return accountService.getAllAccount(); }
 
+    @GetMapping("/accounts/getAccountByCompany/{id}")
+    public List<Account> getAccountByCompany(@PathVariable(value = "id") int id){ return accountService.getAccountByCompany(id); }
+
     @GetMapping("accounts/getDetail/{id}")
     public Account getDetailAccount(@PathVariable(value = "id") int id){ return accountService.getDetailAccount(id); }
 
     @GetMapping("/accounts/search/{searchValue}")
     public List<Account> searchAccount(@PathVariable(value = "searchValue") String searchValue) { return accountService.getAccountsByUsername(searchValue); }
 
-    @PostMapping("/accounts/delete")
-    public Account deleteAccount(@RequestBody Account account) { return accountService.deleteAccount(account); }
+    @PostMapping("/accounts/inactive")
+    public Account inactiveAccount(@RequestBody Account account) { return accountService.inactiveAccount(account); }
+
+    @PostMapping("/accounts/active")
+    public Account activeAccount(@RequestBody Account account) { return accountService.activeAccount(account); }
 
     @PostMapping("/accounts/update")
     public Account updateAccount(@RequestBody Account account) { return accountService.updateAccount(account); }

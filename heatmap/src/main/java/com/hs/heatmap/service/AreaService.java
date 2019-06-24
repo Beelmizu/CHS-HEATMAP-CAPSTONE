@@ -11,6 +11,8 @@ public interface AreaService {
 
     Area getDetailArea(int id);
 
+    List<Area> getActiveAreaByStoreID(int id);
+
     List<Area> getAreaInStore(int id);
 
     List<Area> getAreasByFloor(int searchValue);
@@ -19,6 +21,8 @@ public interface AreaService {
 
     Area updateArea(Area Area);
 
-    Area deleteArea(Area Area);
+    Area inactiveArea(Area Area);
+
+    Area activeArea(Area Area);
 
 }

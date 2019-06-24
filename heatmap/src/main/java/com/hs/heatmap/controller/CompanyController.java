@@ -24,8 +24,11 @@ public class CompanyController {
     @GetMapping("/companies/search/{searchValue}")
     public List<Company> searchCompany(@PathVariable(value = "searchValue") String searchValue) { return companyService.getCompanyByName(searchValue); }
 
-    @DeleteMapping("/companies/delete")
-    public Company deleteCompany(@RequestBody Company company) { return companyService.deleteCompany(company); }
+    @PostMapping("/companies/inactive")
+    public Company inactiveCompany(@RequestBody Company company) { return companyService.inactiveCompany(company); }
+
+    @PostMapping("/companies/active")
+    public Company activeCompany(@RequestBody Company company) { return companyService.activeCompany(company); }
 
     @PostMapping("/companies/update")
     public Company updateCompany(@RequestBody Company company) { return companyService.updateCompany(company); }

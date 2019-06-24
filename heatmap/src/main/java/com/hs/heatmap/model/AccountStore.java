@@ -29,10 +29,6 @@ public class AccountStore {
     private String updatedDate;
 
     @Basic
-    @Column(name = "acc_sto_status")
-    private int status;
-
-    @Basic
     @Column(name = "acc_sto_updated_by" )
     private int updatedBy;
 

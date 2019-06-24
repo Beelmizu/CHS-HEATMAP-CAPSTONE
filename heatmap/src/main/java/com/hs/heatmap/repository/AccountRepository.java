@@ -30,5 +30,9 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
 
     Account findAccountByUsername(String name);
 
+    //Find account by company
+    @Query("SELECT a FROM Account a WHERE a.cpn_acc_id = :id and a.role = false")
+    List<Account> findAccountByCompany(int id);
+
 }
 

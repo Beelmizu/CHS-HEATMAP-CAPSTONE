@@ -18,7 +18,11 @@ public interface StoreService {
 
     Store updateStore(Store store);
 
-    Store deleteStore(Store store);
+    Store inactiveStore(Store store);
+
+    Store activeStore(Store store);
 
     List<Store> getAllStoreByAccountId(int id);
+
+    List<Store> getAllStoreByAccountIdWithoutStatus(int id);
 }

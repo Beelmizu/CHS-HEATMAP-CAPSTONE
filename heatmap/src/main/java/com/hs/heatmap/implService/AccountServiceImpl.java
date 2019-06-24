@@ -20,6 +20,9 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAllAccount() { return accountRepository.getAccountByRole(); }
 
     @Override
+    public List<Account> getAccountByCompany(int id) {return accountRepository.findAccountByCompany(id); }
+
+    @Override
     public Account getDetailAccount(int id) { return accountRepository.findAccountById(id); }
 
     @Override
@@ -33,8 +36,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account deleteAccount(Account account) {
+    public Account inactiveAccount(Account account) {
+        account.setUpdatedDate(LocalDateTime.now().toString());
+        account.setUpdatedBy("cuongdq");
         account.setStatus("inactive");
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public Account activeAccount(Account account) {
+        account.setUpdatedDate(LocalDateTime.now().toString());
+        account.setUpdatedBy("cuongdq");
+        account.setStatus("active");
         return accountRepository.save(account);
     }
 

@@ -26,4 +26,6 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     @Query("SELECT a.store FROM AccountStore a WHERE a.acc_id = :id and a.store.status = 'active'")
     List<Store> findStoreByAccountID(@Param("id")int id);
 
+    @Query("SELECT a.store FROM AccountStore a WHERE a.acc_id = :id")
+    List<Store> findStoreByAccountIDWithoutStatus(@Param("id")int id);
 }

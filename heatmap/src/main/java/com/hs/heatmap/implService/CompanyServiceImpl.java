@@ -51,8 +51,18 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company deleteCompany(Company company) {
+    public Company inactiveCompany(Company company) {
+        company.setUpdateDate(LocalDateTime.now().toString());
+        company.setUpdatedBy("cuongdq");
         company.setStatus("inactive");
+        return companyRepository.save(company);
+    }
+
+    @Override
+    public Company activeCompany(Company company) {
+        company.setUpdateDate(LocalDateTime.now().toString());
+        company.setUpdatedBy("cuongdq");
+        company.setStatus("active");
         return companyRepository.save(company);
     }
 }

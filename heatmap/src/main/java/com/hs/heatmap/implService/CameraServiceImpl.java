@@ -31,6 +31,9 @@ public class CameraServiceImpl implements CameraService {
     public List<Camera> getCameraByArea(int id) { return cameraRepository.getCameraByArea(id); }
 
     @Override
+    public List<Camera> getActiveCameraByArea(int id) { return cameraRepository.findActiveCameraByAreaID(id); }
+
+    @Override
     public List<Camera> getCamerasByIp(String searchValue) { return cameraRepository.searchCamerasByIp(searchValue); }
 
     @Override
@@ -52,8 +55,18 @@ public class CameraServiceImpl implements CameraService {
     }
 
     @Override
-    public Camera deleteCamera(Camera camera) {
+    public Camera inactiveCamera(Camera camera) {
+        camera.setUpdateDate(LocalDateTime.now().toString());
+        camera.setUpdatedBy("cuongdq");
         camera.setStatus("inactive");
+        return cameraRepository.save(camera);
+    }
+
+    @Override
+    public Camera activeCamera(Camera camera) {
+        camera.setUpdateDate(LocalDateTime.now().toString());
+        camera.setUpdatedBy("cuongdq");
+        camera.setStatus("active");
         return cameraRepository.save(camera);
     }
 }
