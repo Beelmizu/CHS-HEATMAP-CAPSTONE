@@ -24,10 +24,12 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import io
 import threading
-# from main import *
+from Upload_cloud import *
 from Thread_heatmap import *
 import signal
 import sys
+from Thread_upload_cloud import *
+
 #%%
 # # Model preparation 
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
@@ -68,8 +70,8 @@ categories = label_map_util.convert_label_map_to_categories(label_map, max_num_c
 category_index = label_map_util.create_category_index(categories)
  
 
-def runCamera(socketio, idCamera, portCamera):
-    cam = cv2.VideoCapture(portCamera)
+def runCamera(socketio, id_camera, port_camera):
+    cam = cv2.VideoCapture(port_camera)
     width = int(cam.get(3)) #width camera
     height = int(cam.get(4)) #height camera
     # print(width,height)
@@ -88,17 +90,29 @@ def runCamera(socketio, idCamera, portCamera):
     countdown_heatmap = 1
     now = datetime.datetime.now()
     day = now.strftime("%Y-%m-%d")
-    create_dir('./Server_data/Save_data/Camera/'+ idCamera +'/'+ day +'/')
-    save_file_location = "./Server_data/Save_data/Camera/"+ idCamera + '/' + day + "/"+ day + now.strftime(" %Hh%Mp%Ss") + ".avi"
-    save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
+    create_dir('./Server_data/Save_data/Camera/'+ id_camera +'/'+ day +'/')
+    save_file_location = "./Server_data/Save_data/Camera/"+ id_camera + '/' + day + "/"+ day + ".avi"
+    save_frame_location = "./Server_data/Streaming_data/Camera/"+ id_camera + ".jpg"
+    # uploadFile(day + ".avi", "./Server_data/Save_data/Camera/"+ id_camera + '/' + day + "/"+ day + ".avi", 'video/avi')
     
-    # filename = "./Server_data/Save_data/Camera/"+ idCamera +".avi"    
+    Upload_time_set = now + datetime.timedelta(minutes=1)
+    print(Upload_time_set)
+    print(now)
+    # filename = "./Server_data/Save_data/Camera/"+ id_camera +".avi"    
     save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
+
+    
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
             while True:
                 try:
+                    now = datetime.datetime.now()
+                    print(now)
+                    if now > Upload_time_set:
+                        # Xuống dưới chạy
+                        print("--------------------------UPLOAD TO CLOUD---------------------------------")
+                        break
                     countdown_heatmap = countdown_heatmap - 1
                     retval, image_read = cam.read()
                     if image_read is not None:
@@ -151,19 +165,19 @@ def runCamera(socketio, idCamera, portCamera):
                         jpg_as_text = base64.b64encode(buffer)
                         image_text = str(jpg_as_text, "utf-8")
                         #truyền về id camera ở html
-                        # socketio.emit(idCamera, image_text)
+                        # socketio.emit(id_camera, image_text)
                         
                         if countdown_heatmap == 0:
                             #Chạy heatmap sau khi chạy xong 25 frame
                             countdown_heatmap = retake_heatmap_count
-                            heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, idCamera, matrix_heatmap, box, new_w, new_h,))
+                            heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, id_camera, matrix_heatmap, box, new_w, new_h,))
                             heatmap.start()
                         save_camera.write(image)
                         cv2.imwrite(save_frame_location, image)
                         time.sleep(0.1) 
                         # socketio.sleep(0.5)
                     else:
-                        cam = cv2.VideoCapture(portCamera)
+                        cam = cv2.VideoCapture(port_camera)
                 except Exception as e:
                     if hasattr(e, 'message'):
                         print(e.message)
@@ -171,26 +185,30 @@ def runCamera(socketio, idCamera, portCamera):
                         print(e)
                         
                     pass
-    # cam.release()
-
-def viewRawCamera(socketio, idCamera, portCamera):
-    cam = cv2.VideoCapture(portCamera)
+    print("Camera have been stop.")            
+    cam.release()
+    time.sleep(1)
+    upload = threading.Thread(target=uploadToCloud, args=(socketio, id_camera, port_camera,))
+    upload.start()
+    
+def viewRawCamera(socketio, id_camera, port_camera):
+    cam = cv2.VideoCapture(port_camera)
     while True:
         try:
             retval, image = cam.read()
             retval, buffer = cv2.imencode('.jpg', image)
             jpg_as_text = base64.b64encode(buffer)
             image_text = str(jpg_as_text, "utf-8")
-            socketio.emit(idCamera, image_text)
+            socketio.emit(id_camera, image_text)
         except:
             pass
 
     cam.release() #カメラオブジェクト破棄
 
-def getFrameCamera(socketio, idCamera):
+def getFrameCamera(socketio, id_camera):
     # cap = cv2.VideoCapture('./streaming_data/video/1.avi')
-    save_frame_location = "./Server_data/Streaming_data/Camera/"+ idCamera + ".jpg"
-    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Live/"+ idCamera + ".png"
+    save_frame_location = "./Server_data/Streaming_data/Camera/"+ id_camera + ".jpg"
+    save_heatmap_location = "./Server_data/Streaming_data/Heatmap/Live/"+ id_camera + ".png"
     countdown_heatmap = 1
     while True:
         try:
@@ -215,7 +233,7 @@ def getFrameCamera(socketio, idCamera):
                 socketio.sleep(0.1)
                 socketio.emit("stream_heatmap", stream_heatmap_text)
         except:
-            # uploadFile(idCamera + ".jpg", "./Server_data/Streaming_data/Camera/" + idCamera + ".jpg", 'image/jpg')
+            # 
             pass
     
 

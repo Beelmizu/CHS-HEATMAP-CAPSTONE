@@ -44,7 +44,9 @@ def uploadFile(filename,filepath,mimetype):
                                         media_body=media,
                                         fields='id').execute()
     print('File ID: %s' % file.get('id'))
-"""
+#uploadFile('2019-06-24.avi','2019-06-24.avi','video/avi')
+
+
 def downloadFile(file_id,filepath):
     request = drive_service.files().get_media(fileId=file_id)
     fh = io.BytesIO()
@@ -77,7 +79,6 @@ def searchFile(size,query):
         for item in items:
             print(item)
             print('{0} ({1})'.format(item['name'], item['id']))
-"""            
 
 #downloadFile('1Knxs5kRAMnoH5fivGeNsdrj_SIgLiqzV','google.jpg')
 #createFolder('Google')
