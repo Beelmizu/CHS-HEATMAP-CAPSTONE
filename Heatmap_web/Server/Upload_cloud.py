@@ -22,8 +22,15 @@ APPLICATION_NAME = 'Drive API Python Quickstart'
 authInst = auth.auth(SCOPES,CLIENT_SECRET_FILE,APPLICATION_NAME)
 credentials = authInst.getCredentials()
 
-http = credentials.authorize(httplib2.Http())
-drive_service = discovery.build('drive', 'v3', http=http)
+    
+try:
+    http = credentials.authorize(httplib2.Http())
+    drive_service = discovery.build('drive', 'v3', http=http)
+    pass
+except:
+    pass    
+finally:
+    pass
 
 def listFiles(size):
     results = drive_service.files().list(
@@ -37,13 +44,26 @@ def listFiles(size):
             print('{0} ({1})'.format(item['name'], item['id']))
 
 def uploadFile(filename,filepath,mimetype):
-    file_metadata = {'name': filename}
-    media = MediaFileUpload(filepath,
+    try:
+        SCOPES = 'https://www.googleapis.com/auth/drive'
+        CLIENT_SECRET_FILE = 'client_secret.json'
+        APPLICATION_NAME = 'Drive API Python Quickstart'
+        authInst = auth.auth(SCOPES,CLIENT_SECRET_FILE,APPLICATION_NAME)
+        credentials = authInst.getCredentials()
+        http = credentials.authorize(httplib2.Http())
+        drive_service = discovery.build('drive', 'v3', http=http)
+        file_metadata = {'name': filename}
+        media = MediaFileUpload(filepath,
                             mimetype=mimetype)
-    file = drive_service.files().create(body=file_metadata,
+        file = drive_service.files().create(body=file_metadata,
                                         media_body=media,
                                         fields='id').execute()
-    print('File ID: %s' % file.get('id'))
+        print('File ID: %s' % file.get('id'))
+        pass
+    except:
+        pass                   
+    
+    
 #uploadFile('2019-06-24.avi','2019-06-24.avi','video/avi')
 
 
