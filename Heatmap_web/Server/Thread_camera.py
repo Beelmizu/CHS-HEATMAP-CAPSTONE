@@ -113,7 +113,7 @@ def runCamera(socketio, id_camera, port_camera):
                     if now > Upload_time_set:
                         # Xuống dưới chạy
                         print("--------------------------UPLOAD TO CLOUD---------------------------------")
-                        break
+                        # break
                     countdown_heatmap = countdown_heatmap - 1
                     retval, image_read = cam.read()
                     if image_read is not None:
