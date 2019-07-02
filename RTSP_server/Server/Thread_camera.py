@@ -81,8 +81,6 @@ def runCamera(socketio, rd, id_camera, port_camera):
     new_h = int(new_h)
     new_w = int(new_w)
     matrix_heatmap = [] 
-    #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
-    countdown_heatmap = 1
     now = datetime.datetime.now()
     day = now.strftime("%Y-%m-%d")
     create_dir('./Server_data/Save_data/Camera/'+ id_camera +'/'+ day +'/')
@@ -91,7 +89,7 @@ def runCamera(socketio, rd, id_camera, port_camera):
     Upload_time_set = now + datetime.timedelta(minutes=1)
     print(Upload_time_set)
     print(now)
-    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (new_w, new_h))
+    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),20.0, (new_w, new_h))
 
     
 
@@ -102,7 +100,6 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 # Xuống dưới chạy
                 print("--------------------------UPLOAD TO CLOUD---------------------------------")
                 break
-            countdown_heatmap = countdown_heatmap - 1
             retval, image_read = cam.read()
             if image_read is not None:
                 image = cv2.resize(image_read, (new_w, new_h))
@@ -125,46 +122,6 @@ def runCamera(socketio, rd, id_camera, port_camera):
     time.sleep(0.05)
     upload = threading.Thread(target=uploadToCloud, args=(socketio, rd, id_camera, port_camera,))
     upload.start()
-    
-def viewRawCamera(socketio, id_camera, port_camera):
-    cam = cv2.VideoCapture(port_camera)
-    while True:
-        try:
-            retval, image = cam.read()
-            retval, buffer = cv2.imencode('.jpg', image)
-            jpg_as_text = base64.b64encode(buffer)
-            image_text = str(jpg_as_text, "utf-8")
-            socketio.emit(id_camera, image_text)
-        except:
-            pass
-
-    cam.release() #カメラオブジェクト破棄
-
-def getFrameCamera(socketio,rd, id_camera,):
-    countdown_heatmap = 1
-    print("Get Frame")
-    while True:
-        try:
-            countdown_heatmap = countdown_heatmap - 1
-            # Lấy Base64 đẩy về web
-            socketio.sleep(0.05)
-            image = rd.get(str(id_camera))
-            socketio.emit("stream_camera", image.decode())
-            socketio.sleep(0.05)
-            image = rd.get(str(id_camera)+"_OD")
-            socketio.emit("stream_object", image.decode())
-            if countdown_heatmap == 0:
-                countdown_heatmap = retake_heatmap_count
-                socketio.sleep(0.02)
-                image = rd.get(str(id_camera)+"_HM")
-                socketio.emit("stream_heatmap", image.decode())
-        except Exception as e:
-            if hasattr(e, 'message'):
-                print(e.message)
-            else:
-                print(e)
-            pass
-    
 
 def create_dir(file_path):
     directory = os.path.dirname(file_path)

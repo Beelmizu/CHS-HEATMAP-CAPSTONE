@@ -8,9 +8,7 @@ import cv2
 from io import BytesIO
 def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height):
     try:
-        strW = str(width)
-        strH = str(height)
-        save_background_location = "./Server_data/Background/"+ strW +"x" + strH + ".png"
+        save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
         # print(box)
         for i in range(len(box)):
             ymin = (int(box[i,0]*height))
@@ -40,6 +38,7 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
                 background_image.save(save_background_location)
                 background = Image.open(save_background_location)
             heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
+            # Chuyển thành Base 64 và bỏ vào redis
             buffered = BytesIO()
             heatmap.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue())

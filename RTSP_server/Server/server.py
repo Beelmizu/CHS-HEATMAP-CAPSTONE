@@ -5,6 +5,7 @@ import base64
 from Thread_camera import *
 from Thread_heatmap import *
 from Thread_worker import *
+from Thread_client import *
 import threading
 from urllib.request import urlopen
 import json
@@ -34,8 +35,12 @@ def connected(data):
 	# 	port = 0
 	
 	try:
-		camera_2 = threading.Thread(target=getFrameCamera, args=(socketio, rd, id_camera,))
-		camera_2.start()
+		camera = threading.Thread(target=getFrameCamera, args=(socketio, rd, id_camera,))
+		camera.start()
+		camera_OD = threading.Thread(target=getObjectDetection, args=(socketio, rd, id_camera,))
+		camera_OD.start()
+		camera_HM = threading.Thread(target=getHeatmap, args=(socketio, rd, id_camera,))
+		camera_HM.start()
 	except Exception as e:
 		if hasattr(e, 'message'):
 			print(e.message)

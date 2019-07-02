@@ -35,7 +35,8 @@ import redis
 # # Model preparation 
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
 # By default we use an "SSD with Mobilenet" model here. See the [detection model zoo](https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
-# Màu của seaborn
+# Font chữ
+font = ImageFont.truetype("./font/arial.ttf", 18)
 retake_heatmap_count = 200
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
@@ -130,12 +131,6 @@ def detectObject(socketio, rd, id_camera, port_camera):
                                                                                                         line_thickness=2,
                                                                                                         max_boxes_to_draw=None,
                                                                                                         min_score_thresh=0.4)
-                        # Đặt count vào màn hình
-                        font = cv2.FONT_HERSHEY_SIMPLEX
-                        if(the_result == ""):
-                            cv2.putText(image, "...", (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)                       
-                        else:
-                            cv2.putText(image, the_result, (5, 25), font, 0.7, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
                         #record video
                         box = np.squeeze(boxes)
                         retval, buffer = cv2.imencode('.jpg', image)
@@ -144,7 +139,7 @@ def detectObject(socketio, rd, id_camera, port_camera):
                         #truyền về id camera ở html
                         
                         if countdown_heatmap == 0:
-                            #Chạy heatmap sau khi chạy xong 25 frame
+                            #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
                             countdown_heatmap = retake_heatmap_count
                             heatmap = threading.Thread(target=viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height,))
                             heatmap.start()
@@ -171,13 +166,15 @@ def detectObject(socketio, rd, id_camera, port_camera):
                             dr.rectangle(cor, outline="green")
 
                         # Vẽ chữ count
-                        dr.text((0, 0),str(the_result),(255,255,255))
+                        text = int(''.join(filter(str.isdigit, the_result)))
+                        #font chữ load ở bên trên
+                        dr.text((10, 10),"Person: " + str(text),(0,255,0), font=font)
                         # Chuyển thành base64 để đẩy lên redis
                         buffered = BytesIO()
                         background_OD.save(buffered, format="PNG")
                         img_str = base64.b64encode(buffered.getvalue())
                         rd.set(str(id_camera) + "_OD", img_str)
-                        time.sleep(0.5) 
+                        time.sleep(0.15) 
                         # socketio.sleep(0.5)
                     # else:
                         # cam = cv2.VideoCapture(port_camera)
@@ -188,14 +185,5 @@ def detectObject(socketio, rd, id_camera, port_camera):
                         print(e)
                         
                     pass
-    # print("Camera have been stop.")            
-    # cam.release()
-    # time.sleep(1)
-    # upload = threading.Thread(target=uploadToCloud, args=(socketio, id_camera, port_camera,))
-    # upload.start()
-def create_dir(file_path):
-    directory = os.path.dirname(file_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
 
