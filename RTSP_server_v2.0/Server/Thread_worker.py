@@ -80,7 +80,7 @@ def getConnection():
     # Bạn có thể thay đổi các thông số kết nối.
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='thientai1412',                             
+                                 password='1234',                             
                                  db='heatmapsystem')
     return connection
 
@@ -226,5 +226,3 @@ def getCount(now, text, id_camera):
             pass
     finally:
         connection.close()
-
-def 
