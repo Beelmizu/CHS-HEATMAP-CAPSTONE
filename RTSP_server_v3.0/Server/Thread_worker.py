@@ -74,20 +74,23 @@ categories = label_map_util.convert_label_map_to_categories(label_map, max_num_c
 category_index = label_map_util.create_category_index(categories)
 
 now = datetime.datetime.now()
-day = now.strftime("%Y-%d-%m")
+currentDate = now.strftime("%Y-%m-%d")
 
 def getConnection():  
     # Bạn có thể thay đổi các thông số kết nối.
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='thientai1412',                             
+                                 password='1234',                             
                                  db='heatmapsystem')
     return connection
         
 
 
 def detectObject(socketio, rd, id_camera, port_camera):
-    matrix_heatmap = [] 
+    matrix_heatmap = []
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    heatmap = threading.Thread(target=thread_hm.totalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
+    heatmap.start()
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     
@@ -182,7 +185,11 @@ def detectObject(socketio, rd, id_camera, port_camera):
                             dr.rectangle(cor, outline="green")
 
                         # Vẽ chữ count
-                        text = int(''.join(filter(str.isdigit, the_result)))
+                        try:
+                            text = int(''.join(filter(str.isdigit, the_result)))
+                        except Exception as e:
+                            text = 0
+                            pass
                         #font chữ load ở bên trên
                         dr.text((10, 10),"Person: " + str(text),(0,255,0), font=font)
                         # Chuyển thành base64 để đẩy lên redis
@@ -192,7 +199,7 @@ def detectObject(socketio, rd, id_camera, port_camera):
                         rd.set(str(id_camera) + "_OD", img_str)
 
                         
-                        time.sleep(0.15) 
+                        time.sleep(0.1) 
                         # socketio.sleep(0.5)
                     # else:
                         # cam = cv2.VideoCapture(port_camera)

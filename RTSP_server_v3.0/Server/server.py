@@ -67,7 +67,7 @@ def setupApp(app):
 	id_camera = "1"
 	port_camera = 0
 	# port_camera = "rtsp://admin:Admin@123@192.168.1.64/1"
-	
+	# port_camera = "rtsp://admin:Admin@123@14.187.178.200:10554"
 
 	
 	# rd.set('foo', "bar") 

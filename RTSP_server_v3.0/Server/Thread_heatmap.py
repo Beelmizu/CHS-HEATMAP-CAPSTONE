@@ -10,6 +10,7 @@ from Thread_worker import *
 import datetime
 
 now = datetime.datetime.now()
+currentDate = now.strftime("%Y-%m-%d")
 
 def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height):
     try:
@@ -52,9 +53,8 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
             heatmap.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue())
             rd.set(str(id_camera) + "_HM", img_str)
-
+        print(matrix_heatmap)
         getMatrix(string_matrix, id_camera)
-        totalMatrix(string_matrix, id_camera)
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)
@@ -79,7 +79,6 @@ def getMatrix(string_matrix, id_camera):
             print(e.message)
         else:
             print(e)
-                        
             pass
     finally:
         connection.close()
@@ -88,20 +87,43 @@ def Convert(string):
     li = list(string.split(";"))
     return li
 
-def totalMatrix(string_matrix, id_camera):
-    matrix_heatmap = []
+def totalMatrix(matrix_heatmap, id_camera, currentDate):
+    # matrix_heatmap = []
+    now = datetime.datetime.now()
+    currentDate = now.strftime("%Y-%m-%d")
     try:                     
         #kết nối DB
         connection = getConnection()
         print("Connect successful!") 
-
+        print(currentDate)
         cursor = connection.cursor()
-        sql = "SELECT * FROM heatmap"
-        cursor.execute(sql)
+        # sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s and htm_time like '%s%'"
+        # cursor.execute(sql, (id_camera, currentDate, ))
+        sql = "SELECT * FROM heatmap WHERE htm_cam_id = %s"
+        cursor.execute(sql, (id_camera,))
         records = cursor.fetchall()
         print("Total number of rows is: ", cursor.rowcount)
         for row in records:
-            matrix_heatmap.append(Convert(row[1]))
+            # row kế bên row id
+            # print(row[1])
+            # lenStr = len(row[1])
+            # lenStr = int(lenStr)
+            number = ""
+            for char in row[1]:
+                if char == ",":
+                    x = int(number)
+                    # print(x)
+                if char == ";":
+                    y =int(number)
+                    # print(y)
+                    matrix_heatmap.append((x,y))
+                
+                if char == "," or char == ";":
+                    number = ""
+                else:
+                    number = number + str(char)
+            # print(matrix_heatmap)
+            # matrix_heatmap.append(Convert(row[1]))
 
         print("total matrix heatmap: ", matrix_heatmap)
         cursor.close()
