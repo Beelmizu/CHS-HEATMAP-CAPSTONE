@@ -99,8 +99,9 @@ def totalMatrix(matrix_heatmap, id_camera, currentDate):
         cursor = connection.cursor()
         # sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s and htm_time like '%s%'"
         # cursor.execute(sql, (id_camera, currentDate, ))
-        sql = "SELECT * FROM heatmap WHERE htm_cam_id = %s"
-        cursor.execute(sql, (id_camera,))
+        currentDate ='%'+currentDate+'%'
+        sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s AND htm_time Like %s"
+        cursor.execute(sql, (id_camera,currentDate,))
         records = cursor.fetchall()
         print("Total number of rows is: ", cursor.rowcount)
         for row in records:
