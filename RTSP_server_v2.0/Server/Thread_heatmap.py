@@ -38,8 +38,8 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
                 grey_heatmapper='PIL'  # The object responsible for drawing the points
                                     # Pillow used by default, 'PySide' option available if installed
             )
-            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
-            print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
+            # print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
+            # print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
             try:
                 background = Image.open(save_background_location)
             except:
