@@ -187,7 +187,7 @@ def detectObject(socketio, rd, id_camera):
                         if countdown_heatmap == 0:
                             #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
                             countdown_heatmap = retake_heatmap_count
-                            getCount(now, text, id_camera)
+                            getCount(text, id_camera)
                             heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height,))
                             heatmap.start()
                         # Chuyển thành base64 để đẩy lên redis
@@ -209,9 +209,9 @@ def detectObject(socketio, rd, id_camera):
                         
                     pass
 
-def getCount(now, text, id_camera):
+def getCount(text, id_camera):
     try:
-                        
+        now = datetime.datetime.now()            
         #kết nối DB
         connection = getConnection()
         print("Connect successful!") 

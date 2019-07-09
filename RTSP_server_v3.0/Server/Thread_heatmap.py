@@ -9,8 +9,6 @@ from io import BytesIO
 from Thread_worker import *
 import datetime
 import gc
-now = datetime.datetime.now()
-currentDate = now.strftime("%Y-%m-%d")
 
 def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height):
     try:
@@ -67,7 +65,7 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
 
 def getMatrix(string_matrix, id_camera):
     try:
-                        
+        now = datetime.datetime.now()            
         #kết nối DB
         connection = getConnection()
         # print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
@@ -93,7 +91,6 @@ def Convert(string):
 def totalMatrix(matrix_heatmap, id_camera, currentDate):
     # matrix_heatmap = []
     now = datetime.datetime.now()
-    currentDate = now.strftime("%Y-%m-%d")
     try:                     
         #kết nối DB
         connection = getConnection()
