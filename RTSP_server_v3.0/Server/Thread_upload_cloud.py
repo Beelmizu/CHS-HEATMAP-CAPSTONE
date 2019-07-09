@@ -14,7 +14,7 @@ def uploadToCloud(socketio, rd, id_camera, port_camera):
     camera_1 = threading.Thread(target=camera.runCamera, args=(socketio, rd, id_camera, port_camera,))
     camera_1.start()
     try:
-        uploadFile("camera_" + str(id_camera) + "_" + day + ".avi", "./Server_data/Save_data/Camera/"+ id_camera + '/' + day + "/"+ day + ".avi", 'video/avi')
+        uploadFile("camera_" + str(id_camera) + "_" + day + ".avi", "./Server_data/Save_data/Camera/"+ id_camera + "/" + day + "/Camera_"+id_camera +"_"+ day + ".avi", 'video/avi')
         pass
     except:
         pass 

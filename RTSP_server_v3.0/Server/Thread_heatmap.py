@@ -8,7 +8,7 @@ import cv2
 from io import BytesIO
 from Thread_worker import *
 import datetime
-
+import gc
 now = datetime.datetime.now()
 currentDate = now.strftime("%Y-%m-%d")
 
@@ -18,20 +18,21 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
         # print(box)
         string_matrix = ""
         for i in range(len(box)):
-            ymin = (int(box[i,0]*height))
+            ymax = (int(box[i,0]*height))
             xmin = (int(box[i,1]*width))
-            ymax = (int(box[i,2]*height))
+            ymin = (int(box[i,2]*height))
             xmax = (int(box[i,3]*width))
             if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
                 break
 
-            y = (ymin+ymax)//2
+            # y = (ymin+ymax)//2
+            y = ymin
             x = (xmin+xmax)//2
             string_matrix = string_matrix + str(x)+"," + str(y) + ";"
             matrix_heatmap.append((x,y))
             heatmapper = Heatmapper(
                 point_diameter=50,  # the size of each point to be drawn
-                point_strength=0.2,  # the strength, between 0 and 1, of each point to be drawn
+                point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
                 opacity=0.7,  # the opacity of the heatmap layer
                 colours='default',  # 'default' or 'reveal'
                                     # OR a matplotlib LinearSegmentedColorMap object 
@@ -39,8 +40,8 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
                 grey_heatmapper='PIL'  # The object responsible for drawing the points
                                     # Pillow used by default, 'PySide' option available if installed
             )
-            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
-            print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
+            # print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
+            # print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
             try:
                 background = Image.open(save_background_location)
             except:
@@ -53,8 +54,10 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
             heatmap.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue())
             rd.set(str(id_camera) + "_HM", img_str)
-        print(matrix_heatmap)
+        # print(matrix_heatmap)
         getMatrix(string_matrix, id_camera)
+        # Garbage collection
+        gc.collect()
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)
@@ -67,7 +70,7 @@ def getMatrix(string_matrix, id_camera):
                         
         #kết nối DB
         connection = getConnection()
-        print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+        # print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
 
         cursor = connection.cursor()
         sql = "INSERT INTO heatmap(htm_matrix, htm_time, htm_cam_id) values(%s, %s, %s)"
@@ -94,8 +97,8 @@ def totalMatrix(matrix_heatmap, id_camera, currentDate):
     try:                     
         #kết nối DB
         connection = getConnection()
-        print("Connect successful!") 
-        print(currentDate)
+        # print("Connect successful!") 
+        # print(currentDate)
         cursor = connection.cursor()
         # sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s and htm_time like '%s%'"
         # cursor.execute(sql, (id_camera, currentDate, ))
@@ -103,7 +106,7 @@ def totalMatrix(matrix_heatmap, id_camera, currentDate):
         sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s AND htm_time Like %s"
         cursor.execute(sql, (id_camera,currentDate,))
         records = cursor.fetchall()
-        print("Total number of rows is: ", cursor.rowcount)
+        # print("Total number of rows is: ", cursor.rowcount)
         for row in records:
             # row kế bên row id
             # print(row[1])

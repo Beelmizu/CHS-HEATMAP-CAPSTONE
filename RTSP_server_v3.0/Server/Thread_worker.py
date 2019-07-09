@@ -86,9 +86,9 @@ def getConnection():
         
 
 
-def detectObject(socketio, rd, id_camera, port_camera):
+def detectObject(socketio, rd, id_camera):
     matrix_heatmap = []
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     heatmap = threading.Thread(target=thread_hm.totalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
     heatmap.start()
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
@@ -147,22 +147,13 @@ def detectObject(socketio, rd, id_camera, port_camera):
                                                                                                         use_normalized_coordinates=True,
                                                                                                         line_thickness=2,
                                                                                                         max_boxes_to_draw=None,
-                                                                                                        min_score_thresh=0.4)
+                                                                                                        min_score_thresh=0.35)
                         #record video
                         box = np.squeeze(boxes)
                         retval, buffer = cv2.imencode('.jpg', image)
                         jpg_as_text = base64.b64encode(buffer)
                         image_text = str(jpg_as_text, "utf-8")
                         #truyền về id camera ở html
-                        
-                        if countdown_heatmap == 0:
-                            #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
-                            countdown_heatmap = retake_heatmap_count
-                            getCount(now, text, id_camera)
-                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height,))
-                            heatmap.start()
-
-
                         # Load background và tạo mới nếu chưa có
                         try:
                             background_OD = Image.open(save_background_location)
@@ -192,6 +183,13 @@ def detectObject(socketio, rd, id_camera, port_camera):
                             pass
                         #font chữ load ở bên trên
                         dr.text((10, 10),"Person: " + str(text),(0,255,0), font=font)
+
+                        if countdown_heatmap == 0:
+                            #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
+                            countdown_heatmap = retake_heatmap_count
+                            getCount(now, text, id_camera)
+                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height,))
+                            heatmap.start()
                         # Chuyển thành base64 để đẩy lên redis
                         buffered = BytesIO()
                         background_OD.save(buffered, format="PNG")

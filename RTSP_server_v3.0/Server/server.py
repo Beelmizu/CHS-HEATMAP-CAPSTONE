@@ -75,7 +75,7 @@ def setupApp(app):
 	# print (v.decode())
 	camera_1 = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
 	camera_1.start()
-	worker_1 = threading.Thread(target=detectObject, args=(socketio, rd, id_camera, port_camera,))
+	worker_1 = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
 	worker_1.start()
     
 def signal_handler(sig, frame):
