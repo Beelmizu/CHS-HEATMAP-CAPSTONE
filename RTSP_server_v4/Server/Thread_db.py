@@ -11,7 +11,7 @@ def getConnection():
                                  password='1234',                             
                                  db='heatmapsystem')
     return connection
-        
+# Nếu có lỗi về connection thì bật MySql lên
 def setMatrixToDB(string_matrix, id_camera, currentTime):
     try:
         # now = datetime.datetime.now()            
