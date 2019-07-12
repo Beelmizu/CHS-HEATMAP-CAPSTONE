@@ -45,7 +45,7 @@ def getTotalMatrix(matrix_heatmap, id_camera, currentDate):
         # sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s and htm_time like '%s%'"
         # cursor.execute(sql, (id_camera, currentDate, ))
         currentDate ='%'+currentDate+'%'
-        sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s AND htm_time Like %s"
+        sql = "SELECT * FROM heatmap WHERE htm_cam_id = %s AND htm_time Like %s"
         cursor.execute(sql, (id_camera,currentDate,))
         records = cursor.fetchall()
         # print("Total number of rows is: ", cursor.rowcount)
@@ -72,6 +72,45 @@ def getTotalMatrix(matrix_heatmap, id_camera, currentDate):
         # print("total matrix heatmap: ", matrix_heatmap)
         cursor.close()
 
+    except Exception as e:
+        if hasattr(e, 'message'):
+            print(e.message)
+        else:
+            print(e)
+                        
+            pass
+    finally:
+        connection.close()
+def getPreviewHeatmap(matrix_heatmap, id_camera, startDate, endDate):
+    # matrix_heatmap = []
+    now = datetime.datetime.now()
+    try:                     
+        #kết nối DB
+        connection = thread_db.getConnection()
+        cursor = connection.cursor()
+        sql = "Select * from heatmap where htm_cam_id = %s AND htm_time BETWEEN %s AND %s;"
+        cursor.execute(sql, (id_camera, startDate, endDate))
+        records = cursor.fetchall()
+        # print("Total number of rows is: ", cursor.rowcount)
+        for row in records:
+            number = ""
+            for char in row[1]:
+                if char == ",":
+                    x = int(number)
+                    # print(x)
+                if char == ";":
+                    y =int(number)
+                    # print(y)
+                    matrix_heatmap.append((x,y))
+                
+                if char == "," or char == ";":
+                    number = ""
+                else:
+                    number = number + str(char)
+
+        print("preview matrix heatmap: ", matrix_heatmap)
+        cursor.close()
+        
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)

@@ -11,13 +11,24 @@ import Thread_db as thread_db
 import datetime
 import gc
 import threading
-
+import numpy as np
 
 def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime):
     try:
         save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
         # print(box)
         string_matrix = ""
+        
+        heatmapper = Heatmapper(
+            point_diameter=50,  # the size of each point to be drawn
+            point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
+            opacity=0.5,  # the opacity of the heatmap layer
+            colours='default',  # 'default' or 'reveal'
+                                    # OR a matplotlib LinearSegmentedColorMap object 
+                                    # OR the path to a horizontal scale image
+            grey_heatmapper='PIL'  # The object responsible for drawing the points
+                                    # Pillow used by default, 'PySide' option available if installed
+            )
         for i in range(len(box)):
             ymax = (int(box[i,0]*height))
             xmin = (int(box[i,1]*width))
@@ -31,7 +42,40 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
             x = (xmin+xmax)//2
             string_matrix = string_matrix + str(x)+"," + str(y) + ";"
             matrix_heatmap.append((x,y))
-            heatmapper = Heatmapper(
+            # print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
+            # print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
+        try:
+            background = Image.open(save_background_location)
+        except:
+            background_image = Image.new('RGBA', (width, height), (255,255,255,0))
+            background_image.save(save_background_location)
+            background = Image.open(save_background_location)
+        heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
+            
+        # Chuyển thành Base 64 và bỏ vào redis
+        buffered = BytesIO()
+        heatmap.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue())
+        rd.set(str(id_camera) + "_HM", img_str)
+        # print(matrix_heatmap)
+        # setMatrixToDB(string_matrix, id_camera, currentTime)
+        db = threading.Thread(target=thread_db.setMatrixToDB, args=(string_matrix, id_camera, currentTime,))
+        db.start()
+        # Garbage collection
+        gc.collect()
+    except Exception as e:
+        if hasattr(e, 'message'):
+            print(e.message)
+        else:
+            print(e)
+        pass
+
+def previewHeatmap(socketio, rd, id_camera, startDate, endDate):
+    try:
+        matrix_heatmap = []
+        db = threading.Thread(target=thread_db.getPreviewHeatmap, args=(matrix_heatmap, id_camera, startDate, endDate,))
+        db.start()
+        heatmapper = Heatmapper(
                 point_diameter=50,  # the size of each point to be drawn
                 point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
                 opacity=0.5,  # the opacity of the heatmap layer
@@ -41,25 +85,21 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
                 grey_heatmapper='PIL'  # The object responsible for drawing the points
                                     # Pillow used by default, 'PySide' option available if installed
             )
-            # print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
-            # print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
-            try:
-                background = Image.open(save_background_location)
-            except:
-                background_image = Image.new('RGBA', (width, height), (255,255,255,0))
-                background_image.save(save_background_location)
-                background = Image.open(save_background_location)
-            heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
+        image_base64 = rd.get(str(id_camera))
+        # Từ base64 chuyển thành image
+        decoded_data = base64.b64decode(image_base64.decode())
+        np_data = np.fromstring(decoded_data,np.uint8)
+        image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+        # print(image)
+        # Convert color
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        im_pil = Image.fromarray(img)
+        heatmap = heatmapper.heatmap_on_img(matrix_heatmap, im_pil)
             
-            # Chuyển thành Base 64 và bỏ vào redis
-            buffered = BytesIO()
-            heatmap.save(buffered, format="PNG")
-            img_str = base64.b64encode(buffered.getvalue())
-            rd.set(str(id_camera) + "_HM", img_str)
-        # print(matrix_heatmap)
-        # setMatrixToDB(string_matrix, id_camera, currentTime)
-        db = threading.Thread(target=thread_db.setMatrixToDB, args=(string_matrix, id_camera, currentTime,))
-        db.start()
+        buffered = BytesIO()
+        heatmap.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue())
+        socketio.emit('preview_heatmap', img_str.decode())
         # Garbage collection
         gc.collect()
     except Exception as e:

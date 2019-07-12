@@ -8,6 +8,9 @@ $(document).ready(function() {
 		//Chỉ định hàm sẽ chạy
 		// id camera + port
 		socket.emit('stream_camera', "1");
+		// 2019-07-12 15:25:06.535100
+		// 2019-07-12 15:26:52.927587
+		socket.emit('preview_heatmap', "1;2019-07-12 15:25:06.535100,2019-07-12 15:26:52.927587");
 		//rtsp://admin:Admin@123@192.168.1.64/1
 		// socket.emit('stream_camera', "1:rtsp://admin:Admin@123@192.168.1.64/1");
 	});
@@ -31,6 +34,11 @@ $(document).ready(function() {
 	});
 	socket.on('stream_heatmap', (image) => {
 		img = document.getElementById('frame_3');
+		console.log(image);
+		img.src = `data:image/png;base64,${image}`;
+	});
+	socket.on('preview_heatmap', (image) => {
+		img = document.getElementById('frame_4');
 		console.log(image);
 		img.src = `data:image/png;base64,${image}`;
 	});
