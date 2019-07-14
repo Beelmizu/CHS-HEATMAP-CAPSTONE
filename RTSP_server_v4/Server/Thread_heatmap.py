@@ -2,7 +2,7 @@
 import io
 import base64
 from flask_socketio import SocketIO, send
-from heatmappy import Heatmapper
+from heatmap import Heatmapper
 from PIL import Image
 import cv2
 from io import BytesIO
@@ -13,22 +13,17 @@ import gc
 import threading
 import numpy as np
 
+heatmapper = Heatmapper(
+    point_diameter=50,  # the size of each point to be drawn
+    point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
+    opacity=0.5,)
 def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime):
     try:
         save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
         # print(box)
         string_matrix = ""
         
-        heatmapper = Heatmapper(
-            point_diameter=50,  # the size of each point to be drawn
-            point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
-            opacity=0.5,  # the opacity of the heatmap layer
-            colours='default',  # 'default' or 'reveal'
-                                    # OR a matplotlib LinearSegmentedColorMap object 
-                                    # OR the path to a horizontal scale image
-            grey_heatmapper='PIL'  # The object responsible for drawing the points
-                                    # Pillow used by default, 'PySide' option available if installed
-            )
+        
         for i in range(len(box)):
             ymax = (int(box[i,0]*height))
             xmin = (int(box[i,1]*width))
@@ -75,16 +70,6 @@ def previewHeatmap(socketio, rd, id_camera, startDate, endDate):
         matrix_heatmap = []
         db = threading.Thread(target=thread_db.getPreviewHeatmap, args=(matrix_heatmap, id_camera, startDate, endDate,))
         db.start()
-        heatmapper = Heatmapper(
-                point_diameter=50,  # the size of each point to be drawn
-                point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
-                opacity=0.5,  # the opacity of the heatmap layer
-                colours='default',  # 'default' or 'reveal'
-                                    # OR a matplotlib LinearSegmentedColorMap object 
-                                    # OR the path to a horizontal scale image
-                grey_heatmapper='PIL'  # The object responsible for drawing the points
-                                    # Pillow used by default, 'PySide' option available if installed
-            )
         image_base64 = rd.get(str(id_camera))
         # Từ base64 chuyển thành image
         decoded_data = base64.b64decode(image_base64.decode())

@@ -25,10 +25,6 @@ def getFaceBox(net, frame, conf_threshold=0.7):
     return frameOpencvDnn, bboxes
 
 
-parser = argparse.ArgumentParser(description='Use this script to run age and gender recognition using OpenCV.')
-parser.add_argument('--input', help='Path to input image or video file. Skip this argument to capture frames from a camera.')
-
-args = parser.parse_args()
 
 faceProto = "opencv_face_detector.pbtxt"
 faceModel = "opencv_face_detector_uint8.pb"
@@ -49,7 +45,7 @@ genderNet = cv.dnn.readNet(genderModel, genderProto)
 faceNet = cv.dnn.readNet(faceModel, faceProto)
 
 # Open a video file or an image file or a camera stream
-cap = cv.VideoCapture(args.input if args.input else 0)
+cap = cv.VideoCapture(0)
 padding = 20
 while cv.waitKey(1) < 0:
     # Read frame
@@ -67,22 +63,23 @@ while cv.waitKey(1) < 0:
     for bbox in bboxes:
         # print(bbox)
         face = frame[max(0,bbox[1]-padding):min(bbox[3]+padding,frame.shape[0]-1),max(0,bbox[0]-padding):min(bbox[2]+padding, frame.shape[1]-1)]
-
+        # print(face)
         blob = cv.dnn.blobFromImage(face, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
+        # print(blob)
         genderNet.setInput(blob)
         genderPreds = genderNet.forward()
         gender = genderList[genderPreds[0].argmax()]
         # print("Gender Output : {}".format(genderPreds))
-        print("Gender : {}, conf = {:.3f}".format(gender, genderPreds[0].max()))
-
+        # print("Gender : {}, conf = {:.3f}".format(gender, genderPreds[0].max()))
+        print(gender)
         ageNet.setInput(blob)
         agePreds = ageNet.forward()
         age = ageList[agePreds[0].argmax()]
-        print("Age Output : {}".format(agePreds))
-        print("Age : {}, conf = {:.3f}".format(age, agePreds[0].max()))
+        print(age)
+        # print("Age Output : {}".format(agePreds))
+        # print("Age : {}, conf = {:.3f}".format(age, agePreds[0].max()))
 
         label = "{},{}".format(gender, age)
-        cv.putText(frameFace, label, (bbox[0], bbox[1]-10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2, cv.LINE_AA)
+        # cv.putText(frameFace, label, (bbox[0], bbox[1]-10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2, cv.LINE_AA)
         cv.imshow("Age Gender Demo", frameFace)
         # cv.imwrite("age-gender-out-{}".format(args.input),frameFace)
-    print("time : {:.3f}".format(time.time() - t))

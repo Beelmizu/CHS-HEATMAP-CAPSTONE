@@ -32,20 +32,20 @@ def connected(data):
 	for char in data:
 		if char == ";":
 			id_camera = strData
-			print(strData)
+			# print(strData)
 
 		if char == ",":
 			start  = strData
-			print(strData)
+			# print(strData)
 
 		if char == "," or char == ";":
 			strData = ""
 		else:
 			strData = strData + str(char)
 	end = strData
-	print("id camera",id_camera)
-	print("start day",start)
-	print("End day",end)
+	# print("id camera",id_camera)
+	# print("start day",start)
+	# print("End day",end)
 	camera = threading.Thread(target=previewHeatmap, args=(socketio, rd, id_camera, start, end))
 	camera.start()
 @socketio.on('stream_camera')

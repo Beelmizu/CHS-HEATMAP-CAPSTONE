@@ -4,9 +4,6 @@ import socket
 import time
 import redis
 
-
-
-
 def getFrameCamera(socketio,rd, id_camera,):
     while True:
         try:

@@ -31,6 +31,7 @@ import Thread_db as thread_db
 import signal
 import sys
 from Thread_upload_cloud import *
+from Thread_face import * 
 import redis
 
 import pymysql.cursors
@@ -40,6 +41,7 @@ import pymysql.cursors
 # By default we use an "SSD with Mobilenet" model here. See the [detection model zoo](https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
 # Font chữ
 font = ImageFont.truetype("./font/arial.ttf", 18)
+fontFaceRe = ImageFont.truetype("./font/arial.ttf", 10)
 retake_heatmap_count = 200
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
@@ -86,6 +88,9 @@ def detectObject(socketio, rd, id_camera):
     # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     db = threading.Thread(target=thread_db.getTotalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
     db.start()
+    # Chạy nhận dạng gender và age
+    face = threading.Thread(target=detectFace, args=(rd, id_camera,))
+    face.start()
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     
@@ -178,7 +183,11 @@ def detectObject(socketio, rd, id_camera):
                             pass
                         #font chữ load ở bên trên
                         dr.text((10, 10),"Person: " + str(countNum),(0,255,0), font=font)
-
+                        # Lấy kết quả của nhận dạng gender vs age
+                        face_re = rd.get(str(id_camera) + "_FR").decode()
+                        if face_re == None:
+                            face_re = "Loading..."
+                        dr.text((30, 30),face_re,(0,255,0), font=fontFaceRe)
                         if countdown_heatmap == 0:
                             #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
                             countdown_heatmap = retake_heatmap_count
