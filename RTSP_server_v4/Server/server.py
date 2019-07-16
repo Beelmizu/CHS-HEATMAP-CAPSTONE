@@ -6,6 +6,7 @@ from Thread_camera import *
 from Thread_heatmap import *
 from Thread_worker import *
 from Thread_client import *
+import Thread_db as thread_db
 import threading
 from urllib.request import urlopen
 import json
@@ -83,26 +84,30 @@ def connected(data):
 
 
 def setupApp(app):
-	# jsonurl = urlopen("http://localhost:8080/api/cameras/getAll")
-	# text = json.loads(jsonurl.read())
-	#Lấy id đầu tiên
-	# print(text[0]['id'])
-	# print(text)
-	# for camera in text:
-	# 	print(camera['account'])
-	id_camera = "1"
-	port_camera = 0
 	# port_camera = "rtsp://admin:Admin@123@192.168.1.64/1"
 	# port_camera = "rtsp://admin:Admin@123@14.187.178.200:10554"
+	cameras = thread_db.getAllCamera()
+	for camera in cameras:
+		# 0 là id, 1 là ip, 2 là account, 3 là password
+		port_camera ="rtsp://" + camera[2] + ":" + camera[3] + "@" + camera[1]
+		id_camera = str(camera[0])
+		print(port_camera)
+		# print(camera[0])
+		if camera[2] == "admin":
+			port_camera = 0
+			print("Start Camera: ", port_camera)
+			thread_camera = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
+			thread_camera.start()
+			thread_worker = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
+			thread_worker.start()
 
-	
 	# rd.set('foo', "bar") 
 	# v = rd.get('foo')
 	# print (v.decode())
-	camera_1 = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
-	camera_1.start()
-	worker_1 = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
-	worker_1.start()
+	# camera_1 = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
+	# camera_1.start()
+	# worker_1 = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
+	# worker_1.start()
     
 def signal_handler(sig, frame):
 	# cleanup_stop_thread()

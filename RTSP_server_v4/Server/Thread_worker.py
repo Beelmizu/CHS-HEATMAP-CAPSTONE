@@ -84,10 +84,10 @@ def detectObject(socketio, rd, id_camera):
     currentDate = currentTime.strftime("%Y-%m-%d")
     now = datetime.date.today()
     Upload_time_set = now + datetime.timedelta(days=1)
-    matrix_heatmap = []
+    matrix_heatmap = thread_db.getTotalMatrix(id_camera, currentDate,)
     # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    db = threading.Thread(target=thread_db.getTotalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
-    db.start()
+    # db = threading.Thread(target=thread_db.getTotalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
+    # db.start()
     # Chạy nhận dạng gender và age
     face = threading.Thread(target=detectFace, args=(rd, id_camera,))
     face.start()
@@ -147,7 +147,7 @@ def detectObject(socketio, rd, id_camera):
                                                                                                         use_normalized_coordinates=True,
                                                                                                         line_thickness=2,
                                                                                                         max_boxes_to_draw=None,
-                                                                                                        min_score_thresh=0.35)
+                                                                                                        min_score_thresh=0.5)
                         #record video
                         box = np.squeeze(boxes)
                         retval, buffer = cv2.imencode('.jpg', image)
@@ -200,10 +200,10 @@ def detectObject(socketio, rd, id_camera):
                                 Upload_time_set = Upload_time_set + datetime.timedelta(days=1)
                                 matrix_heatmap = []
                             currentTime = datetime.datetime.now()
-                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height,currentTime,))
+                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime, countNum,))
                             heatmap.start()
-                            db = threading.Thread(target=thread_db.setCount, args=(countNum, id_camera, currentTime,))
-                            db.start()
+                            # db = threading.Thread(target=thread_db.setCount, args=(countNum, id_camera, currentTime,))
+                            # db.start()
                         # Chuyển thành base64 để đẩy lên redis
                         buffered = BytesIO()
                         background_OD.save(buffered, format="PNG")

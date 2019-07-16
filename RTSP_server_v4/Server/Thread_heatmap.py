@@ -17,7 +17,7 @@ heatmapper = Heatmapper(
     point_diameter=50,  # the size of each point to be drawn
     point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
     opacity=0.5,)
-def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime):
+def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime, countNum):
     try:
         save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
         # print(box)
@@ -54,7 +54,7 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
         rd.set(str(id_camera) + "_HM", img_str)
         # print(matrix_heatmap)
         # setMatrixToDB(string_matrix, id_camera, currentTime)
-        db = threading.Thread(target=thread_db.setMatrixToDB, args=(string_matrix, id_camera, currentTime,))
+        db = threading.Thread(target=thread_db.setMatrixToDB, args=(string_matrix, id_camera, currentTime, countNum))
         db.start()
         # Garbage collection
         gc.collect()

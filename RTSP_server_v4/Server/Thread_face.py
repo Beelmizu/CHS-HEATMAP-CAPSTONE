@@ -7,6 +7,8 @@ import redis
 import base64
 import numpy as np
 import datetime
+import Thread_db as thread_db
+import threading
 
 def getFaceBox(net, frame, conf_threshold=0.7):
     frameOpencvDnn = frame.copy()
@@ -61,7 +63,7 @@ def detectFace(rd, id_camera):
             image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
             # Read frame
             currentTime = datetime.datetime.now()
-
+            hour = currentTime.strftime("%H:%M")
             frameFace, bboxes = getFaceBox(faceNet, image)
             maleNum = 0
             femaleNum = 0
@@ -82,11 +84,13 @@ def detectFace(rd, id_camera):
                 ageNet.setInput(blob)
                 agePreds = ageNet.forward()
                 age = ageList[agePreds[0].argmax()]
+                db = threading.Thread(target=thread_db.setAnalysis, args=(gender, age, id_camera, currentTime))
+                db.start()
 
-            report = "Male: "+ str(maleNum) + "  Female: " + str(femaleNum) + " In :" + str(currentTime)
+            report = "Male: "+ str(maleNum) + "  Female: " + str(femaleNum) + " In: " + str(hour)
             print(report)
             rd.set(str(id_camera) + "_FR", report)
-            time.sleep(5)
+            time.sleep(60)
     except Exception as e:
 
         if hasattr(e, 'message'):

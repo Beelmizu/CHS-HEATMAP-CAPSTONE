@@ -78,7 +78,7 @@ def runCamera(socketio, rd, id_camera, port_camera):
             pass
     print("Camera have been stop.")            
     cam.release()
-    # time.sleep(0.05)
+    time.sleep(0.05)
     upload = threading.Thread(target=uploadToCloud, args=(socketio, rd, id_camera, port_camera,))
     upload.start()
     # Garbage collection

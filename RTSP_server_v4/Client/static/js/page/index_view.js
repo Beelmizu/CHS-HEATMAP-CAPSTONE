@@ -10,7 +10,7 @@ $(document).ready(function() {
 		socket.emit('stream_camera', "1");
 		// 2019-07-12 15:25:06.535100
 		// 2019-07-12 15:26:52.927587
-		socket.emit('preview_heatmap', "1;2019-07-12 15:25:06.535100,2019-07-12 15:26:52.927587");
+		socket.emit('preview_heatmap', "1;2019-07-16 23:02:31.280025,2019-07-16 23:23:43.259128");
 		//rtsp://admin:Admin@123@192.168.1.64/1
 		// socket.emit('stream_camera', "1:rtsp://admin:Admin@123@192.168.1.64/1");
 	});
