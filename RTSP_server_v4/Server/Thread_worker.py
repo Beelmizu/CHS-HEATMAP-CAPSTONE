@@ -89,8 +89,8 @@ def detectObject(socketio, rd, id_camera):
     # db = threading.Thread(target=thread_db.getTotalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
     # db.start()
     # Chạy nhận dạng gender và age
-    face = threading.Thread(target=detectFace, args=(rd, id_camera,))
-    face.start()
+    # face = threading.Thread(target=detectFace, args=(rd, id_camera,))
+    # face.start()
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
     

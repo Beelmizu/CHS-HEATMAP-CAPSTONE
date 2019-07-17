@@ -50,47 +50,57 @@ genderNet = cv2.dnn.readNet(genderModel, genderProto)
 faceNet = cv2.dnn.readNet(faceModel, faceProto)
 
 # Open a video file or an image file or a camera stream
-def detectFace(rd, id_camera):
+def detectFace(rd, id_camera,):
     try:
         padding = 20
         # print("Get in FACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-        while True:
-            # Lấy ảnh từ redis và decode
-            image_base64 = rd.get(str(id_camera))
-            # Từ base64 chuyển thành image
-            decoded_data = base64.b64decode(image_base64.decode())
-            np_data = np.fromstring(decoded_data,np.uint8)
-            image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
-            # Read frame
-            currentTime = datetime.datetime.now()
-            hour = currentTime.strftime("%H:%M")
-            frameFace, bboxes = getFaceBox(faceNet, image)
-            maleNum = 0
-            femaleNum = 0
-            for bbox in bboxes:
-                # print(bbox)
-                face = image[max(0,bbox[1]-padding):min(bbox[3]+padding,image.shape[0]-1),max(0,bbox[0]-padding):min(bbox[2]+padding, image.shape[1]-1)]
-                # print(face)
-                blob = cv2.dnn.blobFromImage(face, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
-                # Check Gender
-                genderNet.setInput(blob)
-                genderPreds = genderNet.forward()
-                gender = genderList[genderPreds[0].argmax()]
-                if gender == "Male":
-                    maleNum = maleNum + 1
-                else:
-                    femaleNum = femaleNum + 1
-                # Check Age
-                ageNet.setInput(blob)
-                agePreds = ageNet.forward()
-                age = ageList[agePreds[0].argmax()]
-                db = threading.Thread(target=thread_db.setAnalysis, args=(gender, age, id_camera, currentTime))
-                db.start()
+        # while True:
+        # Lấy ảnh từ redis và decode
+        image_base64 = rd.get(str(id_camera))
+        # Từ base64 chuyển thành image
+        decoded_data = base64.b64decode(image_base64.decode())
+        np_data = np.fromstring(decoded_data,np.uint8)
+        image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+        # Read frame
+        currentTime = datetime.datetime.now()
+        hour = currentTime.strftime("%H:%M")
+        frameFace, bboxes = getFaceBox(faceNet, image)
+        maleNum = 0
+        femaleNum = 0
+        gender_list = ""
+        age_list = ""
+        for bbox in bboxes:
+            # print(bbox)
+            face = image[max(0,bbox[1]-padding):min(bbox[3]+padding,image.shape[0]-1),max(0,bbox[0]-padding):min(bbox[2]+padding, image.shape[1]-1)]
+            # print(face)
+            blob = cv2.dnn.blobFromImage(face, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
+            # Check Gender
+            genderNet.setInput(blob)
+            genderPreds = genderNet.forward()
+            gender = genderList[genderPreds[0].argmax()]
+            gender_list = gender_list + gender + ";"
+            if gender == "Male":
+                maleNum = maleNum + 1
+            else:
+                femaleNum = femaleNum + 1
+            # Check Age
+            ageNet.setInput(blob)
+            agePreds = ageNet.forward()
+            age = ageList[agePreds[0].argmax()]
+            age_list = age_list + age + ";"
+            # db = threading.Thread(target=thread_db.setAnalysis, args=(gender, age, id_camera, currentTime))
+            # db.start()
 
-            report = "Male: "+ str(maleNum) + "  Female: " + str(femaleNum) + " In: " + str(hour)
-            print(report)
-            rd.set(str(id_camera) + "_FR", report)
-            time.sleep(60)
+        report = "Male: "+ str(maleNum) + "  Female: " + str(femaleNum) + " In: " + str(hour)
+        print(report)
+        # print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: ",gender_list)
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ",age_list)
+        rd.set(str(id_camera) + "_FR", report)
+        return {
+            "gender":gender_list,
+            "age":age_list
+        }
+        # time.sleep(60)
     except Exception as e:
 
         if hasattr(e, 'message'):

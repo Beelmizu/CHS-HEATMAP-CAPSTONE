@@ -7,12 +7,12 @@ from PIL import Image
 import cv2
 from io import BytesIO
 from Thread_worker import *
+import Thread_face as thread_fa
 import Thread_db as thread_db
 import datetime
 import gc
 import threading
 import numpy as np
-
 heatmapper = Heatmapper(
     point_diameter=50,  # the size of each point to be drawn
     point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
@@ -22,7 +22,12 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
         save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
         # print(box)
         string_matrix = ""
-        
+        gender_list = ""
+        age_list = ""
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
+        result = thread_fa.detectFace(rd, id_camera,)
+        # face = threading.Thread(target=detectFace, args=(rd, id_camera, gender_list, age_list))
+        # face.start()
         
         for i in range(len(box)):
             ymax = (int(box[i,0]*height))
@@ -54,8 +59,11 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
         rd.set(str(id_camera) + "_HM", img_str)
         # print(matrix_heatmap)
         # setMatrixToDB(string_matrix, id_camera, currentTime)
-        db = threading.Thread(target=thread_db.setMatrixToDB, args=(string_matrix, id_camera, currentTime, countNum))
-        db.start()
+        # print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: ",result["gender"])
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ",result["age"])
+        if countNum != 0:
+            db = threading.Thread(target=thread_db.addReport, args=(string_matrix, id_camera, currentTime, countNum, result["gender"], result["age"]))
+            db.start()
         # Garbage collection
         gc.collect()
     except Exception as e:
