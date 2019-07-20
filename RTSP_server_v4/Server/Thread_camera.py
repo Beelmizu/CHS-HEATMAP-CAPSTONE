@@ -68,8 +68,8 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 image_text = str(jpg_as_text, "utf-8")
                 rd.set(str(id_camera), image_text)
                 save_camera.write(image)
-            # else:
-            #     cam = cv2.VideoCapture(port_camera)
+            else:
+                cam = cv2.VideoCapture(port_camera)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
