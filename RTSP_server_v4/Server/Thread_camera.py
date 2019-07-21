@@ -70,6 +70,7 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 save_camera.write(image)
             else:
                 cam = cv2.VideoCapture(port_camera)
+            time.sleep(0.05)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
@@ -78,7 +79,7 @@ def runCamera(socketio, rd, id_camera, port_camera):
             pass
     print("Camera have been stop.")            
     cam.release()
-    time.sleep(0.05)
+    time.sleep(1)
     upload = threading.Thread(target=uploadToCloud, args=(socketio, rd, id_camera, port_camera,))
     upload.start()
     # Garbage collection

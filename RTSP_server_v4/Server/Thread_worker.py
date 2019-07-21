@@ -93,7 +93,8 @@ def detectObject(socketio, rd, id_camera):
     # face.start()
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     countdown_heatmap = 1
-    
+    heatmapTime = datetime.datetime.now()
+    heatmapRunTime = heatmapTime + datetime.timedelta(minutes=1)
 
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
@@ -188,9 +189,11 @@ def detectObject(socketio, rd, id_camera):
                         if face_re == None:
                             face_re = "Loading..."
                         dr.text((30, 30),face_re,(0,255,0), font=fontFaceRe)
-                        if countdown_heatmap == 0:
+                        heatmapTime = datetime.datetime.now()
+                        if heatmapTime > heatmapRunTime:
                             #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
-                            countdown_heatmap = retake_heatmap_count
+                            # countdown_heatmap = retake_heatmap_count
+                            heatmapRunTime = heatmapTime + datetime.timedelta(minutes=1)
                             # setCount(countNum, id_camera)
                             now = datetime.date.today()
                             # print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
@@ -199,11 +202,8 @@ def detectObject(socketio, rd, id_camera):
                             if now > Upload_time_set:
                                 Upload_time_set = Upload_time_set + datetime.timedelta(days=1)
                                 matrix_heatmap = []
-                            currentTime = datetime.datetime.now()
-                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height, currentTime, countNum,))
+                            heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height, heatmapTime, countNum,))
                             heatmap.start()
-                            # db = threading.Thread(target=thread_db.setCount, args=(countNum, id_camera, currentTime,))
-                            # db.start()
                         # Chuyển thành base64 để đẩy lên redis
                         buffered = BytesIO()
                         background_OD.save(buffered, format="PNG")
@@ -211,7 +211,7 @@ def detectObject(socketio, rd, id_camera):
                         rd.set(str(id_camera) + "_OD", img_str)
 
                         
-                        time.sleep(0.08) 
+                        time.sleep(0.1) 
                         # socketio.sleep(0.5)
                     # else:
                         # cam = cv2.VideoCapture(port_camera)

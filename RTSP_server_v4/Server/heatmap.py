@@ -18,20 +18,12 @@ def setOpacity(img, opacity):
         alpha = img.split()[3]
         alpha = alpha.point(lambda p: int(p * opacity))
         img.putalpha(alpha)
+        # img.save('opacity.png')
         return img
 
 
 class Heatmapper:
     def __init__(self, point_diameter=50, point_strength=0.2, opacity=0.65):
-        """
-        :param opacity: opacity (between 0 and 1) of the generated heatmap overlay
-        :param colours: Either 'default', 'reveal',
-                        OR the path to horizontal image which will be converted to a scale
-                        OR a matplotlib LinearSegmentedColorMap instance.
-        :param grey_heatmapper: Required to draw points on an image as a greyscale
-                                heatmap. If not using the default, this must be an object
-                                which fulfils the GreyHeatmapper interface.
-        """
 
         self.opacity = opacity
         self.point_diameter = point_diameter
@@ -42,12 +34,6 @@ class Heatmapper:
         return self.heatmap(width, height, points, base_img=img)
         
     def heatmap(self, width, height, points, base_img=None):
-        """
-        :param points: sequence of tuples of (x, y), eg [(9, 20), (7, 3), (19, 12)]
-        :return: If base_path of base_img provided, a heat map from the given points
-                 is overlayed on the image. Otherwise, the heat map aplone is returned
-                 with a transparent background.
-        """
         # Lấy màu
         self._cmap = self.getColorMap(asset_file + 'HeatmapColor.png')
         # Vẽ điểm đen trên nền trắng
@@ -60,11 +46,8 @@ class Heatmapper:
 
 
     def drawColor(self, img):
-        """ maps values in greyscale image to colours """
         arr = numpy.array(img)
         rgba_img = self._cmap(arr, bytes=True)
-        # coloru = Image.fromarray(rgba_img)
-        # coloru.save('colour.png')
         return Image.fromarray(rgba_img)
 
     def getColorMap(self, img_path):
