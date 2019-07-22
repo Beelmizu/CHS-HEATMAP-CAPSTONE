@@ -41,25 +41,8 @@ def runCamera(socketio, rd, id_camera, port_camera):
     new_w=width//2
     new_h = int(new_h)
     new_w = int(new_w)
-    now = datetime.date.today()
-    day = now.strftime("%Y-%m-%d")
-    create_dir('./Server_data/Save_data/Camera/'+ id_camera +'/'+ day +'/')
-    save_file_location = "./Server_data/Save_data/Camera/"+ id_camera + '/' + day + "/Camera_"+id_camera +"_"+ day + ".avi"
-    
-    Upload_time_set = now + datetime.timedelta(days=1)
-    # print(now)
-    # print(Upload_time_set)
-    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),20.0, (new_w, new_h))
-
-    
-
     while True:
         try:
-            now = datetime.date.today()
-            if now > Upload_time_set:
-                # Xuống dưới chạy
-                print("--------------------------UPLOAD TO CLOUD---------------------------------")
-                break
             retval, image_read = cam.read()
             if image_read is not None:
                 image = cv2.resize(image_read, (new_w, new_h))
@@ -67,9 +50,51 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 jpg_as_text = base64.b64encode(buffer)
                 image_text = str(jpg_as_text, "utf-8")
                 rd.set(str(id_camera), image_text)
-                save_camera.write(image)
+                # save_camera.write(image)
             else:
                 cam = cv2.VideoCapture(port_camera)
+            time.sleep(0.04)
+        except Exception as e:
+            if hasattr(e, 'message'):
+                print(e.message)
+            else:
+                print(e)
+            pass
+
+def saveCameraVideo(socketio, rd, id_camera, port_camera):
+    startTime = datetime.datetime.now()
+    day = startTime.strftime("%Y-%m-%d")
+    create_dir('./Server_data/Save_data/Camera/'+ id_camera +'/'+ day +'/')
+    save_file_location = "./Server_data/Save_data/Camera/"+ id_camera + '/' + day + "/Camera_"+id_camera +"_"+ day + ".avi"
+    
+    uploadTime = startTime + datetime.timedelta(days=1)
+    # print(startTime)
+    # print(uploadTime)
+    uploadTime = uploadTime.replace(hour=0, minute=0, second=0, microsecond=0)
+    image_base64 = rd.get(str(id_camera))
+    # Từ base64 chuyển thành image
+    decoded_data = base64.b64decode(image_base64.decode())
+    np_data = np.fromstring(decoded_data,np.uint8)
+    image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+    height, width, channel = image.shape
+    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),20.0, (width, height))
+    while True:
+        try:
+            save_camera.write(image)
+            startTime = datetime.datetime.now()
+            # print(startTime)
+            # print(uploadTime)
+            if startTime > uploadTime:
+                # Xuống dưới chạy
+                print("--------------------------UPLOAD TO CLOUD---------------------------------")
+                break
+            # Lấy ảnh từ redis và decode
+            image_base64 = rd.get(str(id_camera))
+            # Từ base64 chuyển thành image
+            decoded_data = base64.b64decode(image_base64.decode())
+            np_data = np.fromstring(decoded_data,np.uint8)
+            image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+            
             time.sleep(0.05)
         except Exception as e:
             if hasattr(e, 'message'):
@@ -78,7 +103,7 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 print(e)
             pass
     print("Camera have been stop.")            
-    cam.release()
+    # cam.release()
     time.sleep(1)
     upload = threading.Thread(target=uploadToCloud, args=(socketio, rd, id_camera, port_camera,))
     upload.start()

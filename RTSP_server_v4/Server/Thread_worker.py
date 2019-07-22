@@ -82,8 +82,8 @@ def detectObject(socketio, rd, id_camera):
     
     currentTime = datetime.datetime.now()
     currentDate = currentTime.strftime("%Y-%m-%d")
-    now = datetime.date.today()
-    Upload_time_set = now + datetime.timedelta(days=1)
+    upload_time = currentTime + datetime.timedelta(days=1)
+    upload_time = upload_time.replace(hour=0, minute=0, second=0, microsecond=0)
     matrix_heatmap = thread_db.getTotalMatrix(id_camera, currentDate,)
     # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     # db = threading.Thread(target=thread_db.getTotalMatrix, args=(matrix_heatmap, id_camera, currentDate,))
@@ -190,17 +190,19 @@ def detectObject(socketio, rd, id_camera):
                             face_re = "Loading..."
                         dr.text((30, 30),face_re,(0,255,0), font=fontFaceRe)
                         heatmapTime = datetime.datetime.now()
+                        # print(upload_time)
                         if heatmapTime > heatmapRunTime:
                             #Chạy heatmap sau khi chạy xong retake_heatmap_count frame
                             # countdown_heatmap = retake_heatmap_count
                             heatmapRunTime = heatmapTime + datetime.timedelta(minutes=1)
                             # setCount(countNum, id_camera)
-                            now = datetime.date.today()
+                            currentTime = datetime.datetime.now()
                             # print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
                             # print(now)
-                            # print(Upload_time_set)
-                            if now > Upload_time_set:
-                                Upload_time_set = Upload_time_set + datetime.timedelta(days=1)
+                            # print(upload_time)
+                            if currentTime > upload_time:
+                                upload_time = upload_time + datetime.timedelta(days=1)
+                                upload_time = upload_time.replace(hour=0, minute=0, second=0)
                                 matrix_heatmap = []
                             heatmap = threading.Thread(target=thread_hm.viewHeatmapCamera, args=(socketio, rd, id_camera, matrix_heatmap, box, width, height, heatmapTime, countNum,))
                             heatmap.start()

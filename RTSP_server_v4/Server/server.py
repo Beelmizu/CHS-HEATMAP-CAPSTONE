@@ -94,9 +94,11 @@ def setupApp(app):
 		print(port_camera)
 		# print(camera[0])
 		if camera[2] == "admin":
-			port_camera = 0
+			# port_camera = 0
 			print("Start Camera: ", port_camera)
 			thread_camera = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
+			thread_camera.start()
+			thread_camera = threading.Thread(target=saveCameraVideo, args=(socketio, rd, id_camera, port_camera,))
 			thread_camera.start()
 			thread_worker = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
 			thread_worker.start()
