@@ -15,6 +15,8 @@ asset_file = "./assets_heatmap/"
 
 def setOpacity(img, opacity):
         img = img.copy()
+        # Lấy màu sáng tối từ trắng tới đen
+        # return: 1 mảng gồm RGB
         alpha = img.split()[3]
         alpha = alpha.point(lambda p: int(p * opacity))
         img.putalpha(alpha)

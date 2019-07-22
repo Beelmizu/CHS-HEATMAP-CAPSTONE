@@ -13,7 +13,7 @@ def getFrameCamera(socketio,rd, id_camera,):
             # Lấy từ redis với key là id của camera
             socketio.emit("stream_camera", image.decode())
             # time.sleep(0.1)
-            socketio.sleep(0.07)
+            socketio.sleep(0.08)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
