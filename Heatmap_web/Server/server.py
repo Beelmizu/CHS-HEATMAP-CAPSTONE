@@ -50,8 +50,8 @@ def setupApp(app):
 	# for camera in text:
 	# 	print(camera['account'])
 	id_camera = "1"
-	port_camera = 0
-	# port_camera = "rtsp://admin:Admin@123@192.168.1.64/1"
+	# port_camera = 0
+	port_camera = "rtsp://admin:Admin@123@123.20.250.6:554"
 	camera_1 = threading.Thread(target=runCamera, args=(socketio, id_camera, port_camera,))
 	camera_1.start()
     
