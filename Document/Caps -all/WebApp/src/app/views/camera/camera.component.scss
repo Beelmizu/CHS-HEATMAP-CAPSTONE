@@ -1,0 +1,40 @@
+.row {
+    margin-top: 30px;
+}
+#spanView button{
+    margin-right: 5px;
+    float: right;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+i{
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+#btnDetail {
+    margin: 0 auto ;
+    display: block;
+    text-align: center;
+}
+
+#imgCamera {
+    margin: 0 auto ;   
+    display: block;
+    text-align: center;
+}
+
+
+#header {
+    border-top-left-radius: 30px; border-top-right-radius: 30px;
+}
+
+#footer {
+    border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+}
+#body {
+    border-radius: 30px;
+}

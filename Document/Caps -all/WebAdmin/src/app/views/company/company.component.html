@@ -1,0 +1,51 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class=card-header>
+      <i class="fa fa-align-justify" > Company </i>
+    </div>
+    <div class="card-body">
+      <div class="form-group" [formGroup]="companyForm">
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
+                    <i class="fa fa-plus"> Add </i>
+                </button>
+            </span>
+            <input type="text" class="form-control" placeholder="Search by name ..." formControlName="searchValue" />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-primary" (click)="searchCompanyByName(companyForm.get('searchValue').value)">
+                <i class="fa fa-search" ></i> Search 
+              </button>
+            </span> 
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+              <div class="col-sm-6 col-md-4"  *ngFor="let company of companies">
+                  <div class="card">
+                    <div class="card-header">{{company.name}}
+                      <span class="badge badge-success float-right" *ngIf="company.status == 'active'">Active</span>
+                      <span class="badge badge-secondary float-right" *ngIf="company.status == 'inactive'">Inactive</span>
+                    </div>
+                    <div class="card-body">
+                        <tr><b>Address: </b> {{company.address}}</tr>
+                        <tr><b>Created Date: </b>{{company.createDate}}</tr>
+                    </div>
+                    <div class="card-footer">
+                      <span id="spanView">
+                          <button class="btn btn-info" type="button" [routerLink]="['detail', company.id]" routerLinkActive="active" > Detail</button>
+                          <button class="btn btn-success" type="button" [routerLink]="[company.id, 'all', 'account']" routerLinkActive="active" *ngIf="company.status == 'active'">View Account</button>
+                          <button class="btn btn-success" type="button" [routerLink]="[company.id, 'all', 'account']" routerLinkActive="active" *ngIf="company.status == 'inactive'" disabled = "true">View Account</button>
+                          <button class="btn btn-success" type="button" [routerLink]="[company.id, 'all', 'store']" routerLinkActive="active" *ngIf="company.status == 'active'">View Store</button>
+                          <button class="btn btn-success" type="button" [routerLink]="[company.id, 'all', 'store']" routerLinkActive="active" *ngIf="company.status == 'inactive'" disabled = "true">View Store</button>
+                      </span>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
