@@ -16123,7 +16123,7 @@
 											"top": 1419.5,
 											"width": 142,
 											"height": 13,
-											"text": "Check Age and Gender"
+											"text": "Face Detection"
 										},
 										{
 											"_type": "LabelView",
@@ -16154,7 +16154,7 @@
 									"font": "Arial;13;0",
 									"left": 744,
 									"top": 1412.5,
-									"width": 153.0380859375,
+									"width": 152,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFsFVzOnFgNxbg="
@@ -19016,7 +19016,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Check Age and Gender"
+					"name": "Face Detection"
 				},
 				{
 					"_type": "UMLUseCase",
