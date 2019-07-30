@@ -1,0 +1,56 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class=card-header>
+      <i class="fa fa-align-justify" > Area </i>
+    </div>
+    <div class="card-body">
+      <div class="form-group" [formGroup]="areaForm">
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
+                    <i class="fa fa-user-plus"> Add </i>
+                </button>
+            </span>
+          <input type="text" class="form-control" placeholder="Search by name ..." formControlName="searchValue"/>
+          <span class="input-group-append">
+            <button type="button" class="btn btn-primary" (click)="searchAreaByValue(areaForm.get('searchValue').value)">
+              <i class="fa fa-search"></i> Search </button>
+          </span> 
+        </div>
+      </div>
+      <table class="table table-bordered table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Floor</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th id="thAction">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let area of areas">
+            <td>{{area.floor}}</td>
+            <td>{{area.name}}</td>
+            <td  *ngIf="area.status == 'active'"> 
+              <span class="badge badge-success">Active</span>
+            </td>
+            <td *ngIf="area.status == 'inactive'">
+              <span class="badge badge-secondary" >Inactive</span>
+            </td>
+            <td id="tdAction">
+              <button type="button" class="btn btn-success" id="btnCamera" [routerLink]="[area.id, 'all', 'camera']" routerLinkActive="active" *ngIf="area.status == 'active'">
+                  View Camera
+              </button>
+              <button type="button" class="btn btn-success" id="btnCamera" [routerLink]="[area.id, 'all', 'camera']" routerLinkActive="active" *ngIf="area.status == 'inactive'" disabled="true">
+                  View Camera
+              </button>
+              <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', area.id]" routerLinkActive="active">
+                Detail
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

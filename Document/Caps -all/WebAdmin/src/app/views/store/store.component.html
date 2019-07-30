@@ -1,0 +1,58 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class=card-header>
+      <i class="fa fa-align-justify" > Store </i>
+    </div>
+    <div class="card-body">
+      <div class="form-group" [formGroup]="storeForm">
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
+                    <i class="fa fa-user-plus"> Add </i>
+                </button>
+            </span>
+          <input type="text" class="form-control" placeholder="Search by name ..." formControlName="searchValue"/>
+          <span class="input-group-append">
+            <button type="button" class="btn btn-primary" (click)="searchStoreByName(storeForm.get('searchValue').value)">
+              <i class="fa fa-search"></i> Search </button>
+          </span> 
+        </div>
+      </div>
+      <table class="table table-bordered table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let store of stores">
+            <td>{{store.name}}</td>
+            <td>{{store.address}}</td>
+            <td>{{store.phone}}</td>
+            <td  *ngIf="store.status == 'active'"> 
+              <span class="badge badge-success">Active</span>
+            </td>
+            <td *ngIf="store.status == 'inactive'">
+              <span class="badge badge-secondary" >Inactive</span>
+            </td>
+            <td>
+               <button type="button" class="btn btn-success" id="btnArea" [routerLink]="[store.id, 'all', 'area']" routerLinkActive="active" *ngIf="store.status == 'active'" >
+                View Area
+              </button>
+              <button type="button" class="btn btn-success" id="btnArea" [routerLink]="[store.id, 'all', 'area']" routerLinkActive="active"  *ngIf="store.status == 'inactive'" disabled="true">
+                  View Area
+              </button>
+              <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', store.id]" routerLinkActive="active">
+                Detail
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

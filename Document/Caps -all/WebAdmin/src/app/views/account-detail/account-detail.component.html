@@ -1,0 +1,199 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class=card-header>
+      <strong>Account Detail </strong>
+      <small>{{accountDetail.id}}</small>
+    </div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="accountDetailForm">
+         <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accID" >
+          </div>
+        </div>
+        
+         <!-- Input Name -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> Username: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accUsername" >
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="mode == 'add'">
+          <label class="col-md-3 col-form-label" for="text-input" >Username: </label>
+          <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="accUsername" [ngClass]="{'is-invalid': isInvalid('accUsername'),
+              'is-valid' : isValid('accUsername')}">
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accUsername')">
+                Fullname is required !
+                </div>
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accUsername')">
+                  Max length &lt; 20
+              </div>
+          </div>
+        </div>
+
+         <!-- Input Password -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Password: </label>
+          <div class="col-md-9">
+              <input type="password" class="form-control" formControlName="accPassword" [ngClass]="{'is-invalid': isInvalid('accPassword'), 
+              'is-valid' : isValid('accPassword') }">
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accPassword')">
+                  Password is required !
+              </div>
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accPassword')">
+                  Max length &lt; 20
+              </div>
+          </div>
+        </div>
+
+         <!-- Input Fullname -->
+         <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input" >Fullname: </label>
+          <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="accFullname" [ngClass]="{'is-invalid': isInvalid('accFullname'),
+              'is-valid' : isValid('accFullname')}">
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accFullname')">
+                Fullname is required !
+                </div>
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accFullname')">
+                  Max length &lt; 45
+              </div>
+          </div>
+        </div>
+
+        <!-- Input Email -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Email: </label>
+          <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="accEmail" [ngClass]="{'is-invalid': isInvalid('accEmail'), 
+              'is-valid' : isValid('accEmail') }">
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accEmail')">
+                Email is required !
+              </div>
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('email','accEmail')">
+                 Email must be right format
+              </div>
+          </div>
+        </div>
+
+        <!-- Input Phone -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
+          <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="accPhone" [ngClass]="{'is-invalid': isInvalid('accPhone'), 
+              'is-valid' : isValid('accPhone') }">
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accPhone')">
+                  Phone is required !
+              </div>
+              <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accPhone')">
+                Max length &lt; 10
+            </div>
+          </div>
+        </div>
+
+        <!-- Radio Gender -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="inline-radios">Gender: </label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=0>
+              <label class="form-check-label" for="radio1">Male
+                <i class="icon-symbol-male"></i>
+              </label>
+            </div>
+            <br/>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=1>
+              <label class="form-check-label" for="radio2">Female
+                <i class="icon-symbol-female"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+
+          <!-- Radio Role -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Role: </label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accRole" value=true>
+              <label class="form-check-label" for="radio1">Administrator
+              </label>
+            </div>
+            <br/>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accRole" value=false>
+              <label class="form-check-label" for="radio2">Manager
+              </label>
+            </div>
+          </div>
+        </div>
+
+       <!-- Show Created Date  -->
+       <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accCreatedDate" >
+          </div>
+        </div>
+        
+        <!-- Show Updated Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accUpdatedDate" >
+          </div>
+        </div>
+
+      <!-- Show Status -->
+      <div class="form-group row" *ngIf="mode == 'detail'">
+        <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
+        <div class="col-md-9">
+          <input type="text" class="form-control" readonly=true formControlName="accStatus" >
+        </div>
+      </div>
+
+      <!-- Show Updated By -->
+      <div class="form-group row" *ngIf="mode == 'detail'">
+        <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
+        <div class="col-md-9">
+          <input type="text" class="form-control" readonly=true formControlName="accUpdatedBy" >
+        </div>
+      </div>
+
+        <!-- Show ComID -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Company: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="accCompany"  *ngIf="mode == 'detail'"> 
+              <option  *ngFor="let com of companies" value="{{com.id}}" >{{com.name}}</option> 
+            </select>
+            <select class="form-control" id="select1" name="select1" formControlName="accCompany" disabled = "true" *ngIf="mode == 'add'"> 
+                <option  *ngFor="let com of companies" value="{{com.id}}" >{{com.name}}</option>
+              </select>
+          </div>
+        </div> 
+    </form>
+      </div>
+        <div class="card-footer" *ngIf="mode == 'add'">
+            <button class="btn btn-sm btn-primary" (click)="goBack()">
+              <i class="icon-action-undo"></i> Back</button>
+            <button type="submit" class="btn btn-sm btn-warning" (click)="addAccount()" >
+              <i class="icon-book-open"></i> Add</button>
+        </div>
+        <div class="card-footer" *ngIf="mode == 'detail'">
+            <button class="btn btn-sm btn-primary" (click)="goBack()">
+              <i class="icon-action-undo"></i> Back</button>
+            <button type="submit" class="btn btn-sm btn-warning" (click)="updateAccountByID()" *ngIf="accountDetail.status == 'active'" >
+              <i class="icon-book-open"></i> Update</button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="inactiveAccountByID()" *ngIf="accountDetail.status == 'active'">
+              <i class="icon-trash"></i> Inactive </button>
+            <button type="button" class="btn btn-sm btn-success" (click)="activeAccountByID()" *ngIf="accountDetail.status == 'inactive'">
+                <i class="icon-check"></i> Active </button>
+        </div>
+  </div>
+</div>

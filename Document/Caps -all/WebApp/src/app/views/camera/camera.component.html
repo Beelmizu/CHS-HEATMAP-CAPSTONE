@@ -1,0 +1,25 @@
+<div class="animated fadeIn">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-6 col-md-4" *ngFor="let camera of cameras">
+        <div class="card" id="body">
+          <div class="card-header" id="header"><b>Camera: </b>{{camera.id}}
+            <span class="badge badge-success float-right" *ngIf="camera.status == 'active'">Active</span>
+            <span class="badge badge-secondary float-right" *ngIf="camera.status == 'inactive'">Inactive</span>
+          </div>
+          <div class="card-body">
+            <img src="../../../assets/img/background/cameraicon.png" id="imgCamera"/>
+          </div>
+          <div class="card-footer" id="footer">
+            <span id="spanView"  id="btnDetail">
+              <button class="btn btn-info" type="button" disabled="" *ngIf="camera.status == 'inactive'"> 
+                Live Preview</button>
+              <button class="btn btn-info" type="button" *ngIf="camera.status == 'active'"
+                [routerLink]="[camera.id, 'detail']" routerLinkActive="active"> Live Preview</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

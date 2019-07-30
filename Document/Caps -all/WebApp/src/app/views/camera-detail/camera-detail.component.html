@@ -1,0 +1,95 @@
+<div class="animated fadeIn">
+  <div class="card" id="cardContainer">
+    <div class="container-fluid" id="container">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" role="tab" [ngClass]="{'active show': choosedTab == 'stream'}"
+            (click)="choosedTab = 'stream'">
+            <i class="icon-screen-desktop"></i> Stream</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" role="tab" [ngClass]="{'active show': choosedTab == 'preview'}"
+            (click)="choosedTab = 'preview'">
+            <i class="icon-loop"></i> Preview</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+
+        <!-- Tab Stream of Camera -->
+        <div class="tab-pane active" id="streamVideo" role="tabpanel"
+          [ngClass]="{'active show': choosedTab == 'stream'}">
+          <div class="row">
+            <div class="col-sm-9" id="divImgStream">
+              <img [src]="imageSrc" id="imgStream" />
+              <img [src]="heatmapSrc" id="imgHeatmap" [style.display]="chbHeatmap?'inherit':'none'" />
+              <img [src]="objectSrc" id="imgObject" [style.display]="chbObject?'inherit':'none'" />
+            </div>
+            <div class="col-sm-3" >
+              <div id="options">
+                <div class="row" id="switchButtonHeatmap">
+                  <div class="col-md-9">
+                    <h5> Heatmap </h5>
+                  </div>
+                  <div class="col-md-3">
+                    <span id="switchStream">
+                      <label class="switch switch-label switch-success">
+                        <!-- <input class="switch-input" type="checkbox"  [checked]="chbHeatmap" (change)="chbHeatmap = !chbHeatmap"> -->
+                        <input class="switch-input" type="checkbox" [checked]="chbHeatmap"
+                          (change)="chbHeatmap = !chbHeatmap">
+                        <span class="switch-slider" data-checked="&#x2713;" data-unchecked="&#x2715;"></span>
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-9">
+                    <h5>People Detection</h5>
+                  </div>
+                  <div class="col-md-3">
+                    <span id="switchStream">
+                      <label class="switch switch-label switch-success">
+                        <input class="switch-input" type="checkbox" [checked]="chbObject"
+                          (change)="chbObject = !chbObject">
+                        <span class="switch-slider" data-checked="&#x2713;" data-unchecked="&#x2715;"></span>
+                      </label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Preview of Camera -->
+        <div class="tab-pane " id="previewHeatmap" role="tabpanel" [ngClass]="{'active show': choosedTab == 'preview'}">
+          <div class="row">
+            <div class="col-sm-9">
+              <img [src]="previewSrc" id="imgPreview" />
+            </div>
+            <div class="col-sm-3" id="controlPreviewDiv">
+              <div id="headerPreviewTime">
+                <app-fulldatepicker (date)="catchDate($event)"></app-fulldatepicker>
+              </div>
+              <div id="bodyPreviewTime">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link" *ngFor="let time of listTime" (click)="chooseTimeForPreview(time)"
+                      [ngClass]="{'active': time == selectedTime}">{{time}}</a>
+                  </li>
+                </ul>
+              </div>
+              <div id="footerPreviewTime">
+                <button class="btn btn-med btn-primary" id="btnPause" (click)="playPreview()" *ngIf="play === false">
+                  <i class="fa fa-play"></i> Play
+                </button>
+                <button class="btn btn-med btn-primary" id="btnPause" (click)="playPreview()" *ngIf="play === true">
+                  <i class="fa fa-pause"></i> Pause
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

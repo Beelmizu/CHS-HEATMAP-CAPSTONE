@@ -1,0 +1,30 @@
+
+#btnLogin {
+    margin: 0 auto ;
+    margin-top: 10px;    
+    display: block;
+    text-align: center;
+}
+
+
+#imgLoading {
+    margin: 0 auto ;
+    margin-top: 10px;    
+    display: block;
+    text-align: center;
+}
+.icon-login {
+    margin-right: 5px;
+}
+#background { 
+    background: url(../../../assets/img/background/backgroundlogin.jpg)  no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#divLogin { 
+    opacity: 0.9;
+}
+
