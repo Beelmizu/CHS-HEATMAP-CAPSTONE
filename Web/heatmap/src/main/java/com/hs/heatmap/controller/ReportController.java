@@ -35,7 +35,7 @@ public class ReportController {
                                                  @PathVariable(value = "cameraID") int cameraID,
                                                  @PathVariable(value = "timeFrom") String timeFrom,
                                                  @PathVariable(value = "timeTo") String timeTo){
-        return reportService.getReportByTime(selectedDate, cameraID, timeFrom, timeTo);
+        return reportService.getReportCameraByTime(selectedDate, cameraID, timeFrom, timeTo);
     }
 
     @GetMapping("/report/getReportAgeGenderByTime/{selectedDate}/{cameraID}/{timeFrom}/{timeTo}")
@@ -70,11 +70,10 @@ public class ReportController {
         return reportService.getReportStoreByTime(selectedDate, storeID, timeFrom, timeTo);
     }
 
-
     @GetMapping("/report/getReportByMonth/{selectedMonth}/{cameraID}")
     public List<Report> getReportByMonth(@PathVariable(value = "selectedMonth") String selectedMonth,
                                         @PathVariable(value = "cameraID") int cameraID){
-        return reportService.getReportByMonth(selectedMonth, cameraID);
+        return reportService.getReportCameraByMonth(selectedMonth, cameraID);
     }
 
     @GetMapping("/report/getReportAreaByMonth/{selectedMonth}/{areaID}")

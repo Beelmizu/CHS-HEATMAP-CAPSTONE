@@ -16,13 +16,13 @@ public interface CameraService {
 
     List<Camera> getCamerasByIp(String searchValue);
 
-    Camera createNewCamera(Camera camera);
+    boolean createNewCamera(Camera camera);
 
-    Camera updateCamera(Camera camera);
+    boolean updateCamera(Camera camera);
 
-    Camera inactiveCamera(Camera camera);
+    boolean inactiveCamera(Camera camera);
 
-    Camera activeCamera(Camera camera);
+    boolean activeCamera(Camera camera);
 
     Camera getCameraByIP(String ip);
 

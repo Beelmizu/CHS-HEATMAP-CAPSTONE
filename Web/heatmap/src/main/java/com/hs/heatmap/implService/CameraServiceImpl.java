@@ -43,37 +43,57 @@ public class CameraServiceImpl implements CameraService {
     public List<Camera> getCamerasByIp(String searchValue) { return cameraRepository.searchCamerasByIp(searchValue); }
 
     @Override
-    public Camera createNewCamera(Camera camera) {
-        if(cameraRepository.findCamerasByIp(camera.getIp()) != null){
-            return null;
+    public boolean createNewCamera(Camera camera) {
+        Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
+        if (existedCamera != null) {
+            return false;
         } else {
             camera.setCreateDate(LocalDateTime.now().toString());
             camera.setStatus("active");
-            return cameraRepository.save(camera);
+            cameraRepository.save(camera);
+            return true;
         }
     }
 
     @Override
-    public Camera updateCamera(Camera camera) {
-        camera.setUpdateDate(LocalDateTime.now().toString());
-        camera.setUpdatedBy("cuongdq");
-        return cameraRepository.save(camera);
+    public boolean updateCamera(Camera camera) {
+        Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
+        if (existedCamera != null) {
+            return false;
+        } else {
+            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedBy(camera.getUpdatedBy());
+            cameraRepository.save(camera);
+            return true;
+        }
     }
 
     @Override
-    public Camera inactiveCamera(Camera camera) {
-        camera.setUpdateDate(LocalDateTime.now().toString());
-        camera.setUpdatedBy("cuongdq");
-        camera.setStatus("inactive");
-        return cameraRepository.save(camera);
+    public boolean inactiveCamera(Camera camera) {
+        Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
+        if (existedCamera != null) {
+            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedBy(camera.getUpdatedBy());
+            camera.setStatus("inactive");
+            cameraRepository.save(camera);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public Camera activeCamera(Camera camera) {
-        camera.setUpdateDate(LocalDateTime.now().toString());
-        camera.setUpdatedBy("cuongdq");
-        camera.setStatus("active");
-        return cameraRepository.save(camera);
+    public boolean activeCamera(Camera camera) {
+        Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
+        if (existedCamera != null) {
+            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedBy(camera.getUpdatedBy());
+            camera.setStatus("inactive");
+            cameraRepository.save(camera);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

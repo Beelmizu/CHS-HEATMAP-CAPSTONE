@@ -1,6 +1,7 @@
 package com.hs.heatmap.repository;
 
 import com.hs.heatmap.model.Account;
+import com.hs.heatmap.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,6 +27,9 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
     Account findAccountById(Integer id);
 
     Account findAccountByUsername(String name);
+
+    @Query("SELECT a.account FROM AccountStore a WHERE a.sto_id = :id")
+    List<Account> findAccountByStore(@Param("id")int id);
 
     //Find account by company
     @Query("SELECT a FROM Account a WHERE a.cpn_acc_id = :id and a.role = false")

@@ -11,7 +11,7 @@ public interface ReportService {
 
     List<Report> getReportByDate(String date, int cameraID);
 
-    List<Report> getReportByMonth(String month, int cameraID);
+    List<Report> getReportCameraByMonth(String month, int cameraID);
 
     List getReportAreaByMonth(String month, int areaID);
 
@@ -19,7 +19,7 @@ public interface ReportService {
 
     List getReportAgeGenderStoreByMonth(String month, int storeID);
 
-    List<Report> getReportByTime(String date, int cameraID, String timeFrom, String timeTo);
+    List<Report> getReportCameraByTime(String date, int cameraID, String timeFrom, String timeTo);
 
     List<ReportAgeGender> getReportAgeGenderByTime(String date, int cameraID, String timeFrom, String timeTo);
 

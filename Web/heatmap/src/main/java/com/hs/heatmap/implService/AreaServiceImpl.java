@@ -44,37 +44,57 @@ public class AreaServiceImpl implements AreaService {
 
 
     @Override
-    public Area createNewArea(Area area) {
-        if(areaRepository.findAreasByName(area.getName()) != null){
-            return null;
-        } else {
+    public boolean createNewArea(Area area) {
+//        Area existedArea = areaRepository.findAreasByName(area.getName());
+//        if (existedArea != null) {
+//            return false;
+//        } else {
             area.setCreateDate(LocalDateTime.now().toString());
             area.setStatus("active");
-            return areaRepository.save(area);
+            areaRepository.save(area);
+            return true;
+//        }
+    }
+
+    @Override
+    public boolean updateArea(Area area) {
+        Area existedArea = areaRepository.findAreaById(area.getId());
+        if (existedArea != null) {
+            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedBy(area.getUpdatedBy());
+            areaRepository.save(area);
+            return true;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public Area updateArea(Area area) {
-        area.setUpdateDate(LocalDateTime.now().toString());
-        area.setUpdatedBy("cuongdq");
-        return areaRepository.save(area);
+    public boolean inactiveArea(Area area) {
+        Area existedArea = areaRepository.findAreaById(area.getId());
+        if (existedArea != null) {
+            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedBy(area.getUpdatedBy());
+            area.setStatus("inactive");
+            areaRepository.save(area);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public Area inactiveArea(Area area) {
-        area.setUpdateDate(LocalDateTime.now().toString());
-        area.setUpdatedBy("cuongdq");
-        area.setStatus("inactive");
-        return areaRepository.save(area);
-    }
-
-    @Override
-    public Area activeArea(Area area) {
-        area.setUpdateDate(LocalDateTime.now().toString());
-        area.setUpdatedBy("cuongdq");
-        area.setStatus("active");
-        return areaRepository.save(area);
+    public boolean activeArea(Area area) {
+        Area existedArea = areaRepository.findAreaById(area.getId());
+        if (existedArea != null) {
+            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedBy(area.getUpdatedBy());
+            area.setStatus("active");
+            areaRepository.save(area);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -12,12 +12,12 @@ public interface CompanyService {
 
     List<Company> getCompanyByName(String searchValue);
 
-    Company createNewCompany(Company company);
+    boolean createNewCompany(Company company);
 
-    Company updateCompany(Company company);
+    boolean updateCompany(Company company);
 
-    Company inactiveCompany(Company company);
+    boolean inactiveCompany(Company company);
 
-    Company activeCompany(Company company);
+    boolean activeCompany(Company company);
 
 }

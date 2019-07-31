@@ -25,15 +25,15 @@ public class CompanyController {
     public List<Company> searchCompany(@PathVariable(value = "searchValue") String searchValue) { return companyService.getCompanyByName(searchValue); }
 
     @PostMapping("/company/inactive")
-    public Company inactiveCompany(@RequestBody Company company) { return companyService.inactiveCompany(company); }
+    public boolean inactiveCompany(@RequestBody Company company) { return companyService.inactiveCompany(company); }
 
     @PostMapping("/company/active")
-    public Company activeCompany(@RequestBody Company company) { return companyService.activeCompany(company); }
+    public boolean activeCompany(@RequestBody Company company) { return companyService.activeCompany(company); }
 
     @PostMapping("/company/update")
-    public Company updateCompany(@RequestBody Company company) { return companyService.updateCompany(company); }
+    public boolean updateCompany(@RequestBody Company company) { return companyService.updateCompany(company); }
 
     @PostMapping("/company/create")
-    public Company createCompany(@RequestBody Company company) { return companyService.createNewCompany(company); }
+    public boolean createCompany(@RequestBody Company company) { return companyService.createNewCompany(company); }
 
 }

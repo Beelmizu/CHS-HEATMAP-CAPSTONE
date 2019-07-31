@@ -29,37 +29,74 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> getStoreByName(String searchValue) { return storeRepository.searchStoreByName(searchValue); }
 
     @Override
-    public Store createNewStore(Store store) {
-        if (storeRepository.findStoreByName(store.getName()) != null) {
-            return null;
+    public boolean createNewStore(Store store) {
+        Store existedStore = storeRepository.findStoreByName(store.getName());
+        if (existedStore != null) {
+            return false;
         } else {
             store.setCreateDate(LocalDateTime.now().toString());
             store.setStatus("active");
-            return storeRepository.save(store);
+            System.out.println(store.getCpn_store_id());
+            storeRepository.save(store);
+            return true;
         }
     }
 
     @Override
-    public Store updateStore(Store store) {
-        store.setUpdateDate(LocalDateTime.now().toString());
-        store.setUpdatedBy("cuongdq");
-        return storeRepository.save(store);
+    public boolean addStoreToAccount(Store store, Integer accountID) {
+        Store existedStore = storeRepository.findStoreWithAccountID(store.getId(), accountID);
+        System.out.println(existedStore);
+        if (existedStore != null) {
+            return false;
+        } else {
+            store.setCreateDate(LocalDateTime.now().toString());
+            store.setStatus("active");
+            System.out.println(store.getCpn_store_id());
+            storeRepository.save(store);
+            return true;
+        }
     }
 
     @Override
-    public Store inactiveStore(Store store) {
-        store.setUpdateDate(LocalDateTime.now().toString());
-        store.setUpdatedBy("cuongdq");
-        store.setStatus("inactive");
-        return storeRepository.save(store);
+    public boolean updateStore(Store store) {
+        Store existedStore = storeRepository.findStoreById(store.getId());
+        if (existedStore != null) {
+            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedBy(store.getUpdatedBy());
+            storeRepository.save(store);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public Store activeStore(Store store) {
-        store.setUpdateDate(LocalDateTime.now().toString());
-        store.setUpdatedBy("cuongdq");
-        store.setStatus("active");
-        return storeRepository.save(store);
+    public boolean inactiveStore(Store store) {
+
+        Store existedStore = storeRepository.findStoreById(store.getId());
+        if (existedStore != null) {
+            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedBy(store.getUpdatedBy());
+            store.setStatus("inactive");
+            storeRepository.save(store);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean activeStore(Store store) {
+        Store existedStore = storeRepository.findStoreById(store.getId());
+        if (existedStore != null) {
+            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedBy(store.getUpdatedBy());
+            store.setStatus("active");
+            storeRepository.save(store);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

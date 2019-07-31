@@ -33,36 +33,56 @@ public class CompanyServiceImpl implements CompanyService {
     public List<Company> getCompanyByName(String searchValue) { return companyRepository.searchCompaniesByName(searchValue); }
 
     @Override
-    public Company createNewCompany(Company company) {
-        if(companyRepository.findCompaniesByName(company.getName()) != null){
-            return null;
+    public boolean createNewCompany(Company company) {
+        Company existedCompany = companyRepository.findCompaniesByName(company.getName());
+        if (existedCompany != null) {
+            return false;
         } else {
             company.setCreateDate(LocalDateTime.now().toString());
             company.setStatus("active");
-            return companyRepository.save(company);
+            companyRepository.save(company);
+            return true;
         }
     }
 
     @Override
-    public Company updateCompany(Company company) {
-        company.setUpdateDate(LocalDateTime.now().toString());
-        company.setUpdatedBy("cuongdq");
-        return companyRepository.save(company);
+    public boolean updateCompany(Company company) {
+        Company existedCompany = companyRepository.findCompaniesById(company.getId());
+        if (existedCompany != null) {
+            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedBy(company.getUpdatedBy());
+            companyRepository.save(company);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public Company inactiveCompany(Company company) {
-        company.setUpdateDate(LocalDateTime.now().toString());
-        company.setUpdatedBy("cuongdq");
-        company.setStatus("inactive");
-        return companyRepository.save(company);
+    public boolean inactiveCompany(Company company) {
+        Company existedCompany = companyRepository.findCompaniesById(company.getId());
+        if (existedCompany != null) {
+            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedBy(company.getUpdatedBy());
+            company.setStatus("inactive");
+            companyRepository.save(company);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public Company activeCompany(Company company) {
-        company.setUpdateDate(LocalDateTime.now().toString());
-        company.setUpdatedBy("cuongdq");
-        company.setStatus("active");
-        return companyRepository.save(company);
+    public boolean activeCompany(Company company) {
+        Company existedCompany = companyRepository.findCompaniesById(company.getId());
+        if (existedCompany != null) {
+            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedBy(company.getUpdatedBy());
+            company.setStatus("active");
+            companyRepository.save(company);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

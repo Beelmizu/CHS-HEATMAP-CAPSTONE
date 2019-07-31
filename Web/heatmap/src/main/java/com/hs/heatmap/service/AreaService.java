@@ -17,13 +17,13 @@ public interface AreaService {
 
     List<Area> getAreasByFloor(int searchValue);
 
-    Area createNewArea(Area Area);
+    boolean createNewArea(Area Area);
 
-    Area updateArea(Area Area);
+    boolean updateArea(Area Area);
 
-    Area inactiveArea(Area Area);
+    boolean inactiveArea(Area Area);
 
-    Area activeArea(Area Area);
+    boolean activeArea(Area Area);
 
     List<Area> getAllAreaByAccountID(int accountID);
 

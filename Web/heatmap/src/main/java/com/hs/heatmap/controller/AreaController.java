@@ -36,22 +36,22 @@ public class AreaController {
     }
 
     @PostMapping("/area/inactive")
-    public Area inactiveArea(@RequestBody Area area) {
+    public boolean inactiveArea(@RequestBody Area area) {
         return areaService.inactiveArea(area);
     }
 
     @PostMapping("/area/active")
-    public Area activeArea(@RequestBody Area area) {
+    public boolean activeArea(@RequestBody Area area) {
         return areaService.activeArea(area);
     }
 
     @PostMapping("/area/update")
-    public Area updateArea(@RequestBody Area area) {
+    public boolean updateArea(@RequestBody Area area) {
         return areaService.updateArea(area);
     }
 
     @PostMapping("/area/create")
-    public Area createArea(@RequestBody Area area) {
+    public boolean createArea(@RequestBody Area area) {
         return areaService.createNewArea(area);
     }
 

@@ -6,21 +6,23 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
-    Account getOne(String username);
+    Integer getIDByUsername(String username);
 
     List<Account> getAllAccount();
 
     List<Account> getAccountByCompany(int id);
 
+    List<Account> getAccountByStore(int id);
+
     Account getDetailAccount(int id);
 
     List<Account> getAccountsByUsername(String searchValue);
 
-    Account createNewAccount(Account account);
+    boolean createNewAccount(Account account);
 
-    Account updateAccount(Account account);
+    boolean updateAccount(Account account);
 
-    Account inactiveAccount(Account account);
+    boolean inactiveAccount(Account account);
 
-    Account activeAccount(Account account);
+    boolean activeAccount(Account account);
 }

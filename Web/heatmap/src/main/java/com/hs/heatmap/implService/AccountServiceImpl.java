@@ -4,41 +4,22 @@ import com.hs.heatmap.model.Account;
 import com.hs.heatmap.repository.AccountRepository;
 import com.hs.heatmap.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
-@Service(value = "accountService")
-public class AccountServiceImpl implements AccountService, UserDetailsService {
+@Service
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
-
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUsername(username);
-        if(account == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-        return new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), getAuthority());
-    }
-
-    private List<SimpleGrantedAuthority> getAuthority() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
-
     @Override
-    public Account getOne(String username) {
-        return accountRepository.findAccountByUsername(username);
+    public Integer getIDByUsername(String username) {
+        return accountRepository.findByUsername(username).getId();
     }
 
     @Override
@@ -48,44 +29,76 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public List<Account> getAccountByCompany(int id) {return accountRepository.findAccountByCompany(id); }
 
     @Override
-    public Account getDetailAccount(int id) { return accountRepository.findAccountById(id); }
+    public List<Account> getAccountByStore(int id) {
+        return accountRepository.findAccountByStore(id);
+    }
+
+    @Override
+    public Account getDetailAccount(int id) {
+        Account account = accountRepository.findAccountById(id);
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        account.setPassword(encoder.deaccount.getPassword());
+        return accountRepository.findAccountById(id);
+    }
 
     @Override
     public List<Account> getAccountsByUsername(String searchValue) { return accountRepository.searchByUsernameOrFullname(searchValue); }
 
     @Override
-    public Account updateAccount(Account account) {
-        account.setUpdatedDate(LocalDateTime.now().toString());
-        account.setUpdatedBy("cuongdq");
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account inactiveAccount(Account account) {
-        account.setUpdatedDate(LocalDateTime.now().toString());
-        account.setUpdatedBy("cuongdq");
-        account.setStatus("inactive");
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account activeAccount(Account account) {
-        account.setUpdatedDate(LocalDateTime.now().toString());
-        account.setUpdatedBy("cuongdq");
-        account.setStatus("active");
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account createNewAccount(Account account) {
-        if(accountRepository.findAccountByUsername(account.getUsername()) != null){
-            return null;
+    public boolean updateAccount(Account account) {
+        Account exitedAccount = accountRepository.findAccountById(account.getId());
+        if (exitedAccount != null) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            account.setUpdatedDate(LocalDateTime.now().toString());
+            account.setUpdatedBy(account.getUpdatedBy());
+            account.setPassword(encoder.encode(account.getPassword()));
+            accountRepository.save(account);
+            return true;
         } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean inactiveAccount(Account account) {
+        Account exitedAccount = accountRepository.findAccountById(account.getId());
+        if (exitedAccount != null) {
+            account.setUpdatedDate(LocalDateTime.now().toString());
+            account.setUpdatedBy(account.getUpdatedBy());
+            account.setStatus("inactive");
+            accountRepository.save(account);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean activeAccount(Account account) {
+        Account exitedAccount = accountRepository.findAccountById(account.getId());
+        if (exitedAccount != null) {
+            account.setUpdatedDate(LocalDateTime.now().toString());
+            account.setUpdatedBy(account.getUpdatedBy());
+            account.setStatus("active");
+            accountRepository.save(account);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createNewAccount(Account account) {
+        Account exitedAccount = accountRepository.findByUsername(account.getUsername());
+        if (exitedAccount != null) {
+            return false;
+        } else {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             account.setCreatedDate(LocalDateTime.now().toString());
             account.setStatus("active");
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             account.setPassword(encoder.encode(account.getPassword()));
-            return accountRepository.save(account);
+            accountRepository.save(account);
+            return true;
         }
     }
 

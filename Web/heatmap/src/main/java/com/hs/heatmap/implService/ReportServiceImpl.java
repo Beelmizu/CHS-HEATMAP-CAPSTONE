@@ -36,7 +36,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Report> getReportByMonth(String month, int cameraID) {
+    public List<Report> getReportCameraByMonth(String month, int cameraID) {
         List<Report> reports = reportRepository.getReportByDate(month, cameraID);
         List<Report> result = new ArrayList<>();
         Report element;
@@ -90,7 +90,7 @@ public class ReportServiceImpl implements ReportService {
         List<List<Report>> result = new ArrayList<>();
         if (cameras != null) {
             for (int i = 0; i < cameras.size(); i++) {
-                flag = getReportByMonth(month, cameras.get(i).getId());
+                flag = getReportCameraByMonth(month, cameras.get(i).getId());
                 if (flag != null) {
                     result.add((flag));
                 }
@@ -188,7 +188,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Report> getReportByTime(String date, int cameraID, String timeFrom, String timeTo) {
+    public List<Report> getReportCameraByTime(String date, int cameraID, String timeFrom, String timeTo) {
         List<Report> reports = reportRepository.getReportByDate(date, cameraID);
         List<Report> result = new ArrayList<>();
         List<Report> flag = new ArrayList<>();
@@ -282,7 +282,7 @@ public class ReportServiceImpl implements ReportService {
         List<Report> flag;
         if (cameras != null) {
             for (int i = 0; i < cameras.size(); i++) {
-                flag = getReportByTime(date, cameras.get(i).getId(), timeFrom, timeTo);
+                flag = getReportCameraByTime(date, cameras.get(i).getId(), timeFrom, timeTo);
                 if (flag != null) {
                     result.add((flag));
                 }

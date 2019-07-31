@@ -32,16 +32,16 @@ public class CameraController {
     public List<Camera> getStoreInCompany(@PathVariable(value = "id") int id){ return cameraService.getCameraByArea(id); }
 
     @PostMapping("/camera/inactive")
-    public Camera inactiveCamera(@RequestBody Camera camera) { return cameraService.inactiveCamera(camera); }
+    public boolean inactiveCamera(@RequestBody Camera camera) { return cameraService.inactiveCamera(camera); }
 
     @PostMapping("/camera/delete")
-    public Camera activeCamera(@RequestBody Camera camera) { return cameraService.activeCamera(camera); }
+    public boolean activeCamera(@RequestBody Camera camera) { return cameraService.activeCamera(camera); }
 
     @PostMapping("/camera/update")
-    public Camera updateCamera(@RequestBody Camera camera) { return cameraService.updateCamera(camera); }
+    public boolean updateCamera(@RequestBody Camera camera) { return cameraService.updateCamera(camera); }
 
     @PostMapping("/camera/create")
-    public Camera createCamera(@RequestBody Camera camera) { return cameraService.createNewCamera(camera); }
+    public boolean createCamera(@RequestBody Camera camera) { return cameraService.createNewCamera(camera); }
 
     @GetMapping("/camera/getActiveCameraByAreaID/{id}")
     public List<Camera> getActiveCameraByAreaID(@PathVariable(value = "id") int id){ return cameraService.getActiveCameraByArea(id); }

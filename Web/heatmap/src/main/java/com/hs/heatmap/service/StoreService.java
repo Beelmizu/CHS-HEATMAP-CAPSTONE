@@ -14,13 +14,15 @@ public interface StoreService {
 
     List<Store> getStoreByName(String searchValue);
 
-    Store createNewStore(Store store);
+    boolean createNewStore(Store store);
 
-    Store updateStore(Store store);
+    boolean addStoreToAccount(Store store, Integer accountID);
 
-    Store inactiveStore(Store store);
+    boolean updateStore(Store store);
 
-    Store activeStore(Store store);
+    boolean inactiveStore(Store store);
+
+    boolean activeStore(Store store);
 
     List<Store> getAllStoreByAccountId(int id);
 
