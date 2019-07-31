@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit {
     const self = this;
 
     self.loginForm = self.fb.group({
-      'username': ['', [Validators.required]],
-      'password': ['', [Validators.required]]
+      'username': [''],
+      'password': ['']
     });
 
     // reset login status
@@ -54,44 +54,41 @@ export class LoginComponent implements OnInit {
     let username;
     let role;
     this.loading = true;
-    if (this.valueIsChecked()) {
-      this.loginService.login(this.user).subscribe(
-        (response: any) => {
-          if (response !== '') {
-            const token = response.headers.get('authorization');
-            this.decoded = jwt_decode(token);
-            role  = this.decoded['JWTAuthoritiesKey'];
-            if (role === 'Manager') {
-              this.router.navigate([this.returnUrl]);
-              localStorage.setItem('currentUser', JSON.stringify(token));
-              username = this.decoded['sub'];
-              this.accountService.getIDAccountByUsername(username).subscribe((id) => {
-                this.accountID = id;
-                localStorage.setItem('accountID', '' + id);
-                localStorage.setItem('accountUsername', '' + username);
-                localStorage.setItem('role', '' + role);
-              },
-                error => {
-                  console.log(error);
-                }
-              );
-            } else {
-              this.error = 'Your account cannot access this !';
-              this.loading = false;
-            }
+    this.user.username = this.loginForm.get('username').value;
+    this.user.password = this.loginForm.get('password').value;
+    this.loginService.login(this.user).subscribe(
+      (response: any) => {
+        if (response !== '') {
+          const token = response.headers.get('authorization');
+          this.decoded = jwt_decode(token);
+          role = this.decoded['JWTAuthoritiesKey'];
+          if (role === 'Manager') {
+            this.router.navigate([this.returnUrl]);
+            localStorage.setItem('currentUser', JSON.stringify(token));
+            username = this.decoded['sub'];
+            this.accountService.getIDAccountByUsername(username).subscribe((id) => {
+              this.accountID = id;
+              localStorage.setItem('accountID', '' + id);
+              localStorage.setItem('accountUsername', '' + username);
+              localStorage.setItem('role', '' + role);
+            },
+              error => {
+                console.log(error);
+              }
+            );
           } else {
-            console.log('error when logging');
+            this.error = 'Your account cannot access this !';
+            this.loading = false;
           }
-        },
-        error => {
-          this.error = 'Username or password is incorrect !';
-          this.loading = false;
+        } else {
+          console.log('error when logging');
         }
-      );
-    } else {
-      window.alert('Please input username, password');
-      this.loading = false;
-    }
+      },
+      error => {
+        this.error = 'Username or password is incorrect !';
+        this.loading = false;
+      }
+    );
   }
 
   public get loggedIn(): boolean {
@@ -100,6 +97,9 @@ export class LoginComponent implements OnInit {
 
   logOut() {
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('accountID');
+    localStorage.removeItem('accountUsername');
+    localStorage.removeItem('role');
   }
 
 

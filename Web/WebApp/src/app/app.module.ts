@@ -43,7 +43,7 @@ import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/fo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-
+import { NgxPasswordToggleModule } from 'ngx-password-toggle';
 
 @NgModule({
   imports: [
@@ -63,6 +63,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
     BrowserAnimationsModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
+    NgxPasswordToggleModule
   ],
   declarations: [
     AppComponent,

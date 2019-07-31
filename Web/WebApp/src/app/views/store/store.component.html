@@ -1,11 +1,10 @@
 <div class="animated fadeIn">
   <div class="animated fadeIn">
     <div class="row">
-      <div class="col-sm-6 col-md-4" *ngFor="let store of stores" id="row" >
+      <div class="col-sm-6 col-md-4" *ngFor="let store of stores" id="row">
         <div class="card" id="body">
           <div class="card-header" id="header">{{store.name}}
-            <span class="badge badge-success float-right" *ngIf="store.status == 'active'">Active</span>
-            <span class="badge badge-secondary float-right" *ngIf="store.status == 'inactive'">Inactive</span>
+
           </div>
           <div class="card-body">
             <img src="../../../assets/img/background/store.jpg" id="imgStore" />
@@ -14,10 +13,7 @@
           </div>
           <div class="card-footer" id="footer">
             <span id="spanView" id="btnViewArea">
-              <button class="btn btn-info" type="button" disabled="" *ngIf="store.status == 'inactive'"> View
-                Area</button>
-              <button class="btn btn-info" type="button" [routerLink]="[store.id,'area']" routerLinkActive="active"
-                *ngIf="store.status == 'active'"> View Store</button>
+              <button class="btn btn-info" type="button" [routerLink]="[store.id,'area']" routerLinkActive="active" id="btnView"> View </button>
             </span>
           </div>
         </div>

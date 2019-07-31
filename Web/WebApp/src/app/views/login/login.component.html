@@ -16,11 +16,7 @@
                         <i class="icon-user"></i>
                       </span>
                     </div>
-                    <input class="form-control" type="text" placeholder="Username"  formControlName="username" [ngClass]="{'is-invalid': isInvalid('username'), 
-                    'is-valid' : isValid('username') }">
-                    <div class="invalid-feedback" *ngIf="loginForm.hasError('required','username')">
-                        Username is required !
-                    </div>
+                    <input class="form-control" type="text" placeholder="Username"  formControlName="username">
                   </div>
                   <div class="input-group mb-4">
                     <div class="input-group-prepend">
@@ -28,11 +24,7 @@
                         <i class="icon-lock"></i>
                       </span>
                     </div>
-                    <input class="form-control" type="password" placeholder="Password"  formControlName="password" [ngClass]="{'is-invalid': isInvalid('password'), 
-                    'is-valid' : isValid('password') }">
-                    <div class="invalid-feedback" *ngIf="loginForm.hasError('required','password')">
-                        Password is required !
-                    </div>
+                    <input class="form-control" type="password" placeholder="Password"  formControlName="password" ngModel passwordToggle>
                   </div>
                   <div class="row">
                     <div class="col-12">
