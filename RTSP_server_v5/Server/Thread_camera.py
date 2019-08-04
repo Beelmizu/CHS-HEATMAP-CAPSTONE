@@ -43,9 +43,11 @@ def runCamera(socketio, rd, id_camera, port_camera):
     new_w = int(new_w)
     thread_camera = threading.Thread(target=saveCameraVideo, args=(socketio, rd, id_camera, port_camera,))
     thread_camera.start()
+    image_text = ""
     while True:
         try:
             retval, image_read = cam.read()
+            # print("image: ",image_read)
             if image_read is not None:
                 image = cv2.resize(image_read, (new_w, new_h))
                 retval, buffer = cv2.imencode('.jpg', image)
@@ -54,9 +56,12 @@ def runCamera(socketio, rd, id_camera, port_camera):
                 rd.set(str(id_camera), image_text)
                 # save_camera.write(image)
             else:
+                rd.set(str(id_camera)+"_ERROR", image_text)
                 cam = cv2.VideoCapture(port_camera)
             time.sleep(0.05)
         except Exception as e:
+            print("--------------------                  ERROR              ------------------------")
+            rd.set(str(id_camera)+"_ERROR", image_text)
             if hasattr(e, 'message'):
                 print(e.message)
             else:
@@ -82,7 +87,7 @@ def saveCameraVideo(socketio, rd, id_camera, port_camera):
     save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),20.0, (width, height))
     while True:
         try:
-            save_camera.write(image)
+            check_flag = True
             startTime = datetime.datetime.now()
             # print(startTime)
             # print(uploadTime)
@@ -92,10 +97,17 @@ def saveCameraVideo(socketio, rd, id_camera, port_camera):
                 break
             # Lấy ảnh từ redis và decode
             image_base64 = rd.get(str(id_camera))
-            # Từ base64 chuyển thành image
-            decoded_data = base64.b64decode(image_base64.decode())
-            np_data = np.fromstring(decoded_data,np.uint8)
-            image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+            image_error = rd.get(str(id_camera)+"_ERROR")
+            if image_error is not None:
+                if image_base64.decode() == image_error.decode():
+                    check_flag = False
+
+            if check_flag:
+                # Từ base64 chuyển thành image
+                decoded_data = base64.b64decode(image_base64.decode())
+                np_data = np.fromstring(decoded_data,np.uint8)
+                image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+                save_camera.write(image)
             
             time.sleep(0.05)
         except Exception as e:
