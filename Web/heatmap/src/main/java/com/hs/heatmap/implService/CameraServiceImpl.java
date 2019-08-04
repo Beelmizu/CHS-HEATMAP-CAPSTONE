@@ -40,7 +40,7 @@ public class CameraServiceImpl implements CameraService {
     public List<Camera> getActiveCameraByArea(int id) { return cameraRepository.findActiveCameraByAreaID(id); }
 
     @Override
-    public List<Camera> getCamerasByIp(String searchValue) { return cameraRepository.searchCamerasByIp(searchValue); }
+    public List<Camera> getCamerasByIp(String searchValue, int areaID) { return cameraRepository.searchCamerasByIp(searchValue, areaID); }
 
     @Override
     public boolean createNewCamera(Camera camera) {
@@ -48,7 +48,7 @@ public class CameraServiceImpl implements CameraService {
         if (existedCamera != null) {
             return false;
         } else {
-            camera.setCreateDate(LocalDateTime.now().toString());
+            camera.setCreatedDate(LocalDateTime.now().toString());
             camera.setStatus("active");
             cameraRepository.save(camera);
             return true;
@@ -61,7 +61,7 @@ public class CameraServiceImpl implements CameraService {
         if (existedCamera != null) {
             return false;
         } else {
-            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedDate(LocalDateTime.now().toString());
             camera.setUpdatedBy(camera.getUpdatedBy());
             cameraRepository.save(camera);
             return true;
@@ -72,7 +72,7 @@ public class CameraServiceImpl implements CameraService {
     public boolean inactiveCamera(Camera camera) {
         Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
         if (existedCamera != null) {
-            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedDate(LocalDateTime.now().toString());
             camera.setUpdatedBy(camera.getUpdatedBy());
             camera.setStatus("inactive");
             cameraRepository.save(camera);
@@ -86,7 +86,7 @@ public class CameraServiceImpl implements CameraService {
     public boolean activeCamera(Camera camera) {
         Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
         if (existedCamera != null) {
-            camera.setUpdateDate(LocalDateTime.now().toString());
+            camera.setUpdatedDate(LocalDateTime.now().toString());
             camera.setUpdatedBy(camera.getUpdatedBy());
             camera.setStatus("inactive");
             cameraRepository.save(camera);

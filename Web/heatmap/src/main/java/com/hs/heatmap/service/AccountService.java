@@ -12,6 +12,8 @@ public interface AccountService {
 
     List<Account> getAccountByCompany(int id);
 
+    List<Account> getAllAccountByCompanyNotBelongToThisStore(int comID, int stoID);
+
     List<Account> getAccountByStore(int id);
 
     Account getDetailAccount(int id);
@@ -20,9 +22,19 @@ public interface AccountService {
 
     boolean createNewAccount(Account account);
 
+    boolean addAccountToStore(String accountID, String storeID);
+
+    boolean deleteAccountInStore(String accountID, String storeID);
+
+    boolean changePassword(String accountID, String oldPass, String newPass, String updatedBy);
+
     boolean updateAccount(Account account);
 
     boolean inactiveAccount(Account account);
 
     boolean activeAccount(Account account);
+
+    List<Account> getAccountInCompanyByUsernameOrFullname(String searchValue, int companyID);
+
+    List<Account> getAccountInStoreByUsernameOrFullname(String searchValue, int storeID);
 }

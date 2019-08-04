@@ -19,4 +19,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     @Query("SELECT r FROM Report r WHERE r.time like :date% and r.cameraID = :cameraID and r.heatmap is not null ")
     List<Report> getHeatmapByDate(@Param("date") String date, @Param("cameraID") int cameraID);
+
+    @Query("SELECT r FROM Report r WHERE (r.time between :timeFrom and :timeTo) and r.cameraID = :cameraID ")
+    List<Report> getReportByDateInTime(@Param("cameraID") int cameraID, @Param("timeFrom") String timeFrom, @Param("timeTo") String timeTo);
 }

@@ -15,7 +15,7 @@ public interface AreaService {
 
     List<Area> getAreaInStore(int id);
 
-    List<Area> getAreasByFloor(int searchValue);
+    List<Area> getAreasByFloor(int searchValue, int stoID);
 
     boolean createNewArea(Area Area);
 

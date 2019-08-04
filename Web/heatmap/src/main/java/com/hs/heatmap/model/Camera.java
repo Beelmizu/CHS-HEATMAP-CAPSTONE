@@ -35,11 +35,11 @@ public class Camera implements Serializable {
 
     @Basic
     @Column(name = "cam_date_created")
-    private String createDate;
+    private String createdDate;
 
     @Basic
     @Column(name = "cam_date_updated")
-    private String updateDate;
+    private String updatedDate;
 
     @Basic
     @Column(name = "cam_status")

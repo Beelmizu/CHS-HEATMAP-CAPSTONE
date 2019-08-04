@@ -16,8 +16,8 @@ public interface AreaRepository extends JpaRepository<Area, Integer> {
     Area findAreaById(Integer id);
 
     //Find Area by name
-    @Query("SELECT ar FROM Area ar WHERE ar.floor = :searchValue")
-    List<Area> searchAreasByFloor(@Param("searchValue") int searchValue);
+    @Query("SELECT ar FROM Area ar WHERE ar.floor = :searchValue and ar.stoID = :stoID")
+    List<Area> searchAreasByFloor(@Param("searchValue") int searchValue, @Param("stoID") int stoID);
 
     Area findAreasByName(String name);
 

@@ -38,7 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
         if (existedCompany != null) {
             return false;
         } else {
-            company.setCreateDate(LocalDateTime.now().toString());
+            company.setCreatedDate(LocalDateTime.now().toString());
             company.setStatus("active");
             companyRepository.save(company);
             return true;
@@ -49,7 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean updateCompany(Company company) {
         Company existedCompany = companyRepository.findCompaniesById(company.getId());
         if (existedCompany != null) {
-            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedDate(LocalDateTime.now().toString());
             company.setUpdatedBy(company.getUpdatedBy());
             companyRepository.save(company);
             return true;
@@ -62,7 +62,7 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean inactiveCompany(Company company) {
         Company existedCompany = companyRepository.findCompaniesById(company.getId());
         if (existedCompany != null) {
-            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedDate(LocalDateTime.now().toString());
             company.setUpdatedBy(company.getUpdatedBy());
             company.setStatus("inactive");
             companyRepository.save(company);
@@ -76,7 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean activeCompany(Company company) {
         Company existedCompany = companyRepository.findCompaniesById(company.getId());
         if (existedCompany != null) {
-            company.setUpdateDate(LocalDateTime.now().toString());
+            company.setUpdatedDate(LocalDateTime.now().toString());
             company.setUpdatedBy(company.getUpdatedBy());
             company.setStatus("active");
             companyRepository.save(company);

@@ -14,7 +14,7 @@ public interface CameraService {
 
     List<Camera> getActiveCameraByArea(int id);
 
-    List<Camera> getCamerasByIp(String searchValue);
+    List<Camera> getCamerasByIp(String searchValue, int areaID);
 
     boolean createNewCamera(Camera camera);
 
