@@ -32,11 +32,11 @@ public class Company implements Serializable {
 
     @Basic
     @Column(name = "cpn_date_created")
-    private String createDate;
+    private String createdDate;
 
     @Basic
     @Column(name = "cpn_date_updated")
-    private String updateDate;
+    private String updatedDate;
 
     @Basic
     @Column(name = "cpn_status")

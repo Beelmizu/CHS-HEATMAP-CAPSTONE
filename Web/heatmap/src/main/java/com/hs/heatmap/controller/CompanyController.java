@@ -19,7 +19,7 @@ public class CompanyController {
     public List<Company> getAllCompanies(){ return companyService.getAllCompanies(); }
 
     @GetMapping("/company/getDetail/{id}")
-    public Company getDetailCompany(@PathVariable(value = "id") int id){ return companyService.getDetailCompany(id); }
+    public Company getDetailCgetompany(@PathVariable(value = "id") int id){ return companyService.getDetailCompany(id); }
 
     @GetMapping("/company/search/{searchValue}")
     public List<Company> searchCompany(@PathVariable(value = "searchValue") String searchValue) { return companyService.getCompanyByName(searchValue); }

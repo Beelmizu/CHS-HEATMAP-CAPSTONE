@@ -31,7 +31,7 @@ public class ReportController {
 
 
     @GetMapping("/report/getReportByTime/{selectedDate}/{cameraID}/{timeFrom}/{timeTo}")
-    public List<Report> getReportByDate(@PathVariable(value = "selectedDate") String selectedDate,
+    public List<Report> getReportByTime(@PathVariable(value = "selectedDate") String selectedDate,
                                                  @PathVariable(value = "cameraID") int cameraID,
                                                  @PathVariable(value = "timeFrom") String timeFrom,
                                                  @PathVariable(value = "timeTo") String timeTo){

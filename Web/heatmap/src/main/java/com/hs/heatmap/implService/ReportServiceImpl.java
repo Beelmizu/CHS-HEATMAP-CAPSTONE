@@ -189,10 +189,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<Report> getReportCameraByTime(String date, int cameraID, String timeFrom, String timeTo) {
-        List<Report> reports = reportRepository.getReportByDate(date, cameraID);
+        List<Report> reports = reportRepository.getReportByDateInTime(cameraID, date + " " + timeFrom, date + " " + timeTo);
         List<Report> result = new ArrayList<>();
-        List<Report> flag = new ArrayList<>();
-
         Report element;
         int start = Integer.parseInt(timeFrom);
         int end = Integer.parseInt(timeTo);
@@ -202,67 +200,57 @@ public class ReportServiceImpl implements ReportService {
         String time, min;
         String nextElement;
         if (reports.size() != 0) {
-            for (int j = 0; j < reports.size(); j++) {
-                time = reports.get(j).getTime().split(" ")[1].split(":")[0];
-                if (start <= Integer.parseInt(time) && Integer.parseInt(time) < end) {
-                    flag.add(reports.get(j));
-                }
-            }
-            Collections.sort(flag, (o1, o2) -> {
+            Collections.sort(reports, (o1, o2) -> {
                 if (o1.getTime() == null || o2.getTime() == null)
                     return 0;
                 return o1.getTime().compareTo(o2.getTime());
             });
-            if (flag.size() == 0) {
-                return null;
-            } else {
-                sum += flag.get(0).getCount();
-                count++;
-                if (end - start > 3) {
-                    for (int i = 0; i < flag.size() - 1; i++) {
-                        time = flag.get(i).getTime().split(" ")[1].split(":")[0];
-                        nextElement = flag.get(i + 1).getTime().split(" ")[1].split(":")[0];
-                        if (Integer.parseInt(time) == Integer.parseInt((nextElement))) {
-                            sum += flag.get(i + 1).getCount();
-                            count++;
-                            if (i == flag.size() - 2) {
-                                element = setElementForCameraReport(id, sum, count, cameraID, date, time);
-                                result.add(element);
-                            }
-                        } else {
+            sum += reports.get(0).getCount();
+            count++;
+            if (end - start > 3) {
+                for (int i = 0; i < reports.size() - 1; i++) {
+                    time = reports.get(i).getTime().split(" ")[1].split(":")[0];
+                    nextElement = reports.get(i + 1).getTime().split(" ")[1].split(":")[0];
+                    if (Integer.parseInt(time) == Integer.parseInt((nextElement))) {
+                        sum += reports.get(i + 1).getCount();
+                        count++;
+                        if (i == reports.size() - 2) {
                             element = setElementForCameraReport(id, sum, count, cameraID, date, time);
                             result.add(element);
-                            sum = reports.get(i + 1).getCount();
-                            count = 1;
-                            id++;
-                            if (i == flag.size() - 2) {
-                                element = setElementForCameraReport(id, sum, count, cameraID, date, nextElement);
-                                result.add(element);
-                            }
+                        }
+                    } else {
+                        element = setElementForCameraReport(id, sum, count, cameraID, date, time);
+                        result.add(element);
+                        sum = reports.get(i + 1).getCount();
+                        count = 1;
+                        id++;
+                        if (i == reports.size() - 2) {
+                            element = setElementForCameraReport(id, sum, count, cameraID, date, nextElement);
+                            result.add(element);
                         }
                     }
-                } else {
-                    for (int i = 0; i < flag.size() - 1; i++) {
-                        time = flag.get(i).getTime().split(" ")[1].split(":")[0];
-                        min = String.valueOf(flag.get(i).getTime().split(" ")[1].split(":")[1].charAt(0));
-                        nextElement = String.valueOf(flag.get(i + 1).getTime().split(" ")[1].split(":")[1].charAt(0));
-                        if (Integer.parseInt(min) == Integer.parseInt((nextElement))) {
-                            count++;
-                            sum += flag.get(i + 1).getCount();
-                            if (i == flag.size() - 2) {
-                                element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
-                                result.add(element);
-                            }
-                        } else {
+                }
+            } else {
+                for (int i = 0; i < reports.size() - 1; i++) {
+                    time = reports.get(i).getTime().split(" ")[1].split(":")[0];
+                    min = String.valueOf(reports.get(i).getTime().split(" ")[1].split(":")[1].charAt(0));
+                    nextElement = String.valueOf(reports.get(i + 1).getTime().split(" ")[1].split(":")[1].charAt(0));
+                    if (Integer.parseInt(min) == Integer.parseInt((nextElement))) {
+                        count++;
+                        sum += reports.get(i + 1).getCount();
+                        if (i == reports.size() - 2) {
                             element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
                             result.add(element);
-                            sum = reports.get(i + 1).getCount();
-                            count = 1;
-                            id++;
-                            if (i == flag.size() - 2) {
-                                element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, nextElement);
-                                result.add(element);
-                            }
+                        }
+                    } else {
+                        element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
+                        result.add(element);
+                        sum = reports.get(i + 1).getCount();
+                        count = 1;
+                        id++;
+                        if (i == reports.size() - 2) {
+                            element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, nextElement);
+                            result.add(element);
                         }
                     }
                 }

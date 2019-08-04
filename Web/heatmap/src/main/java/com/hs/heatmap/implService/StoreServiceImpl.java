@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +24,15 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> getStoreByCompany(int id) { return storeRepository.getStoreInCompany(id); }
 
     @Override
+    public List<Store> getAllStoreInCompanyNotBelongAccount(int comID, int accID) {
+        List<Store> storeInCompany = storeRepository.getStoreInCompany(comID);
+        List<Store> storeOfAccount = storeRepository.getAllStoreInCompanyNotBelongAccount(comID, accID);
+        List<Store> result = new ArrayList<>(storeInCompany);
+        result.removeAll(storeOfAccount);
+        return result;
+    }
+
+    @Override
     public Store getDetailStore(int id) { return storeRepository.findStoreById(id); }
 
     @Override
@@ -34,22 +44,7 @@ public class StoreServiceImpl implements StoreService {
         if (existedStore != null) {
             return false;
         } else {
-            store.setCreateDate(LocalDateTime.now().toString());
-            store.setStatus("active");
-            System.out.println(store.getCpn_store_id());
-            storeRepository.save(store);
-            return true;
-        }
-    }
-
-    @Override
-    public boolean addStoreToAccount(Store store, Integer accountID) {
-        Store existedStore = storeRepository.findStoreWithAccountID(store.getId(), accountID);
-        System.out.println(existedStore);
-        if (existedStore != null) {
-            return false;
-        } else {
-            store.setCreateDate(LocalDateTime.now().toString());
+            store.setCreatedDate(LocalDateTime.now().toString());
             store.setStatus("active");
             System.out.println(store.getCpn_store_id());
             storeRepository.save(store);
@@ -61,7 +56,7 @@ public class StoreServiceImpl implements StoreService {
     public boolean updateStore(Store store) {
         Store existedStore = storeRepository.findStoreById(store.getId());
         if (existedStore != null) {
-            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedDate(LocalDateTime.now().toString());
             store.setUpdatedBy(store.getUpdatedBy());
             storeRepository.save(store);
             return true;
@@ -75,7 +70,7 @@ public class StoreServiceImpl implements StoreService {
 
         Store existedStore = storeRepository.findStoreById(store.getId());
         if (existedStore != null) {
-            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedDate(LocalDateTime.now().toString());
             store.setUpdatedBy(store.getUpdatedBy());
             store.setStatus("inactive");
             storeRepository.save(store);
@@ -89,7 +84,7 @@ public class StoreServiceImpl implements StoreService {
     public boolean activeStore(Store store) {
         Store existedStore = storeRepository.findStoreById(store.getId());
         if (existedStore != null) {
-            store.setUpdateDate(LocalDateTime.now().toString());
+            store.setUpdatedDate(LocalDateTime.now().toString());
             store.setUpdatedBy(store.getUpdatedBy());
             store.setStatus("active");
             storeRepository.save(store);
@@ -107,6 +102,36 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<Store> getAllStoreByAccountIdWithoutStatus(int id) { return storeRepository.findStoreByAccountIDWithoutStatus(id); }
+
+    @Override
+    public boolean addStoreToAccount(String accountID, String storeID) {
+        int result = storeRepository.addStoreToAccount(LocalDateTime.now().toString(), Integer.parseInt(accountID), Integer.parseInt(storeID));
+        if (result != 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean deleteStoreOfAccount(String accountID, String storeID) {
+        int result = storeRepository.deleteStoreOfAccount(Integer.parseInt(accountID), Integer.parseInt(storeID));
+        if (result != 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public List<Store> getStoreInCompanyByValue(String searchValue, int companyID) {
+        return storeRepository.getStoreInCompanyByValue(searchValue, companyID);
+    }
+
+    @Override
+    public List<Store> getStoreOfAccountByValue(String searchValue, int accID) {
+        return storeRepository.getStoreOfAccountByValue(searchValue, accID);
+    }
 
 
 }

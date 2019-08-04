@@ -1,5 +1,6 @@
 package com.hs.heatmap.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hs.heatmap.model.Account;
 import com.hs.heatmap.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,13 @@ public class AccountController {
     @GetMapping("/account/getAccountByCompany/{id}")
     public List<Account> getAccountByCompany(@PathVariable(value = "id") int id){ return accountService.getAccountByCompany(id); }
 
+    @GetMapping("/account/getAllAccountByCompanyNotBelongToThisStore/{comID}/{stoID}")
+    public List<Account> getAllAccountByCompanyNotBelongToThisStore(@PathVariable(value = "comID") int comID, @PathVariable(value = "stoID") int stoID){
+        return accountService.getAllAccountByCompanyNotBelongToThisStore(comID, stoID);
+    }
+
     @GetMapping("/account/getAccountByStore/{id}")
-    public List<Account> getAccountByStore(@PathVariable(value = "id") int id){ return accountService.getAccountByCompany(id); }
+    public List<Account> getAccountByStore(@PathVariable(value = "id") int id){ return accountService.getAccountByStore(id); }
 
     @GetMapping("account/getDetail/{id}")
     public Account getDetailAccount(@PathVariable(value = "id") int id){ return accountService.getDetailAccount(id); }
@@ -35,6 +41,16 @@ public class AccountController {
 
     @GetMapping("/account/search/{searchValue}")
     public List<Account> searchAccount(@PathVariable(value = "searchValue") String searchValue) { return accountService.getAccountsByUsername(searchValue); }
+
+    @GetMapping("/account/searchInCompany/{searchValue}/{id}")
+    public List<Account> searchInCompany(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int companyID) {
+        return accountService.getAccountInCompanyByUsernameOrFullname(searchValue, companyID);
+    }
+
+    @GetMapping("/account/searchInStore/{searchValue}/{id}")
+    public List<Account> searchInStore(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int storeID) {
+        return accountService.getAccountInStoreByUsernameOrFullname(searchValue, storeID);
+    }
 
     @PostMapping("/account/inactive")
     public boolean inactiveAccount(@RequestBody Account account) { return accountService.inactiveAccount(account); }
@@ -50,5 +66,23 @@ public class AccountController {
     @PostMapping("/account/create")
     public boolean createAccount(@RequestBody Account account) {
         return accountService.createNewAccount(account);
+    }
+
+    @PostMapping("/account/addAccountToStore/")
+    public boolean addAccountToStore(@RequestParam(name = "accID") String accountID, @RequestParam(name = "stoID") String storeID) {
+        return accountService.addAccountToStore(accountID, storeID);
+    }
+
+    @PostMapping("/account/deleteAccountInStore/")
+    public boolean deleteAccountInStore(@RequestParam(name = "accID") String accountID, @RequestParam(name = "stoID") String storeID) {
+        return accountService.deleteAccountInStore(accountID, storeID);
+    }
+
+    @PostMapping("/account/changePassword/")
+    public boolean changePassword(@RequestParam(name = "accountID") String accountID,
+                                  @RequestParam(name = "oldPass") String oldPass,
+                                  @RequestParam(name = "newPass") String newPass,
+                                  @RequestParam(name = "updatedBy") String updatedBy) {
+        return accountService.changePassword(accountID, oldPass, newPass, updatedBy);
     }
 }

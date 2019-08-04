@@ -16,8 +16,8 @@ public interface CameraRepository extends JpaRepository<Camera, Integer> {
     Camera findCameraById(Integer id);
 
     //Find Camera by ip
-    @Query("SELECT ca FROM Camera ca WHERE ca.ip like %:searchValue%")
-    List<Camera> searchCamerasByIp(@Param("searchValue") String searchValue);
+    @Query("SELECT ca FROM Camera ca WHERE ca.ip like %:searchValue% and ca.areaID = :areaID")
+    List<Camera> searchCamerasByIp(@Param("searchValue") String searchValue, @Param("areaID") int areaID);
 
     Camera findCamerasByIp(String Ip);
 

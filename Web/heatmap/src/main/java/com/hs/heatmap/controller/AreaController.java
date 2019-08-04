@@ -30,9 +30,9 @@ public class AreaController {
         return areaService.getAreaInStore(id);
     }
 
-    @GetMapping("/area/search/{searchValue}")
-    public List<Area> searchArea(@PathVariable(value = "searchValue") int searchValue) {
-        return areaService.getAreasByFloor(searchValue);
+    @GetMapping("/area/search/{searchValue}/{id}")
+    public List<Area> searchArea(@PathVariable(value = "searchValue") int searchValue, @PathVariable(value = "id") int stoID) {
+        return areaService.getAreasByFloor(searchValue, stoID);
     }
 
     @PostMapping("/area/inactive")

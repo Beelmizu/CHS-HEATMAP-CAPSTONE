@@ -30,11 +30,11 @@ public class Area implements Serializable {
 
     @Basic
     @Column(name = "area_date_created")
-    private String createDate;
+    private String createdDate;
 
     @Basic
     @Column(name = "area_date_updated")
-    private String updateDate;
+    private String updatedDate;
 
     @Basic
     @Column(name = "area_status")

@@ -10,13 +10,13 @@ public interface StoreService {
 
     List<Store> getStoreByCompany(int id);
 
+    List<Store> getAllStoreInCompanyNotBelongAccount(int comID, int accID);
+
     Store getDetailStore(int id);
 
     List<Store> getStoreByName(String searchValue);
 
     boolean createNewStore(Store store);
-
-    boolean addStoreToAccount(Store store, Integer accountID);
 
     boolean updateStore(Store store);
 
@@ -27,4 +27,12 @@ public interface StoreService {
     List<Store> getAllStoreByAccountId(int id);
 
     List<Store> getAllStoreByAccountIdWithoutStatus(int id);
+
+    boolean addStoreToAccount(String accountID, String storeID);
+
+    boolean deleteStoreOfAccount(String accountID, String storeID);
+
+    List<Store> getStoreInCompanyByValue(String searchValue, int companyID);
+
+    List<Store> getStoreOfAccountByValue(String searchValue, int accID);
 }

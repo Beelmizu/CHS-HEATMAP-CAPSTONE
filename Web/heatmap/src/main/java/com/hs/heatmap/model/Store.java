@@ -38,11 +38,11 @@ public class Store implements Serializable {
 
     @Basic
     @Column(name = "sto_date_created")
-    private String createDate;
+    private String createdDate;
 
     @Basic
     @Column(name = "sto_date_updated")
-    private String updateDate;
+    private String updatedDate;
 
     @Basic
     @Column(name = "sto_status")

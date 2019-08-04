@@ -40,7 +40,7 @@ public class AreaServiceImpl implements AreaService {
 
 
     @Override
-    public List<Area> getAreasByFloor(int searchValue) { return areaRepository.searchAreasByFloor(searchValue); }
+    public List<Area> getAreasByFloor(int searchValue, int stoID) { return areaRepository.searchAreasByFloor(searchValue, stoID); }
 
 
     @Override
@@ -49,7 +49,7 @@ public class AreaServiceImpl implements AreaService {
 //        if (existedArea != null) {
 //            return false;
 //        } else {
-            area.setCreateDate(LocalDateTime.now().toString());
+            area.setCreatedDate(LocalDateTime.now().toString());
             area.setStatus("active");
             areaRepository.save(area);
             return true;
@@ -60,7 +60,7 @@ public class AreaServiceImpl implements AreaService {
     public boolean updateArea(Area area) {
         Area existedArea = areaRepository.findAreaById(area.getId());
         if (existedArea != null) {
-            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedDate(LocalDateTime.now().toString());
             area.setUpdatedBy(area.getUpdatedBy());
             areaRepository.save(area);
             return true;
@@ -73,7 +73,7 @@ public class AreaServiceImpl implements AreaService {
     public boolean inactiveArea(Area area) {
         Area existedArea = areaRepository.findAreaById(area.getId());
         if (existedArea != null) {
-            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedDate(LocalDateTime.now().toString());
             area.setUpdatedBy(area.getUpdatedBy());
             area.setStatus("inactive");
             areaRepository.save(area);
@@ -87,7 +87,7 @@ public class AreaServiceImpl implements AreaService {
     public boolean activeArea(Area area) {
         Area existedArea = areaRepository.findAreaById(area.getId());
         if (existedArea != null) {
-            area.setUpdateDate(LocalDateTime.now().toString());
+            area.setUpdatedDate(LocalDateTime.now().toString());
             area.setUpdatedBy(area.getUpdatedBy());
             area.setStatus("active");
             areaRepository.save(area);

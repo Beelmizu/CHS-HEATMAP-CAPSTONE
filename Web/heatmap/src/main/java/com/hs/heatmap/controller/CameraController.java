@@ -25,8 +25,8 @@ public class CameraController {
     @GetMapping("camera/getDetail/{id}")
     public Camera getDetailCamera(@PathVariable(value = "id") int id){ return cameraService.getDetailCamera(id); }
 
-    @GetMapping("/camera/search/{searchValue}")
-    public List<Camera> searchCamera(@PathVariable(value = "searchValue") String searchValue) { return cameraService.getCamerasByIp(searchValue); }
+    @GetMapping("/camera/search/{searchValue}/{id}")
+    public List<Camera> searchCamera(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int areaID) { return cameraService.getCamerasByIp(searchValue, areaID); }
 
     @GetMapping("/camera/getCameraInArea/{id}")
     public List<Camera> getStoreInCompany(@PathVariable(value = "id") int id){ return cameraService.getCameraByArea(id); }
