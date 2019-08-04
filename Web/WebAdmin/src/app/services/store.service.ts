@@ -26,6 +26,10 @@ export class StoreService {
     return this.http.get<Store[]>(this.storeUrl + 'getStoreInCompany/' + companyID);
   }
 
+  getAllStoreInCompanyNotBelongAccount(companyID: number, accountID: number): Observable<Store[]> {
+    return this.http.get<Store[]>(this.storeUrl + 'getAllStoreInCompanyNotBelongAccount/' + companyID + '/' + accountID);
+  }
+
   getAllStoreByAccount(accountID: number): Observable<Store[]> {
     return this.http.get<Store[]>(this.storeUrl + 'getStoreByAccount/' + accountID);
   }
@@ -36,5 +40,13 @@ export class StoreService {
 
   getStoreByValue(searchValue: String): Observable<Store[]> {
     return this.http.get<Store[]>(this.storeUrl + 'search/' + searchValue);
+  }
+
+  getStoreInCompanyByValue(searchValue: String, companyID: number): Observable<Store[]> {
+    return this.http.get<Store[]>(this.storeUrl + 'getStoreInCompanyByValue/' + searchValue + '/' + companyID);
+  }
+
+  getStoreOfAccountByValue(searchValue: String, accountID: number): Observable<Store[]> {
+    return this.http.get<Store[]>(this.storeUrl + 'getStoreOfAccountByValue/' + searchValue + '/' + accountID);
   }
 }

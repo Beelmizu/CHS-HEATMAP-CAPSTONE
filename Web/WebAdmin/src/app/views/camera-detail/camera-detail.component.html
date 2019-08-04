@@ -1,119 +1,141 @@
 <div class="animated fadeIn">
-    <div class="card">
-      <div class=card-header>
-        <strong>Camera Detail </strong>
-        <small>{{cameraDetail.id}}</small>
-      </div>
-      <div class="card-body">
-        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="cameraDetailForm">
-            <!-- Show ID -->
-            <div class="form-group row" *ngIf="mode == 'detail'">
-              <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" readonly=true formControlName="cameraID" >
-              </div>
-            </div>
-  
-            <!-- Input IP -->
-            <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input" >IP: </label>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" formControlName="cameraIP" [ngClass]="{'is-invalid': isInvalid('cameraIP'), 'is-valid' : isValid('cameraIP')}">
-                    <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraIP')">
-                        IP is required !
-                    </div>
-                </div>
-            </div>
-  
-            <!-- Input Account -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="text-input">Account: </label>
-              <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="cameraAccount" [ngClass]="{'is-invalid': isInvalid('cameraAccount'), 'is-valid' : isValid('cameraAccount')}">
-                  <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraAccount')">
-                      Account is required !
-                  </div>
-                  <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('maxlength','cameraAccount')">
-                      Max length &lt; 45
-                </div>
-              </div>
-            </div>
+  <div class="card" id="cardContainer">
+    <div class=card-header>
+      <strong>Camera Detail </strong>
+      <small>{{cameraDetail.id}}</small>
+    </div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+        [formGroup]="cameraDetailForm">
+        <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraID">
+          </div>
+        </div>
 
-            <!-- Input Password -->
-            <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Password: </label>
-                <div class="col-md-9">
-                    <input type="password" class="form-control" formControlName="cameraPassword" [ngClass]="{'is-invalid': isInvalid('cameraPassword'), 'is-valid' : isValid('cameraPassword')}">
-                    <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraPassword')">
-                        Password is required !
-                    </div>
-                    <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('maxlength','cameraPassword')">
-                        Max length &lt; 45
-                  </div>
-                </div>
-              </div>
-  
-            <!-- Show Created Date  -->
-            <div class="form-group row" *ngIf="mode == 'detail'">
-              <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" readonly=true formControlName="cameraCreatedDate" >
-              </div>
+        <!-- Input IP -->
+        <div class="form-group row" *ngIf="mode == 'add'">
+          <label class="col-md-3 col-form-label" for="text-input">IP: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="cameraIP" pattern="([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})"
+              [ngClass]="{'is-invalid': isInvalid('cameraIP') || isExisted == true, 'is-valid' : isValid('cameraIP')}">
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraIP')">
+              IP is required !
             </div>
-            
-            <!-- Show Updated Date  -->
-            <div class="form-group row" *ngIf="mode == 'detail'">
-              <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" readonly=true formControlName="cameraUpdatedDate" >
-              </div>
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('pattern','cameraIP')">
+              IP must be number and with format (xxx.xxx.xxx.xxx)
             </div>
-  
-          <!-- Show Status  -->
-          <div class="form-group row" *ngIf="mode == 'detail'">
-            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status:  </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control" readonly=true formControlName="cameraStatus" >
+            <div class="invalid-feedback" *ngIf="isExisted == true">
+             This IP is existed !
             </div>
           </div>
-  
-          <!-- Show Updated By -->
-          <div class="form-group row" *ngIf="mode == 'detail'">
-            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control" readonly=true formControlName="cameraUpdatedBy" >
+        </div>
+
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> IP: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraIP">
+          </div>
+        </div>
+
+        <!-- Input Account -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Account: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="cameraAccount"
+              [ngClass]="{'is-invalid': isInvalid('cameraAccount'), 'is-valid' : isValid('cameraAccount')}">
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraAccount')">
+              Account is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('maxlength','cameraAccount')">
+              Max length &lt; 45
             </div>
           </div>
-  
-          <!-- Show Area ID -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="select1"> Area: </label>
-              <div class="col-md-9">
-                <select class="form-control" id="select1" name="select1" formControlName="cameraArea" disabled="" *ngIf="mode == 'add'"> 
-                  <option  *ngFor="let area of areas" value="{{area.id}}" >{{area.name}}</option>
-                </select>
-                <select class="form-control" id="select1" name="select1" formControlName="cameraArea" *ngIf="mode == 'detail'"> 
-                    <option  *ngFor="let area of areas" value="{{area.id}}" >{{area.name}}</option>
-                </select>
-              </div>
-            </div> 
-        </form>
-      </div>
-        <div class="card-footer" *ngIf="mode =='add'">
-            <button class="btn btn-sm btn-primary" (click)="goBack()">
-              <i class="icon-action-undo"></i> Back</button>
-            <button type="submit" class="btn btn-sm btn-warning" (click)="addCamera()">
-              <i class="icon-book-open"></i> Add</button>
         </div>
-        <div class="card-footer" *ngIf="mode == 'detail'">
-            <button class="btn btn-sm btn-primary" (click)="goBack()">
-              <i class="icon-action-undo"></i> Back</button>
-            <button type="submit" class="btn btn-sm btn-warning" (click)="updateCameraByID()" *ngIf="cameraDetail.status == 'active'">
-              <i class="icon-book-open"></i> Update</button>
-            <button type="button" class="btn btn-sm btn-danger"  (click)="inactiveCameraByID()" *ngIf="cameraDetail.status == 'active'">
-              <i class="icon-trash"></i> Inactive </button>
-            <button type="button" class="btn btn-sm btn-success"  (click)="activeCameraByID()" *ngIf="cameraDetail.status == 'inactive'">
-                <i class="icon-check"></i> Active </button>
+
+        <!-- Input Password -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Password: </label>
+          <div class="col-md-9">
+            <input type="password" class="form-control" formControlName="cameraPassword"
+              [ngClass]="{'is-invalid': isInvalid('cameraPassword'), 'is-valid' : isValid('cameraPassword')}">
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraPassword')">
+              Password is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('maxlength','cameraPassword')">
+              Max length &lt; 45
+            </div>
+          </div>
         </div>
+
+        <!-- Show Created Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraCreatedDate">
+          </div>
+        </div>
+
+        <!-- Show Updated Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraUpdatedDate">
+          </div>
+        </div>
+
+        <!-- Show Status  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraStatus">
+          </div>
+        </div>
+
+        <!-- Show Updated By -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="cameraUpdatedBy">
+          </div>
+        </div>
+
+        <!-- Show Area ID -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Area: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="cameraArea" disabled=""
+              *ngIf="mode == 'add'">
+              <option *ngFor="let area of areas" value="{{area.id}}">{{area.name}}</option>
+            </select>
+            <select class="form-control" id="select1" name="select1" formControlName="cameraArea"
+              *ngIf="mode == 'detail'">
+              <option *ngFor="let area of areas" value="{{area.id}}">{{area.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer" *ngIf="mode =='add'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addCamera()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'detail'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateCameraByID()"
+        *ngIf="cameraDetail.status == 'active'">
+        <i class="icon-book-open"></i> Update</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveCameraByID()"
+        *ngIf="cameraDetail.status == 'active'">
+        <i class="icon-trash"></i> Inactive </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="activeCameraByID()"
+        *ngIf="cameraDetail.status == 'inactive'">
+        <i class="icon-check"></i> Active </button>
     </div>
   </div>
+</div>

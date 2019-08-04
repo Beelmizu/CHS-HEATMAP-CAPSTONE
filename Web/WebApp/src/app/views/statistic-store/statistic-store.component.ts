@@ -15,6 +15,7 @@ import { AreaService } from '../../services/area.service';
 import { Area } from '../../models/area.model';
 import { Store } from '../../models/store.model';
 import { StoreService } from '../../services/store.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-statistic-store',
@@ -124,7 +125,8 @@ export class StatisticStoreComponent implements OnInit {
     private cameraDetailService: CameraDetailService,
     private areaService: AreaService,
     private storeService: StoreService,
-    private cameraService: CameraService
+    private cameraService: CameraService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -242,7 +244,7 @@ export class StatisticStoreComponent implements OnInit {
 
   catchDate(event) {
     if (this.storeDetail == null) {
-      window.alert('Please choose store !');
+      this.toastr.warning('Please choose store !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
       this.selectTimeForm.setValue({
@@ -257,7 +259,7 @@ export class StatisticStoreComponent implements OnInit {
 
   catchSelectedMonth(event) {
     if (this.storeDetail == null) {
-      window.alert('Please choose store !');
+      this.toastr.warning('Please choose store !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
       this.selectTimeForm.get('timeFrom').disable();
@@ -303,7 +305,7 @@ export class StatisticStoreComponent implements OnInit {
     this.timeTo = this.selectTimeForm.get('timeTo').value.split(':')[0];
     this.reportService.getReportStoreByTime(this.selectedValue, this.storeDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
       if (reports == null) {
-        window.alert('No data');
+        this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
         this.bindingChartForDate(reports);
@@ -320,7 +322,7 @@ export class StatisticStoreComponent implements OnInit {
     this.lineChartLabels.length = 0;
     this.reportService.getReportStoreByMonth(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
       if (reports == null) {
-        window.alert('No data');
+        this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
         this.bindingChartForMonth(reports);

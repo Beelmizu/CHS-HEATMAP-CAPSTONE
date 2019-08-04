@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { StoreService } from '../../services/store.service';
 import { AreaDetailService } from '../../services/area-detail.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-area-detail',
@@ -28,7 +29,8 @@ export class AreaDetailComponent implements OnInit {
     private storeService: StoreService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -79,8 +81,8 @@ export class AreaDetailComponent implements OnInit {
         'areaID': this.areaDetail.id,
         'areaFloor': this.areaDetail.floor,
         'areaName': this.areaDetail.name,
-        'areaCreatedDate': this.areaDetail.createDate,
-        'areaUpdatedDate': this.areaDetail.updateDate,
+        'areaCreatedDate': this.areaDetail.createdDate,
+        'areaUpdatedDate': this.areaDetail.updatedDate,
         'areaStatus': this.areaDetail.status,
         'areaUpdatedBy': this.areaDetail.updatedBy,
         'areaStore': this.areaDetail.stoID
@@ -95,16 +97,14 @@ export class AreaDetailComponent implements OnInit {
     if (window.confirm('Do you want to inactive ?')) {
       this.areaDetailService.inactiveAreaByID(this.areaDetail).subscribe((message) => {
         if (message) {
-          window.alert('Inactive ' + this.areaDetail.name + ' successfully !');
+          this.toastr.success('Inactive ' + this.areaDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Inactive ' + this.areaDetail.name + ' unsuccessfully !');
+          this.toastr.error('Inactive ' + this.areaDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
-      window.alert('Inactive ' + this.areaDetail.name + ' successfully !');
-      this.location.back();
     } else {
       return;
     }
@@ -115,16 +115,14 @@ export class AreaDetailComponent implements OnInit {
     if (window.confirm('Do you want to active ?')) {
       this.areaDetailService.activeAreaByID(this.areaDetail).subscribe((message) => {
         if (message) {
-          window.alert('Active ' + this.areaDetail.name + ' successfully !');
+          this.toastr.success('Active ' + this.areaDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Active ' + this.areaDetail.name + ' unsuccessfully !');
+          this.toastr.error('Active ' + this.areaDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
-      window.alert('active ' + this.areaDetail.name + ' successfully !');
-      this.location.back();
     } else {
       return;
     }
@@ -135,16 +133,16 @@ export class AreaDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.areaDetailService.updateAreaByID(this.areaDetail).subscribe((message) => {
         if (message) {
-          window.alert('Update ' + this.areaDetail.name + ' successfully !');
+          this.toastr.success('Update ' + this.areaDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Update ' + this.areaDetail.name + ' unsuccessfully !');
+          this.toastr.error('Update ' + this.areaDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 
@@ -153,16 +151,16 @@ export class AreaDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.areaDetailService.addNewArea(this.areaDetail).subscribe((message) => {
         if (message) {
-          window.alert('Create ' + this.areaDetail.name + ' successfully !');
+          this.toastr.success('Create ' + this.areaDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Create ' + this.areaDetail.name + ' unsuccessfully !');
+          this.toastr.error('Create ' + this.areaDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 

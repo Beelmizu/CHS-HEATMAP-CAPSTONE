@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="card">
+  <div class="card"  id="cardContainer">
     <div class=card-header>
       <i class="fa fa-align-justify" > Company </i>
     </div>
@@ -8,7 +8,7 @@
         <div class="input-group">
             <span class="input-group-prepend">
                 <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
-                    <i class="fa fa-plus"> Add </i>
+                    <i class="fa fa-plus"> Add Company </i>
                 </button>
             </span>
             <input type="text" class="form-control" placeholder="Search by name ..." formControlName="searchValue" />
@@ -31,7 +31,7 @@
                     </div>
                     <div class="card-body">
                         <tr><b>Address: </b> {{company.address}}</tr>
-                        <tr><b>Created Date: </b>{{company.createDate}}</tr>
+                        <tr><b>Created Date: </b>{{company.createdDate}}</tr>
                     </div>
                     <div class="card-footer">
                       <span id="spanView">

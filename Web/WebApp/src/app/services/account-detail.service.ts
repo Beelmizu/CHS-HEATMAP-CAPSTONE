@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Account } from '../models/account.model';
 
@@ -27,5 +27,14 @@ export class AccountDetailService {
 
   getIDAccountByUsername(username: string): Observable<number> {
     return this.http.get<number>(this.accountUrl + 'getIDByUsername/' + username);
+  }
+
+  changePassword(accountID: String, oldPass: String, newPass: String, updatedBy: String): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accountID', '' + accountID);
+    body = body.set('oldPass', '' + oldPass);
+    body = body.set('newPass', '' + newPass);
+    body = body.set('updatedBy', '' + updatedBy);
+    return this.http.post<any>(this.accountUrl + 'changePassword/', body);
   }
 }

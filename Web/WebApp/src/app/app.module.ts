@@ -44,6 +44,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { NgxPasswordToggleModule } from 'ngx-password-toggle';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
@@ -63,7 +64,12 @@ import { NgxPasswordToggleModule } from 'ngx-password-toggle';
     BrowserAnimationsModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
-    NgxPasswordToggleModule
+    NgxPasswordToggleModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
   ],
   declarations: [
     AppComponent,

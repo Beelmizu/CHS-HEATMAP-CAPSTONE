@@ -26,7 +26,7 @@ export class CameraService {
     return this.http.get<Camera[]>(this.cameraUrl + 'getCameraInArea/' + areaID);
   }
 
-  getCameraByValue(searchValue: String): Observable<Camera[]> {
-    return this.http.get<Camera[]>(this.cameraUrl + 'search/' + searchValue);
+  getCameraByValue(searchValue: String, areaID: number): Observable<Camera[]> {
+    return this.http.get<Camera[]>(this.cameraUrl + 'search/' + searchValue + '/' + areaID);
   }
 }

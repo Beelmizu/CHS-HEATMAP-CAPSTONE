@@ -4,6 +4,9 @@ import { StoreService } from '../../services/store.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
 import { Store } from '../../models/store.model';
+import { AccountDetailService } from '../../services/account-detail.service';
+import { ToastrService } from 'ngx-toastr';
+import { StoreDetailService } from '../../services/store-detail.service';
 
 @Component({
   selector: 'app-store',
@@ -20,9 +23,12 @@ export class StoreComponent implements OnInit {
   constructor(
     private router: Router,
     private storeService: StoreService,
+    private accountDetailService: AccountDetailService,
+    private storeDetailService: StoreDetailService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -37,8 +43,8 @@ export class StoreComponent implements OnInit {
       if (self.accountID != null) {
         this.getStoreByAccountWithoutStatus(this.accountID);
       } else {
-        this.companyID =  params.idCompany;
-        this.getStoreInCompany( this.companyID );
+        this.companyID = params.idCompany;
+        this.getStoreInCompany(this.companyID);
       }
     });
   }
@@ -64,15 +70,46 @@ export class StoreComponent implements OnInit {
 
   searchStoreByName(searchValue: String): void {
     const self = this;
-    if (searchValue === '') {
-      this.getStoreInCompany(this.companyID);
+    if (this.accountID == null) {
+      if (searchValue === '') {
+        this.getStoreInCompany(this.companyID);
+      } else {
+        this.storeService.getStoreInCompanyByValue(searchValue, this.companyID).subscribe((storeList) => {
+          if (storeList.length === 0) {
+            this.toastr.warning('Cannot find store by value!', 'Warning');
+          } else {
+            this.stores = storeList;
+          }
+        }, (error) => {
+          console.log(error);
+        });
+      }
     } else {
-      this.storeService.getStoreByValue(searchValue).subscribe((storeList) => {
-        this.stores = storeList;
-      }, (error) => {
-        console.log(error);
-      });
+      if (searchValue === '') {
+        this.getStoreByAccountWithoutStatus(this.accountID);
+      } else {
+        this.storeService.getStoreOfAccountByValue(searchValue, this.accountID).subscribe((storeList) => {
+          if (storeList.length === 0) {
+            this.toastr.warning('Cannot find store by value!', 'Warning');
+          } else {
+            this.stores = storeList;
+          }
+        }, (error) => {
+          console.log(error);
+        });
+      }
     }
   }
 
+  deleteStoreOfAccount(storeID: number, name: String) {
+    const self = this;
+    if (window.confirm('Do you want to delete store ' + name + ' of this account ?')) {
+      this.storeDetailService.deleteStoreOfAccount(this.accountID, storeID).subscribe((message) => {
+        this.toastr.success('Delete ' + name + ' of this account successfully !', 'Success');
+        window.location.reload();
+      }, (error) => {
+        this.toastr.warning('Delete ' + name + ' of this account unsuccessfully !', 'Warning');
+      });
+    } else { return; }
+  }
 }

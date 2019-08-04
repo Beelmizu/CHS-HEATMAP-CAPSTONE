@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Store } from '../models/store.model';
 
@@ -34,5 +34,19 @@ export class StoreDetailService {
 
  addNewStore(store: Store): Observable<any> {
     return this.http.post<any>(this.storeUrl + 'create/',  store);
+  }
+
+  addStoreToAccount(accountID: number, storeID: number): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accID', '' + accountID);
+    body = body.set('stoID', '' + storeID);
+    return this.http.post<any>(this.storeUrl + 'addStoreToAccount/', body);
+  }
+
+  deleteStoreOfAccount(accountID: number, storeID: number): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accID', '' + accountID);
+    body = body.set('stoID', '' + storeID);
+    return this.http.post<any>(this.storeUrl + 'deleteStoreOfAccount/', body);
   }
 }

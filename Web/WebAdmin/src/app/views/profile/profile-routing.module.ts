@@ -1,15 +1,32 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfileComponent,
     data: {
       title: 'Profile'
-    }
+    },
+    children: [
+      {
+        path: 'edit',
+        component: EditProfileComponent,
+        data: {
+          title: 'Edit Profile'
+        }
+      },
+      {
+        path: 'changepassword',
+        component: ChangePasswordComponent,
+        data: {
+          title: 'Change Password'
+        }
+      }
+    ]
   }
 ];
 

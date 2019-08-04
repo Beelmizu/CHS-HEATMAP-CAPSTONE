@@ -26,8 +26,23 @@ export class AccountService {
     return this.http.get<Account[]>(this.accountUrl + 'search/' + searchValue);
   }
 
+  getAccountInCompanyByValue(searchValue: String, companyID: number): Observable<Account[]> {
+    return this.http.get<Account[]>(this.accountUrl + 'searchInCompany/' + searchValue +  '/' + companyID);
+  }
+
+  getAccountInStoreByValue(searchValue: String, storeID: number): Observable<Account[]> {
+    return this.http.get<Account[]>(this.accountUrl + 'searchInStore/' + searchValue + '/ ' + storeID);
+  }
+
   getAccountByCompany(id: number): Observable<Account[]> {
     return this.http.get<Account[]>(this.accountUrl + 'getAccountByCompany/' + id);
   }
 
+  getAccountByStore(id: number): Observable<Account[]> {
+    return this.http.get<Account[]>(this.accountUrl + 'getAccountByStore/' + id);
+  }
+
+  getAllAccountByCompanyNotBelongToThisStore(comID: number, stoID: number): Observable<Account[]> {
+    return this.http.get<Account[]>(this.accountUrl + 'getAllAccountByCompanyNotBelongToThisStore/' + comID + '/' + stoID);
+  }
 }
