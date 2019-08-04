@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Account } from '../models/account.model';
 
@@ -33,11 +33,35 @@ export class AccountDetailService {
     return this.http.post<any>(this.accountUrl + 'update/', account);
   }
 
- addNewAccount(account: Account): Observable<any> {
-    return this.http.post<any>(this.accountUrl + 'create/',  account);
+  addNewAccount(account: Account): Observable<any> {
+    return this.http.post<any>(this.accountUrl + 'create/', account);
+  }
+
+  addAccountToStore(accountID: number, storeID: number): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accID', '' + accountID);
+    body = body.set('stoID', '' + storeID);
+    return this.http.post<any>(this.accountUrl + 'addAccountToStore/', body);
   }
 
   getIDAccountByUsername(username: string): Observable<number> {
     return this.http.get<number>(this.accountUrl + 'getIDByUsername/' + username);
   }
+
+  deleteAccountInStore(accountID: number, storeID: number): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accID', '' + accountID);
+    body = body.set('stoID', '' + storeID);
+    return this.http.post<any>(this.accountUrl + 'deleteAccountInStore/', body);
+  }
+
+  changePassword(accountID: String, oldPass: String, newPass: String, updatedBy: String): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accountID', '' + accountID);
+    body = body.set('oldPass', '' + oldPass);
+    body = body.set('newPass', '' + newPass);
+    body = body.set('updatedBy', '' + updatedBy);
+    return this.http.post<any>(this.accountUrl + 'changePassword/', body);
+  }
+
 }

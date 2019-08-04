@@ -13,6 +13,7 @@ import { CameraService } from '../../services/camera.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { AreaService } from '../../services/area.service';
 import { Area } from '../../models/area.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-statistic-area',
@@ -121,7 +122,8 @@ export class StatisticAreaComponent implements OnInit {
     private route: ActivatedRoute,
     private cameraDetailService: CameraDetailService,
     private areaService: AreaService,
-    private cameraService: CameraService
+    private cameraService: CameraService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -239,7 +241,7 @@ export class StatisticAreaComponent implements OnInit {
 
   catchDate(event) {
     if (this.areaDetail == null) {
-      window.alert('Please choose area !');
+      this.toastr.warning('Please choose area !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
       this.selectTimeForm.setValue({
@@ -256,7 +258,7 @@ export class StatisticAreaComponent implements OnInit {
 
   catchSelectedMonth(event) {
     if (this.areaDetail == null) {
-      window.alert('Please choose area !');
+      this.toastr.warning('Please choose area !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
       this.selectTimeForm.get('timeFrom').disable();
@@ -302,7 +304,7 @@ export class StatisticAreaComponent implements OnInit {
     this.timeTo = this.selectTimeForm.get('timeTo').value.split(':')[0];
     this.reportService.getReportAreaByTime(this.selectedValue, this.areaDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
       if (reports == null) {
-        window.alert('No data');
+        this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
         this.bindingChartForDate(reports);
@@ -319,7 +321,7 @@ export class StatisticAreaComponent implements OnInit {
     this.lineChartLabels.length = 0;
     this.reportService.getReportAreaByMonth(this.selectedValue, this.areaDetail.id).subscribe((reports) => {
       if (reports == null) {
-        window.alert('No data');
+        this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
         this.bindingChartForMonth(reports);

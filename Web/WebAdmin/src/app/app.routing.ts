@@ -10,7 +10,7 @@ import { LoginComponent } from './views/login/login.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'company',
     pathMatch: 'full',
   },
   {

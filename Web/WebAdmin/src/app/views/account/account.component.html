@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="card">
+  <div class="card" id="cardContainer">
     <div class=card-header>
       <i class="fa fa-align-justify" > Account </i>
     </div>
@@ -7,11 +7,14 @@
       <div class="form-group" [formGroup]="accountForm">
         <div class="input-group">
             <span class="input-group-prepend">
-                <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
+                <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active" *ngIf="storeID == null">
                     <i class="fa fa-user-plus"> Add </i>
                 </button>
+                <button type="button" class="btn btn-primary" [routerLink]="['addAccountStore']" routerLinkActive="active" *ngIf="storeID != null">
+                  <i class="fa fa-user-plus"> Add </i>
+              </button>
             </span>
-          <input type="text" class="form-control" placeholder="Search by name ..." formControlName="searchValue"/>
+          <input type="text" class="form-control" placeholder="Search by username ..." formControlName="searchValue"/>
           <span class="input-group-append">
             <button type="button" class="btn btn-primary" (click)="searchByUsernameOrFullname(accountForm.get('searchValue').value)">
               <i class="fa fa-search"></i> Search </button>
@@ -59,11 +62,14 @@
               <span class="badge badge-secondary" >Inactive</span>
             </td>
             <td id="tdAction">
-                <button type="button" class="btn btn-success" id="btnStore" [routerLink]="[account.id, 'all', 'store']" routerLinkActive="active" *ngIf="account.status == 'active'">
+                <button type="button" class="btn btn-success" id="btnStore" [routerLink]="[account.id, 'all', 'store']" routerLinkActive="active" *ngIf="account.status == 'active' && storeID == null">
                     View Store
                 </button>
-                <button type="button" class="btn btn-success" id="btnStore" [routerLink]="[account.id, 'all', 'store']" routerLinkActive="active" *ngIf="account.status == 'inactive'" disabled="true">
+                <button type="button" class="btn btn-success" id="btnStore" [routerLink]="[account.id, 'all', 'store']" routerLinkActive="active" *ngIf="account.status == 'inactive' && storeID == null" disabled="true">
                     View Store
+                </button>
+                <button type="button" class="btn btn-danger" id="btnDelete" (click)="deleteAccountInStore(account.id, account.username)"  *ngIf="storeID != null" >
+                    Delete
                 </button>
                 <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', account.id]" routerLinkActive="active">
                     Detail

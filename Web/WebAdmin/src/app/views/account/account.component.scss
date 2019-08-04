@@ -6,15 +6,21 @@ td {
 }
 
 td button { 
-    margin-left: 15px;
+    margin: 0 auto ;
+    display: inline;
+    text-align: center;
 }
 
 #btnStore {
-   margin-left: -15px;
+   margin-right: 5px;
 }
 
 #btnDetail {
-    margin-right: -15px;
+    margin-left: 5px;
+}
+
+#btnDelete {
+    margin-right: 5px;
 }
 
 #thAction {
@@ -22,4 +28,8 @@ td button {
 }
 #tdAction {
     width: 20%;
+}
+
+#cardContainer {
+    margin-top: 30px;
 }

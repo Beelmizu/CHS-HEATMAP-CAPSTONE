@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AreaService } from '../../services/area.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class AreaComponent implements OnInit {
     private areaService: AreaService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -55,8 +57,12 @@ export class AreaComponent implements OnInit {
     if (searchValue === '') {
       this.getAreaInStore(this.storeID);
     } else {
-      this.areaService.getAreaByValue(searchValue).subscribe((areaList) => {
-        this.areas = areaList;
+      this.areaService.getAreaByValue(searchValue, this.storeID).subscribe((areaList) => {
+        if (areaList.length === 0) {
+          this.toastr.warning('Cannot find area by value!', 'Warning');
+        } else {
+          this.areas = areaList;
+        }
       }, (error) => {
         console.log(error);
       });

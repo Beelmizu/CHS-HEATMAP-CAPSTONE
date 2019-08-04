@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyDetailService } from '../../services/company-detail.service';
 import { Location } from '@angular/common';
 import { DateFormatter } from 'ngx-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-company-detail',
@@ -18,13 +19,15 @@ export class CompanyDetailComponent implements OnInit {
   companyID: number;
 
   mode: String;
+  isExisted = false;
 
   constructor(
     private router: Router,
     private companyDetailService: CompanyDetailService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -60,8 +63,8 @@ export class CompanyDetailComponent implements OnInit {
         'companyID': this.companyDetail.id,
         'companyName': this.companyDetail.name,
         'companyAddress': this.companyDetail.address,
-        'companyCreatedDate': this.companyDetail.createDate,
-        'companyUpdatedDate': this.companyDetail.updateDate,
+        'companyCreatedDate': this.companyDetail.createdDate,
+        'companyUpdatedDate': this.companyDetail.updatedDate,
         'companyStatus': this.companyDetail.status,
         'companyUpdatedBy': this.companyDetail.updatedBy
       });
@@ -75,10 +78,10 @@ export class CompanyDetailComponent implements OnInit {
     if (window.confirm('Do you want to inactive ?')) {
       this.companyDetailService.inactiveCompanyByID(this.companyDetail).subscribe((message) => {
         if (message) {
-          window.alert('Inactive ' + this.companyDetail.name + ' successfully !');
+          this.toastr.success('Inactive ' + this.companyDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Inactive ' + this.companyDetail.name + ' unsuccessfully !');
+          this.toastr.error('Inactive ' + this.companyDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
@@ -93,10 +96,10 @@ export class CompanyDetailComponent implements OnInit {
     if (window.confirm('Do you want to active ?')) {
       this.companyDetailService.activeCompanyByID(this.companyDetail).subscribe((message) => {
         if (message) {
-          window.alert('Active ' + this.companyDetail.name + ' successfully !');
+          this.toastr.success('Active ' + this.companyDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Active ' + this.companyDetail.name + ' unsuccessfully !');
+          this.toastr.error('Active ' + this.companyDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
@@ -111,16 +114,16 @@ export class CompanyDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.companyDetailService.updateCompanyByID(this.companyDetail).subscribe((message) => {
         if (message) {
-          window.alert('Update ' + this.companyDetail.name + ' successfully !');
+          this.toastr.success('Update ' + this.companyDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Update ' + this.companyDetail.name + ' unsuccessfully !');
+          this.toastr.error('Update ' + this.companyDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 
@@ -129,16 +132,17 @@ export class CompanyDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.companyDetailService.addNewCompany(this.companyDetail).subscribe((message) => {
         if (message) {
-          window.alert('Create' + this.companyDetail.name + ' successfully !');
+          this.toastr.success('Create ' + this.companyDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('The ' + this.companyDetail.name + '  is existed !');
+          this.toastr.error('The ' + this.companyDetail.name + '  is existed !', 'Error');
+          this.isExisted = true;
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 

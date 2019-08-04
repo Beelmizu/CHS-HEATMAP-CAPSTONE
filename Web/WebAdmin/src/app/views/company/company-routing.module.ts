@@ -84,6 +84,27 @@ const routes: Routes = [
     }
   },
   {
+    path: ':idCompany/all/store/:idStore/all/account',
+    component: AccountComponent,
+    data: {
+      title: 'Account'
+    }
+  },
+  {
+    path: ':idCompany/all/store/:idStore/all/account/:mode/:idAccount',
+    component: AccountDetailComponent,
+    data: {
+      title: 'Account Detail'
+    }
+  },
+  {
+    path: ':idCompany/all/store/:idStore/all/account/:mode',
+    component: AccountDetailComponent,
+    data: {
+      title: 'Add Account'
+    }
+  },
+  {
     path: ':idCompany/all/store/:idStore/all/area/:mode/:idArea',
     component: AreaDetailComponent,
     data: {

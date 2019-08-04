@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AreaService } from '../../services/area.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-camera-detail',
@@ -21,6 +22,7 @@ export class CameraDetailComponent implements OnInit {
   cameraDetailForm: FormGroup;
 
   mode: String;
+  isExisted = false;
 
   constructor(
     private router: Router,
@@ -28,7 +30,8 @@ export class CameraDetailComponent implements OnInit {
     private areaService: AreaService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -81,8 +84,8 @@ export class CameraDetailComponent implements OnInit {
         'cameraIP': this.cameraDetail.ip,
         'cameraAccount': this.cameraDetail.account,
         'cameraPassword': this.cameraDetail.password,
-        'cameraCreatedDate': this.cameraDetail.createDate,
-        'cameraUpdatedDate': this.cameraDetail.updateDate,
+        'cameraCreatedDate': this.cameraDetail.createdDate,
+        'cameraUpdatedDate': this.cameraDetail.updatedDate,
         'cameraStatus': this.cameraDetail.status,
         'cameraUpdatedBy': this.cameraDetail.updatedBy,
         'cameraArea': this.cameraDetail.areaID
@@ -97,10 +100,10 @@ export class CameraDetailComponent implements OnInit {
     if (window.confirm('Do you want to inactive ?')) {
       this.cameraDetailService.inactiveCameraByID(this.cameraDetail).subscribe((message) => {
         if (message) {
-          window.alert('Inactive ' + this.cameraDetail.ip + ' successfully !');
+          this.toastr.success('Inactive ' + this.cameraDetail.ip + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Inactive ' + this.cameraDetail.ip + ' unsuccessfully !');
+          this.toastr.error('Inactive ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
@@ -115,10 +118,10 @@ export class CameraDetailComponent implements OnInit {
     if (window.confirm('Do you want to active ?')) {
       this.cameraDetailService.activeCameraByID(this.cameraDetail).subscribe((message) => {
         if (message) {
-          window.alert('Active ' + this.cameraDetail.ip + ' successfully !');
+          this.toastr.success('Active ' + this.cameraDetail.ip + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Active ' + this.cameraDetail.ip + ' unsuccessfully !');
+          this.toastr.error('Active ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
@@ -133,16 +136,16 @@ export class CameraDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.cameraDetailService.updateCameraByID(this.cameraDetail).subscribe((message) => {
         if (message) {
-          window.alert('Update ' + this.cameraDetail.ip + ' successfully !');
+          this.toastr.success('Update ' + this.cameraDetail.ip + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Update ' + this.cameraDetail.ip + ' unsuccessfully !');
+          this.toastr.error('Update ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 
@@ -151,16 +154,17 @@ export class CameraDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.cameraDetailService.addNewCamera(this.cameraDetail).subscribe((message) => {
         if (message) {
-          window.alert('Create ' + this.cameraDetail.ip + ' successfully !');
+          this.toastr.success('Create ' + this.cameraDetail.ip + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('This ' + this.cameraDetail.ip + ' is existed !');
+          this.toastr.error('This IP is existed', 'Error');
+          this.isExisted = true;
         }
       }, (error) => {
         console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 

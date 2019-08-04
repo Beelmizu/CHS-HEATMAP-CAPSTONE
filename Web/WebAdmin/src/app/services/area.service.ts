@@ -26,7 +26,7 @@ export class AreaService {
     return this.http.get<Area[]>(this.areaUrl + 'getAreaInStore/' + storeID);
   }
 
-  getAreaByValue(searchValue: String): Observable<Area[]> {
-    return this.http.get<Area[]>(this.areaUrl + 'search/' + searchValue);
+  getAreaByValue(searchValue: String, storeID: number): Observable<Area[]> {
+    return this.http.get<Area[]>(this.areaUrl + 'search/' + searchValue + '/' + storeID);
   }
 }

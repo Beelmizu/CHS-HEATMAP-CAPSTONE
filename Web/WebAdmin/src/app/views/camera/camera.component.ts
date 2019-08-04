@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CameraService } from '../../services/camera.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-camera',
@@ -21,7 +22,8 @@ export class CameraComponent implements OnInit {
     private cameraService: CameraService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -53,8 +55,12 @@ export class CameraComponent implements OnInit {
     if (searchValue === '') {
       this.getCameraInArea(this.areaID);
     } else {
-      this.cameraService.getCameraByValue(searchValue).subscribe((cameraList) => {
-        this.cameras = cameraList;
+      this.cameraService.getCameraByValue(searchValue, this.areaID).subscribe((cameraList) => {
+        if (cameraList.length === 0) {
+          this.toastr.warning('Cannot find camera by value!', 'Warning');
+        } else {
+          this.cameras = cameraList;
+        }
       }, (error) => {
         console.log(error);
       });

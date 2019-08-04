@@ -42,6 +42,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
 import { JwtInterceptor, ErrorInterceptor } from './views/_helpers';
 import { LoginComponent } from './views/login/login.component';
+import { NgxPasswordToggleModule } from 'ngx-password-toggle';
+import { EditProfileComponent } from './views/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './views/change-password/change-password.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
 
 // Import other service
 @NgModule({
@@ -60,6 +66,13 @@ import { LoginComponent } from './views/login/login.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    NgxPasswordToggleModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
   ],
   declarations: [
     AppComponent,
@@ -67,7 +80,7 @@ import { LoginComponent } from './views/login/login.component';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent,
+    RegisterComponent
   ],
   providers: [
     {

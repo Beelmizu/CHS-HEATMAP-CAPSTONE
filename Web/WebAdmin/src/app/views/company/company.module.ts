@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { NgModel } from '@angular/forms/src/directives/ng_model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
 import { CompanyRoutingModule } from './company-routing.module';
 import { CompanyComponent } from './company.component';
 import { CompanyService } from '../../services/company.service';
@@ -25,6 +25,7 @@ import { AccountDetailComponent } from '../account-detail/account-detail.compone
     FormsModule,
     NgxPaginationModule,
     ReactiveFormsModule,
+    CollapseModule,
     BsDropdownModule.forRoot()
   ],
   declarations: [

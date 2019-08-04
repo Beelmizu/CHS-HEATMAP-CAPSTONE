@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { first } from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import { AccountDetailService } from '../../services/account-detail.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private route: ActivatedRoute,
-    private accountService: AccountDetailService
+    private accountService: AccountDetailService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {

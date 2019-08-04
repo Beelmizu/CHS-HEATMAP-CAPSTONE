@@ -1,80 +1,88 @@
-<div class="animated fadeIn">
-  <div class="card">
+<div class="animated fadeIn" *ngIf="mode != 'addStoreToAccount'">
+  <div class="card" id="cardContainer">
     <div class=card-header>
       <strong>Store Detail </strong>
       <small>{{storeDetail.id}}</small>
     </div>
     <div class="card-body">
       <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="storeDetailForm">
-          <!-- Show ID -->
-          <div class="form-group row" *ngIf="mode == 'detail'">
-            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control" readonly=true formControlName="storeID" >
+        <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="storeID">
+          </div>
+        </div>
+
+        <!-- Input Name -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Name: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="storeName"
+              [ngClass]="{'is-invalid': isInvalid('storeName'), 'is-valid' : isValid('storeName')}">
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeName')">
+              Name is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storeName')">
+              Max length &lt; 45
             </div>
           </div>
+        </div>
 
-          <!-- Input Name -->
-          <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="text-input" >Name: </label>
-              <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="storeName" [ngClass]="{'is-invalid': isInvalid('storeName'), 'is-valid' : isValid('storeName')}">
-                  <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeName')">
-                      Name is required !
-                  </div>
-                  <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storeName')">
-                      Max length &lt; 45
-                  </div>
+        <!-- Input Addresss -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Address: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="storeAddress"
+              [ngClass]="{'is-invalid': isInvalid('storeAddress'), 'is-valid' : isValid('storeAddress')}">
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeAddress')">
+              Address is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storeAddress')">
+              Max length &lt; 45
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Phone -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="storePhone" [ngClass]="{'is-invalid': isInvalid('storePhone'), 
+                'is-valid' : isValid('storePhone') }" pattern="^(0|84)([-. ]?[0-9]{1}){9,10}[-. ]?$">
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storePhone')">
+              Phone is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storePhone')">
+              Max length &lt; 11
+            </div>
+            <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('pattern','storePhone')">
+                Phone must be number and with format (09xxxxxxxx) or (84-9xxxxxxxx)
               </div>
           </div>
+        </div>
 
-          <!-- Input Addresss -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Address: </label>
-            <div class="col-md-9">
-                <input type="text" class="form-control" formControlName="storeAddress" [ngClass]="{'is-invalid': isInvalid('storeAddress'), 'is-valid' : isValid('storeAddress')}">
-                <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeAddress')">
-                    Address is required !
-                </div>
-                <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storeAddress')">
-                    Max length &lt; 45
-              </div>
-            </div>
+        <!-- Show Created Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="storeCreatedDate">
           </div>
+        </div>
 
-           <!-- Input Phone -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
-            <div class="col-md-9">
-                <input type="text" class="form-control" formControlName="storePhone" [ngClass]="{'is-invalid': isInvalid('storePhone'), 
-                'is-valid' : isValid('storePhone') }">
-                <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storePhone')">
-                    Phone is required !
-                </div>
-            </div>
+        <!-- Show Updated Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="storeUpdatedDate">
           </div>
-
-          <!-- Show Created Date  -->
-          <div class="form-group row" *ngIf="mode == 'detail'">
-            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control" readonly=true formControlName="storeCreatedDate" >
-            </div>
-          </div>
-          
-          <!-- Show Updated Date  -->
-          <div class="form-group row" *ngIf="mode == 'detail'">
-            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control" readonly=true formControlName="storeUpdatedDate" >
-            </div>
-          </div>
+        </div>
 
         <!-- Show Status  -->
         <div class="form-group row" *ngIf="mode == 'detail'">
-          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status:  </label>
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="storeStatus" >
+            <input type="text" class="form-control" readonly=true formControlName="storeStatus">
           </div>
         </div>
 
@@ -82,39 +90,104 @@
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="storeUpdatedBy" >
+            <input type="text" class="form-control" readonly=true formControlName="storeUpdatedBy">
           </div>
         </div>
 
-        <!-- Show ComID -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="select1"> Account: </label>
-            <div class="col-md-9">
-              <select class="form-control" id="select1" name="select1" formControlName="storeAccount" disabled="" *ngIf="mode == 'add'"> 
-                <option  *ngFor="let account of accounts" value="{{account.id}}" >{{account.username}}</option>
-              </select>
-              <select class="form-control" id="select1" name="select1" formControlName="storeAccount" *ngIf="mode == 'detail'"> 
-                  <option  *ngFor="let account of accounts" value="{{account.id}}" >{{account.username}}</option>
-                </select>
-            </div>
-          </div> 
+        <!-- Show comID -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Company: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="storeCom" disabled="">
+              <option *ngFor="let company of companies" value="{{company.id}}">{{company.name}}</option>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
-      <div class="card-footer" *ngIf="mode =='add'">
-          <button class="btn btn-sm btn-primary" (click)="goBack()">
-            <i class="icon-action-undo"></i> Back</button>
-          <button type="submit" class="btn btn-sm btn-warning" (click)="addStore()">
-            <i class="icon-book-open"></i> Add</button>
-      </div>
-      <div class="card-footer" *ngIf="mode == 'detail'">
-          <button class="btn btn-sm btn-primary" (click)="goBack()">
-            <i class="icon-action-undo"></i> Back</button>
-          <button type="submit" class="btn btn-sm btn-warning" (click)="updateStoreByID()"  *ngIf="storeDetail.status == 'active'">
-            <i class="icon-book-open"></i> Update</button>
-          <button type="button" class="btn btn-sm btn-danger"  (click)="inactiveStoreByID()" *ngIf="storeDetail.status == 'active'">
-            <i class="icon-trash"></i> Inactive </button>
-          <button type="button" class="btn btn-sm btn-success"  (click)="activeStoreByID()" *ngIf="storeDetail.status == 'inactive'">
-              <i class="icon-check"></i> Active </button>
-      </div>
+    <div class="card-footer" *ngIf="mode =='add'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addStoreToCompany()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'detail'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateStoreByID()"
+        *ngIf="storeDetail.status == 'active'">
+        <i class="icon-book-open"></i> Update</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveStoreByID()"
+        *ngIf="storeDetail.status == 'active'">
+        <i class="icon-trash"></i> Inactive </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="activeStoreByID()"
+        *ngIf="storeDetail.status == 'inactive'">
+        <i class="icon-check"></i> Active </button>
+    </div>
   </div>
 </div>
+
+<!-- Add Store To Account View -->
+<div class="animated fadeIn" *ngIf="mode == 'addStoreToAccount'">
+    <div class="card" id="cardContainer">
+      <div class=card-header>
+        <strong>Store Detail </strong>
+        <small>{{storeDetail.id}}</small>
+      </div>
+      <div class="card-body">
+        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="storeDetailToAddForm">
+          <!-- Show ID -->
+          <div class="form-group row" *ngIf="mode == 'detail'">
+            <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" readonly=true formControlName="storeID">
+            </div>
+          </div>
+  
+          <!-- Input Name -->
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="select1"> Store: </label>
+            <div class="col-md-9">
+              <select class="form-control" id="select1" name="select1" formControlName="storeName"
+                (change)="getStoreAfterClick()">
+                <option value="" disabled selected>Select store </option>
+                <option *ngFor="let store of stores" value="{{store.id}}">{{store.name}}</option>
+              </select>
+            </div>
+          </div>
+  
+          <!-- Input Addresss -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Address: </label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="storeAddress" readonly=true>
+            </div>
+          </div>
+  
+          <!-- Input Phone -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="storePhone" readonly=true>
+            </div>
+          </div>
+  
+          <!-- Show accountID -->
+          <div class="form-group row" *ngIf="accountID != 0">
+            <label class="col-md-3 col-form-label" for="select1"> Account: </label>
+            <div class="col-md-9">
+              <select class="form-control" id="select1" name="select1" formControlName="storeAccount" disabled="">
+                <option *ngFor="let account of accounts" value="{{account.id}}">{{account.username}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-sm btn-primary" (click)="goBack()">
+          <i class="icon-action-undo"></i> Back</button>
+        <button type="submit" class="btn btn-sm btn-warning" (click)="addStoreToAccount()">
+          <i class="icon-book-open"></i> Add</button>
+      </div>
+    </div>
+  </div>

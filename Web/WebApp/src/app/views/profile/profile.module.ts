@@ -7,6 +7,10 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { ProfileComponent } from './profile.component';
 import { AccountDetailService } from '../../services/account-detail.service';
 import { ProfileRoutingModule } from './profile-routing.module';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -18,7 +22,7 @@ import { ProfileRoutingModule } from './profile-routing.module';
     ReactiveFormsModule,
     BsDropdownModule.forRoot()
   ],
-  declarations: [ ProfileComponent ],
+  declarations: [ ProfileComponent, ChangePasswordComponent, EditProfileComponent ],
   providers: [ AccountDetailService ]
 })
 export class ProfileModule { }

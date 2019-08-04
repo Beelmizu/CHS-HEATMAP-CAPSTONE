@@ -12,7 +12,7 @@ import { AuthGuard } from './_guards';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'stores',
 
     pathMatch: 'full',
   },

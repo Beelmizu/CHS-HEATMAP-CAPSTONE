@@ -5,8 +5,8 @@ export class Camera  {
     public ip: String;
     public account: String;
     public password: String;
-    public createDate: String;
-    public updateDate: String;
+    public createdDate: String;
+    public updatedDate: String;
     public status: String;
     public updatedBy: String;
     public areaID: number;

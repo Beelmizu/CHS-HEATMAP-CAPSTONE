@@ -9,6 +9,9 @@ import { StoreDetailService } from '../../services/store-detail.service';
 import { CompanyService } from '../../services/company.service';
 import { AccountService } from '../../services/account.service';
 import { Account } from '../../models/account.model';
+import { CompanyDetailService } from '../../services/company-detail.service';
+import { AccountDetailService } from '../../services/account-detail.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-store-detail',
@@ -18,10 +21,15 @@ import { Account } from '../../models/account.model';
 export class StoreDetailComponent implements OnInit {
 
   storeDetail = new Store;
+  companyDetail = new Company;
   storeID: number;
   accountID: number;
+  companyID: number;
   accounts: Account[];
+  companies: Company[];
+  stores: Store[];
   storeDetailForm: FormGroup;
+  storeDetailToAddForm: FormGroup;
 
   mode: String;
 
@@ -29,24 +37,48 @@ export class StoreDetailComponent implements OnInit {
     private router: Router,
     private storeDetailService: StoreDetailService,
     private accountService: AccountService,
+    private storeService: StoreService,
+    private accountDetailService: AccountDetailService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private companyService: CompanyService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
 
     const self = this;
 
-    this.getAllAccount();
+    this.getAllCompany();
 
     this.route.params.subscribe(params => {
       this.mode = params.mode;
       this.storeID = params.idStore;
-      if (params.idAccount != null) {
+      this.companyID = params.idCompany;
+      this.getAllAccountInCompany();
+      if (this.mode === 'addStoreToAccount') {
         this.accountID = params.idAccount;
+        this.getAllStoreInCompanyNotBelongAccount();
+        this.storeDetailToAddForm = this.fb.group({
+          'storeID': [this.storeID],
+          'storeName': [''],
+          'storeAddress': [''],
+          'storePhone': [''],
+          'storeAccount': [this.accountID]
+        });
       } else {
-        this.accountID = 0;
+        this.storeDetailForm = this.fb.group({
+          'storeID': [''],
+          'storeName': ['', [Validators.required, Validators.maxLength(45)]],
+          'storeAddress': ['', [Validators.required, Validators.maxLength(45)]],
+          'storePhone': ['', [Validators.required, Validators.maxLength(11)]],
+          'storeCreatedDate': [''],
+          'storeUpdatedDate': [''],
+          'storeStatus': [''],
+          'storeUpdatedBy': [''],
+          'storeCom': [this.companyID],
+        });
       }
     });
     if (this.storeID != null) {
@@ -54,26 +86,41 @@ export class StoreDetailComponent implements OnInit {
       this.getStoreByID(this.storeID);
     }
 
-    this.storeDetailForm = this.fb.group({
-      'storeID':  [''],
-      'storeName':  ['', [Validators.required, Validators.maxLength(45)]],
-      'storeAddress':   ['', [Validators.required, Validators.maxLength(45)]],
-      'storePhone':   ['', [Validators.required, Validators.maxLength(12)]],
-      'storeCreatedDate':  [''],
-      'storeUpdatedDate':  [''],
-      'storeStatus':   [''],
-      'storeUpdatedBy':   [''],
-      'storeAccount':   [this.accountID]
+  }
+  // Get all company
+  getAllCompany() {
+    const self = this;
+    this.companyService.getAllCompanies().subscribe((companies) => {
+      this.companies = companies;
+    }, (error) => {
+      console.log(error);
     });
+  }
 
+  // Get all Store in company
+  getAllStoreInCompany() {
+    const self = this;
+    this.storeService.getAllStoreInCompany(this.companyID).subscribe((stores) => {
+      this.stores = stores;
+    }, (error) => {
+      console.log(error);
+    });
+  }
 
-
+  // Get all Store in company not belong to this account
+  getAllStoreInCompanyNotBelongAccount() {
+    const self = this;
+    this.storeService.getAllStoreInCompanyNotBelongAccount(this.companyID, this.accountID).subscribe((stores) => {
+      this.stores = stores;
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   // Get all account
-  getAllAccount() {
+  getAllAccountInCompany() {
     const self = this;
-    this.accountService.getAllAccount().subscribe((accountList) => {
+    this.accountService.getAccountByCompany(this.companyID).subscribe((accountList) => {
       this.accounts = accountList;
     }, (error) => {
       console.log(error);
@@ -86,14 +133,31 @@ export class StoreDetailComponent implements OnInit {
     this.storeDetailService.getStoreByID(storeID).subscribe((store) => {
       this.storeDetail = store;
       this.storeDetailForm.setValue({
-        'storeID':  this.storeDetail.id,
+        'storeID': this.storeDetail.id,
         'storeName': this.storeDetail.name,
-        'storeAddress':  this.storeDetail.address,
-        'storePhone':  this.storeDetail.phone,
-        'storeCreatedDate': this.storeDetail.createDate,
-        'storeUpdatedDate': this.storeDetail.updateDate,
-        'storeStatus':  this.storeDetail.status,
-        'storeUpdatedBy':  this.storeDetail.updatedBy,
+        'storeAddress': this.storeDetail.address,
+        'storePhone': this.storeDetail.phone,
+        'storeCreatedDate': this.storeDetail.createdDate,
+        'storeUpdatedDate': this.storeDetail.updatedDate,
+        'storeStatus': this.storeDetail.status,
+        'storeUpdatedBy': this.storeDetail.updatedBy,
+        'storeCom': this.storeDetail.cpn_store_id
+      });
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  // Get detail by ID
+  getStoreAfterClick(): void {
+    const self = this;
+    this.storeDetailService.getStoreByID(this.storeDetailToAddForm.get('storeName').value).subscribe((store) => {
+      this.storeDetail = store;
+      this.storeDetailToAddForm.setValue({
+        'storeID': this.storeDetail.id,
+        'storeName': this.storeDetail.id,
+        'storeAddress': this.storeDetail.address,
+        'storePhone': this.storeDetail.phone,
         'storeAccount': this.accountID
       });
     }, (error) => {
@@ -104,18 +168,16 @@ export class StoreDetailComponent implements OnInit {
   inactiveStoreByID(): void {
     const self = this;
     if (window.confirm('Do you want to inactive ?')) {
-        this.storeDetailService.inactiveStoreByID(this.storeDetail).subscribe((message) => {
-          if (message) {
-            window.alert('Inactive ' + this.storeDetail.name + ' successfully !');
-            this.location.back();
-          } else {
-            window.alert('Inactive ' + this.storeDetail.name + ' unsuccessfully !');
-          }
+      this.storeDetailService.inactiveStoreByID(this.storeDetail).subscribe((message) => {
+        if (message) {
+          this.toastr.success('Inactive ' + this.storeDetail.name + ' successfully !', 'Success');
+          this.location.back();
+        } else {
+          this.toastr.error('Inactive ' + this.storeDetail.name + ' unsuccessfully !', 'Error');
+        }
       }, (error) => {
         console.log(error);
       });
-      window.alert('Inactive ' + this.storeDetail.name + ' successfully !');
-      this.location.back();
     } else {
       return;
     }
@@ -124,13 +186,13 @@ export class StoreDetailComponent implements OnInit {
   activeStoreByID(): void {
     const self = this;
     if (window.confirm('Do you want to active ?')) {
-        this.storeDetailService.activeStoreByID(this.storeDetail).subscribe((message) => {
-          if (message) {
-            window.alert('Active ' + this.storeDetail.name + ' successfully !');
-            this.location.back();
-          } else {
-            window.alert('Active ' + this.storeDetail.name + ' unsuccessfully !');
-          }
+      this.storeDetailService.activeStoreByID(this.storeDetail).subscribe((message) => {
+        if (message) {
+          this.toastr.success('Active ' + this.storeDetail.name + ' successfully !', 'Success');
+          this.location.back();
+        } else {
+          this.toastr.error('Active ' + this.storeDetail.name + ' unsuccessfully !', 'Error');
+        }
       }, (error) => {
         console.log(error);
       });
@@ -144,35 +206,35 @@ export class StoreDetailComponent implements OnInit {
     if (this.valueIsChecked()) {
       this.storeDetailService.updateStoreByID(this.storeDetail).subscribe((message) => {
         if (message) {
-          window.alert('Update ' + this.storeDetail.name + ' successfully !');
+          this.toastr.success('Update ' + this.storeDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          window.alert('Update ' + this.storeDetail.name + ' unsuccessfully !');
+          this.toastr.error('Update ' + this.storeDetail.name + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
-          console.log(error);
+        console.log(error);
       });
     } else {
-      window.alert('Form is not valid !');
+      this.toastr.warning('Form is not valid', 'Warning');
     }
   }
 
-  addStore() {
+  addStoreToCompany() {
     const self = this;
-      if (this.valueIsChecked()) {
-        this.storeDetailService.addNewStore(this.storeDetail).subscribe((message) => {
-          if (message) {
-            window.alert('Add ' + this.storeDetail.name + ' successfully !');
-            this.location.back();
-          } else {
-            window.alert('Add ' + this.storeDetail.name + ' unsuccessfully !');
-          }
-        }, (error) => {
-            console.log(error);
-        });
-      } else {
-        window.alert('Form is not valid !');
-      }
+    if (this.valueIsChecked()) {
+      this.storeDetailService.addNewStore(this.storeDetail).subscribe((message) => {
+        if (message) {
+          this.toastr.success('Add ' + this.storeDetail.name + ' successfully !', 'Success');
+          this.location.back();
+        } else {
+          this.toastr.error('Add ' + this.storeDetail.name + ' unsuccessfully !', 'Error');
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      this.toastr.warning('Form is not valid', 'Warning');
+    }
   }
 
   valueIsChecked(): boolean {
@@ -189,22 +251,18 @@ export class StoreDetailComponent implements OnInit {
       if (this.mode === 'detail') {
         this.storeDetail.updatedBy = localStorage.getItem('accountUsername');
       }
-      if (this.storeDetailForm.get('storeAccount').value !== true) {
-        this.storeDetail.cpn_store_id = this.storeDetailForm.get('storeAccount').value;
-      } else {
-        return false;
-      }
+      this.storeDetail.cpn_store_id = this.storeDetailForm.get('storeCom').value;
       return true;
     } else {
-        return false;
+      return false;
     }
   }
 
-   // ---- Check validate when user input (Invalid)
+  // ---- Check validate when user input (Invalid)
   /* tslint:disable:max-line-length */
   isInvalid(fieldName: string) {
     return this.storeDetailForm.get(fieldName).invalid
-    && (this.storeDetailForm.get(fieldName).dirty || this.storeDetailForm.get(fieldName).touched) && this.storeDetailForm.get(fieldName);
+      && (this.storeDetailForm.get(fieldName).dirty || this.storeDetailForm.get(fieldName).touched) && this.storeDetailForm.get(fieldName);
   }
 
   // ---- Check validate when user input (Invalid)
@@ -214,5 +272,23 @@ export class StoreDetailComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  addStoreToAccount() {
+    const self = this;
+    if (this.storeDetailToAddForm.get('storeName').value !== '') {
+      this.storeDetailService.addStoreToAccount(this.accountID, this.storeDetail.id).subscribe((message) => {
+        if (message) {
+          this.toastr.success('Add ' + this.storeDetail.name + ' to this store successfully !', 'Success');
+          this.location.back();
+        } else {
+          this.toastr.error('Add ' + this.storeDetail.name + ' to this store unsuccessfully !', 'Error');
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      this.toastr.warning('Please choose store !', 'Warning');
+    }
   }
 }

@@ -2,7 +2,19 @@ export const navItems = [
   {
     name: 'Profile',
     url: '/profile',
-    icon: 'icon-user '
+    icon: 'icon-user ',
+    children: [
+      {
+        name: 'Edit Profile',
+        url: '/profile/edit',
+        icon: 'icon-pencil'
+      },
+      {
+        name: 'Change Password',
+        url: '/profile/changepassword',
+        icon: 'icon-lock'
+      }
+    ]
   },
   {
     name: 'Company',

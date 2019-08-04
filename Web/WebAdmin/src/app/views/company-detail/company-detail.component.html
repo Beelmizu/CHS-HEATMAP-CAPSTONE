@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="card">
+  <div class="card"  id="cardContainer">
     <div class=card-header>
       <strong>Company Detail </strong>
       <small>{{companyDetail.id}}</small>
@@ -18,12 +18,15 @@
           <div class="form-group row">
               <label class="col-md-3 col-form-label" for="text-input" >Name: </label>
               <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="companyName" [ngClass]="{'is-invalid': isInvalid('companyName'), 'is-valid' : isValid('companyName')}">
+                  <input type="text" class="form-control" formControlName="companyName" [ngClass]="{'is-invalid': isInvalid('companyName') || isExisted == true, 'is-valid' : isValid('companyName')}">
                   <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('required','companyName')">
                       Name is required !
                   </div>
                   <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('maxlength','companyName')">
                       Max length &lt; 45
+                  </div>
+                  <div class="invalid-feedback" *ngIf="isExisted == true">
+                   This company is existed !
                   </div>
               </div>
           </div>
@@ -60,7 +63,7 @@
 
         <!-- Show Status  -->
         <div class="form-group row" *ngIf="mode == 'detail'">
-          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Deleted Date: </label>
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" readonly=true formControlName="companyStatus" >
           </div>

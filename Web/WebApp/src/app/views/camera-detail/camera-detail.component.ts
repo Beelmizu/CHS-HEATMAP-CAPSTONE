@@ -9,6 +9,7 @@ import { Subscription, Observable } from 'rxjs';
 import { ReportService } from '../../services/report.service';
 import { Report } from '../../models/report.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-camera-detail',
@@ -57,6 +58,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     private streamService: StreamService,
     private reportService: ReportService,
     private fb: FormBuilder,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -87,7 +89,9 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     this.subImg.unsubscribe();
     this.subHeat.unsubscribe();
     this.subObject.unsubscribe();
-    // this.subPreview.unsubscribe();
+    if (this.subPreview != null) {
+      this.subPreview.unsubscribe();
+    }
   }
 
   // Socket
@@ -135,7 +139,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     this.reportService.getHeatmapListByDate(this.selectedDate, this.cameraDetail.id).subscribe((heatmap) => {
       this.heatmapList = heatmap;
       if (this.heatmapList.length === 0) {
-        window.alert('No data for this day !');
+        this.toastr.warning('No data for this date !', 'Warning');
         this.selectedDate = 'noSelected';
       }
     }, (error) => {
@@ -159,7 +163,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
         clearInterval(this.interval);
       }
     } else {
-      window.alert('Please choose date !');
+      this.toastr.warning('Please choose date !', 'Warning');
     }
   }
 
@@ -182,7 +186,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
         clearInterval(this.interval);
       }
     } else {
-      window.alert('Please choose date !');
+      this.toastr.warning('Please choose date !', 'Warning');
     }
   }
 
