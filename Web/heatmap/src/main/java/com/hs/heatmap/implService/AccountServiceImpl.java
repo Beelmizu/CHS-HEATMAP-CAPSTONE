@@ -155,10 +155,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean changePassword(String accountID, String oldPass, String newPass, String updatedBy) {
+    public boolean changePasswordOfProfile(String accountID, String oldPass, String newPass, String updatedBy) {
         Account account = accountRepository.findAccountById(Integer.parseInt(accountID));
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         if (!passwordEncoder.matches(oldPass, account.getPassword())) {
+            return false;
+        } else {
+            account.setUpdatedDate(LocalDateTime.now().toString());
+            account.setUpdatedBy(updatedBy);
+            account.setPassword(encoder.encode(newPass));
+            accountRepository.save(account);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean changePasswordOfAccount(String accountID, String oldPass, String newPass, String updatedBy) {
+        Account account = accountRepository.findAccountById(Integer.parseInt(accountID));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!oldPass.equals(account.getPassword()) ) {
             return false;
         } else {
             account.setUpdatedDate(LocalDateTime.now().toString());

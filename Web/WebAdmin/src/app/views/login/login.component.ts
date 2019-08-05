@@ -96,10 +96,7 @@ export class LoginComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem('accountUsername');
-    localStorage.removeItem('role');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('accountID');
+    localStorage.clear();
   }
 
 
