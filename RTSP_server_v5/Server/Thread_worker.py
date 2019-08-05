@@ -100,17 +100,13 @@ def detectObject(socketio, rd, id_camera):
             ret = True
             while True:
                 try:
-                    time.sleep(1)
-                    #Check xem camera có die không
-                    check_flag = True
-                    # Lấy ảnh từ redis và decode
-                    image_base64 = rd.get(str(id_camera))
-                    image_error = rd.get(str(id_camera)+"_ERROR")
-                    if image_error is not None:
-                        if image_base64.decode() == image_error.decode():
-                            check_flag = False
-
-                    if check_flag:
+                    time.sleep(0.7)
+                    # Lấy flag để xem camera có chết không
+                    check_flag = rd.get(str(id_camera)+"_RUN")
+                    print(check_flag.decode())
+                    if int(check_flag.decode()) == 1:
+                        # Lấy ảnh từ redis và decode
+                        image_base64 = rd.get(str(id_camera))
                         # Từ base64 chuyển thành image
                         decoded_data = base64.b64decode(image_base64.decode())
                         np_data = np.fromstring(decoded_data,np.uint8)

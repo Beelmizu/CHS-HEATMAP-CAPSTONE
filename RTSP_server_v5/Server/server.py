@@ -51,16 +51,8 @@ def connected(data):
 	camera.start()
 @socketio.on('stream_camera')
 def connected(data):
-	# index_port = data.find(':')
-	# id_camera = data[0:index_port]
-	# port = data[index_port+1:len(data)]
 	id_camera = str(data)
 	print("Connect to Camera: "+id_camera)
-	# print("Connect to PORT: "+port)
-	
-	# if(port == "webcam"):
-	# 	port = 0
-	
 	try:
 		camera = threading.Thread(target=getFrameCamera, args=(socketio, rd, id_camera,))
 		camera.start()
@@ -73,14 +65,6 @@ def connected(data):
 			print(e.message)
 		else:
 			print(e)
-	# while True:
-
-	# 	retval, image = cap.read()
-	# 	retval, buffer = cv2.imencode('.jpg', image)
-	# 	jpg_as_text = base64.b64encode(buffer)
-	# 	image_text = str(jpg_as_text, "utf-8")
-	# 	#jpg_as_text = image.tostring()
-	# 	socketio.emit('image', image_text)
 
 
 def setupApp(app):
@@ -100,15 +84,6 @@ def setupApp(app):
 			thread_camera.start()
 			thread_worker = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
 			thread_worker.start()
-
-	# rd.set('foo', "bar") 
-	# v = rd.get('foo')
-	# print (v.decode())
-	# camera_1 = threading.Thread(target=runCamera, args=(socketio, rd, id_camera, port_camera,))
-	# camera_1.start()
-	# worker_1 = threading.Thread(target=detectObject, args=(socketio, rd, id_camera,))
-	# worker_1.start()
-    
 def signal_handler(sig, frame):
 	# cleanup_stop_thread()
 	print("-----END-----")

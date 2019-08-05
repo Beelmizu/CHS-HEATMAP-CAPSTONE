@@ -30,9 +30,12 @@ from Thread_heatmap import *
 import signal
 import sys
 from Thread_upload_cloud import *
+from Thread_control import *
 import redis
 
 def runCamera(socketio, rd, id_camera, port_camera):
+    # Flag để biết camera có runable không
+    rd.set(str(id_camera)+"_RUN", 1)
     cam = cv2.VideoCapture(port_camera)
     width = int(cam.get(3)) #width camera
     height = int(cam.get(4)) #height camera
@@ -43,6 +46,8 @@ def runCamera(socketio, rd, id_camera, port_camera):
     new_w = int(new_w)
     thread_camera = threading.Thread(target=saveCameraVideo, args=(socketio, rd, id_camera, port_camera,))
     thread_camera.start()
+    thread_control = threading.Thread(target=checkErrorCamera, args=(socketio, rd, id_camera,))
+    thread_control.start()
     image_text = ""
     while True:
         try:
@@ -84,10 +89,9 @@ def saveCameraVideo(socketio, rd, id_camera, port_camera):
     np_data = np.fromstring(decoded_data,np.uint8)
     image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
     height, width, channel = image.shape
-    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),20.0, (width, height))
+    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (width, height))
     while True:
         try:
-            check_flag = True
             startTime = datetime.datetime.now()
             # print(startTime)
             # print(uploadTime)
@@ -95,34 +99,28 @@ def saveCameraVideo(socketio, rd, id_camera, port_camera):
                 # Xuống dưới chạy
                 print("--------------------------UPLOAD TO CLOUD---------------------------------")
                 break
-            # Lấy ảnh từ redis và decode
-            image_base64 = rd.get(str(id_camera))
-            image_error = rd.get(str(id_camera)+"_ERROR")
-            if image_error is not None:
-                if image_base64.decode() == image_error.decode():
-                    check_flag = False
-
-            if check_flag:
+            
+            check_flag = rd.get(str(id_camera)+"_RUN")
+            if int(check_flag.decode()) == 1:
+                # Lấy ảnh từ redis và decode
+                image_base64 = rd.get(str(id_camera))
                 # Từ base64 chuyển thành image
                 decoded_data = base64.b64decode(image_base64.decode())
                 np_data = np.fromstring(decoded_data,np.uint8)
                 image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
                 save_camera.write(image)
             
-            time.sleep(0.05)
+            time.sleep(0.1)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
             else:
                 print(e)
             pass
-    print("Camera have been stop.")            
-    # cam.release()
+    print("Camera have been stop.")
     time.sleep(1)
     upload = threading.Thread(target=uploadToCloud, args=(socketio, rd, id_camera, port_camera,))
     upload.start()
-    # Garbage collection
-    # gc.collect()
 
 def create_dir(file_path):
     directory = os.path.dirname(file_path)

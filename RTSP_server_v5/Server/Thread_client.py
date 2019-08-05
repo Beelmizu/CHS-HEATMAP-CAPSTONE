@@ -28,7 +28,7 @@ def getObjectDetection(socketio,rd, id_camera,):
             # Lấy từ redis với key là id của camera + _OD (Object detection)
             image = rd.get(str(id_camera)+"_OD")
             socketio.emit("stream_object", image.decode())
-            time.sleep(2)
+            time.sleep(1)
             
         except Exception as e:
             if hasattr(e, 'message'):

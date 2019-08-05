@@ -65,7 +65,7 @@ def viewHeatmapCamera(socketio, rd, id_camera, matrix_heatmap, box, width, heigh
             db = threading.Thread(target=thread_db.addReport, args=(string_matrix, id_camera, currentTime, countNum, result["gender"], result["age"]))
             db.start()
         # Garbage collection
-        gc.collect()
+        # gc.collect()
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)
