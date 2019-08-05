@@ -55,13 +55,22 @@ export class AccountDetailService {
     return this.http.post<any>(this.accountUrl + 'deleteAccountInStore/', body);
   }
 
-  changePassword(accountID: String, oldPass: String, newPass: String, updatedBy: String): Observable<any> {
+  changePasswordOfAccount(accountID: String, oldPass: String, newPass: String, updatedBy: String): Observable<any> {
     let body = new HttpParams();
     body = body.set('accountID', '' + accountID);
     body = body.set('oldPass', '' + oldPass);
     body = body.set('newPass', '' + newPass);
     body = body.set('updatedBy', '' + updatedBy);
-    return this.http.post<any>(this.accountUrl + 'changePassword/', body);
+    return this.http.post<any>(this.accountUrl + 'changePasswordOfAccount/', body);
+  }
+
+  changePasswordOfProfile(accountID: String, oldPass: String, newPass: String, updatedBy: String): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('accountID', '' + accountID);
+    body = body.set('oldPass', '' + oldPass);
+    body = body.set('newPass', '' + newPass);
+    body = body.set('updatedBy', '' + updatedBy);
+    return this.http.post<any>(this.accountUrl + 'changePasswordOfProfile/', body);
   }
 
 }

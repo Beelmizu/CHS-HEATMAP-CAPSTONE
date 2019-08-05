@@ -26,7 +26,9 @@ public interface AccountService {
 
     boolean deleteAccountInStore(String accountID, String storeID);
 
-    boolean changePassword(String accountID, String oldPass, String newPass, String updatedBy);
+    boolean changePasswordOfProfile(String accountID, String oldPass, String newPass, String updatedBy);
+
+    boolean changePasswordOfAccount(String accountID, String oldPass, String newPass, String updatedBy);
 
     boolean updateAccount(Account account);
 

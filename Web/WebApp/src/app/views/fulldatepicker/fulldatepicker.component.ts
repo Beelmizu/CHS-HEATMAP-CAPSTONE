@@ -13,13 +13,13 @@ const moment = _rollupMoment || _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'MM/DD/YYYY',
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    dateInput: 'MM/DD/YYYY',
-    monthYearLabel: 'MMM DD YYYY',
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'DD MM YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM DD YYYY',
+    monthYearA11yLabel: 'DD MMMM YYYY',
   },
 };
 

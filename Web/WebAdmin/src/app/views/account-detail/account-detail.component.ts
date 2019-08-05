@@ -329,7 +329,7 @@ export class AccountDetailComponent implements OnInit {
     if (this.valueIsCheckedChangePassword()) {
       if (window.confirm('Do you want to change password ?')) {
         // tslint:disable-next-line: max-line-length
-        this.accountDetailService.changePassword(this.accountDetail.id + '', this.accountDetail.password, this.newPassword, localStorage.getItem('accountUsername')).subscribe((message) => {
+        this.accountDetailService.changePasswordOfAccount(this.accountDetail.id + '', this.accountDetail.password, this.newPassword, localStorage.getItem('accountUsername')).subscribe((message) => {
           if (message) {
             this.toastr.success('Change password successfully !', 'Success');
             this.location.back();

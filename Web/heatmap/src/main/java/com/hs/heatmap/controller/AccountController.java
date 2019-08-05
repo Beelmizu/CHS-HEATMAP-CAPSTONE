@@ -78,11 +78,19 @@ public class AccountController {
         return accountService.deleteAccountInStore(accountID, storeID);
     }
 
-    @PostMapping("/account/changePassword/")
-    public boolean changePassword(@RequestParam(name = "accountID") String accountID,
+    @PostMapping("/account/changePasswordOfProfile/")
+    public boolean changePasswordOfProfile(@RequestParam(name = "accountID") String accountID,
                                   @RequestParam(name = "oldPass") String oldPass,
                                   @RequestParam(name = "newPass") String newPass,
                                   @RequestParam(name = "updatedBy") String updatedBy) {
-        return accountService.changePassword(accountID, oldPass, newPass, updatedBy);
+        return accountService.changePasswordOfProfile(accountID, oldPass, newPass, updatedBy);
+    }
+
+    @PostMapping("/account/changePasswordOfAccount/")
+    public boolean changePasswordOfAccount(@RequestParam(name = "accountID") String accountID,
+                                  @RequestParam(name = "oldPass") String oldPass,
+                                  @RequestParam(name = "newPass") String newPass,
+                                  @RequestParam(name = "updatedBy") String updatedBy) {
+        return accountService.changePasswordOfAccount(accountID, oldPass, newPass, updatedBy);
     }
 }

@@ -75,10 +75,11 @@ export class ChangePasswordComponent implements OnInit {
     if (this.valueIsChecked()) {
       if (window.confirm('Do you want to change password ?')) {
         // tslint:disable-next-line: max-line-length
-        this.accountDetailService.changePassword(this.accountDetail.id + '', this.oldPassword, this.newPassword, localStorage.getItem('accountUsername')).subscribe((message) => {
+        this.accountDetailService.changePasswordOfProfile(this.accountDetail.id + '', this.oldPassword, this.newPassword, localStorage.getItem('accountUsername')).subscribe((message) => {
           if (message) {
-            this.toastr.success('Change password successfully !', 'Success');
-            this.router.navigate(['/company']);
+            // this.toastr.success('Change password successfully !', 'Success');
+            localStorage.clear();
+            this.router.navigate(['/login']);
           } else {
             this.isNotCorrect = true;
             this.toastr.error('The old password is not correct !', 'Error');
