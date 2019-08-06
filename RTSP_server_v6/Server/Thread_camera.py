@@ -63,7 +63,7 @@ def run_camera(socketio, rd, id_camera, port_camera):
             else:
                 rd.set(str(id_camera)+"_ERROR", image_text)
                 cam = cv2.VideoCapture(port_camera)
-            time.sleep(0.05)
+            time.sleep(0.075)
         except Exception as e:
             print("--------------------                  ERROR              ------------------------")
             rd.set(str(id_camera)+"_ERROR", image_text)

@@ -85,9 +85,17 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
         image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
         # print(image)
         # Convert color
-        img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        im_pil = Image.fromarray(img)
-        heatmap = heatmapper.heatmap_on_img(matrix_heatmap, im_pil)
+        # img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # im_pil = Image.fromarray(img)
+        height, width, channel = image.shape
+        save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
+        try:
+            background = Image.open(save_background_location)
+        except:
+            background_image = Image.new('RGBA', (width, height), (255,255,255,0))
+            background_image.save(save_background_location)
+            background = Image.open(save_background_location)
+        heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
             
         buffered = BytesIO()
         heatmap.save(buffered, format="PNG")

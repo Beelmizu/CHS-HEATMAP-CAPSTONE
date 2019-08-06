@@ -100,7 +100,7 @@ def detect_object(socketio, rd, id_camera):
             ret = True
             while True:
                 try:
-                    time.sleep(0.75)
+                    time.sleep(1.5)
                     # Lấy flag để xem camera có chết không
                     check_flag = rd.get(str(id_camera)+"_RUN")
                     print(check_flag.decode())

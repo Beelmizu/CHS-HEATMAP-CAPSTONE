@@ -15,7 +15,7 @@ def check_error_camera(socketio,rd, id_camera,):
                 if image_base64.decode() == image_error.decode():
                     check_flag = 0
             rd.set(str(id_camera)+"_RUN", check_flag)
-            time.sleep(1)
+            time.sleep(10)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
