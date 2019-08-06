@@ -9746,7 +9746,7 @@
 											"top": 1171.5,
 											"width": 142,
 											"height": 13,
-											"text": "Face Detection"
+											"text": "Detect Face"
 										},
 										{
 											"_type": "LabelView",
@@ -21047,7 +21047,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Face Detection",
+					"name": "Detect Face",
 					"ownedElements": [
 						{
 							"_type": "UMLInclude",
