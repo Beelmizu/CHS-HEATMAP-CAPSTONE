@@ -40,16 +40,21 @@ class Heatmapper:
         self.cmap = self.get_color_map(asset_file + 'HeatmapColor.png')
         # Vẽ điểm đen trên nền trắng
         heatmap = self.draw_dot(width, height, points)
+        # heatmap.save('step_1.png')
         # Từ điểm đen thành màu
         heatmap = self.draw_color(heatmap)
+        # heatmap.save('step_2.png')
         # set opacity của ảnh
         heatmap = set_opacity(heatmap, self.opacity)
+        # heatmap.save('step_3.png')
         return Image.alpha_composite(base_img.convert('RGBA'), heatmap)
 
 
     def draw_color(self, img):
         arr = numpy.array(img)
+        # print(arr)
         rgba_img = self.cmap(arr, bytes=True)
+        # print(rgba_img)
         return Image.fromarray(rgba_img)
 
     def get_color_map(self, img_path):
