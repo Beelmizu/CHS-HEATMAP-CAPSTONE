@@ -584,6 +584,21 @@
 										},
 										{
 											"_type": "ERDColumnView",
+											"_id": "AAAAAAFscVFV8/YC46M=",
+											"_parent": {
+												"$ref": "AAAAAAFrDjtGYdY3Z/o="
+											},
+											"model": {
+												"$ref": "AAAAAAFscVFV1fX/gaA="
+											},
+											"font": "Arial;13;0",
+											"left": 61,
+											"top": 517,
+											"width": 157.97900390625,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
 											"_id": "AAAAAAFrHDHNblkiHB8=",
 											"_parent": {
 												"$ref": "AAAAAAFrDjtGYdY3Z/o="
@@ -593,7 +608,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 61,
-											"top": 517,
+											"top": 532,
 											"width": 157.97900390625,
 											"height": 13
 										}
@@ -602,14 +617,14 @@
 									"left": 56,
 									"top": 407,
 									"width": 167.97900390625,
-									"height": 128
+									"height": 143
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 56,
 							"top": 384,
 							"width": 167.97900390625,
-							"height": 151,
+							"height": 166,
 							"nameLabel": {
 								"$ref": "AAAAAAFrDjtGYNY23tc="
 							},
@@ -861,7 +876,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 223,
-									"top": 556,
+									"top": 563,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -878,7 +893,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 214,
-									"top": 553,
+									"top": 568,
 									"width": 20.9599609375,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -914,7 +929,7 @@
 								"$ref": "AAAAAAFrDjtGYNY13zQ="
 							},
 							"lineStyle": 2,
-							"points": "209:534;209:592",
+							"points": "209:549;209:592",
 							"nameLabel": {
 								"$ref": "AAAAAAFrDkQ2EtamGh4="
 							},
@@ -2138,6 +2153,15 @@
 								"$ref": "AAAAAAFrDjtGXtYzuak="
 							},
 							"name": "Cam_status",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAFscVFV1fX/gaA=",
+							"_parent": {
+								"$ref": "AAAAAAFrDjtGXtYzuak="
+							},
+							"name": "Cam_image_url",
 							"length": 0
 						},
 						{
