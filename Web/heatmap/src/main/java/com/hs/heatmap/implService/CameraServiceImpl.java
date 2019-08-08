@@ -59,12 +59,12 @@ public class CameraServiceImpl implements CameraService {
     public boolean updateCamera(Camera camera) {
         Camera existedCamera = cameraRepository.findCamerasByIp(camera.getIp());
         if (existedCamera != null) {
-            return false;
-        } else {
             camera.setUpdatedDate(LocalDateTime.now().toString());
             camera.setUpdatedBy(camera.getUpdatedBy());
             cameraRepository.save(camera);
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -88,7 +88,7 @@ public class CameraServiceImpl implements CameraService {
         if (existedCamera != null) {
             camera.setUpdatedDate(LocalDateTime.now().toString());
             camera.setUpdatedBy(camera.getUpdatedBy());
-            camera.setStatus("inactive");
+            camera.setStatus("active");
             cameraRepository.save(camera);
             return true;
         } else {

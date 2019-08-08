@@ -35,6 +35,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   heatmapSrc: any;
   objectSrc: any;
   previewSrc: any;
+  previewHeatmapSrc: any;
 
   // Subcription
   subImg: Subscription;
@@ -119,7 +120,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   getPreviewHeatmap(start: String, end: String) {
     const self = this;
     this.subPreview = this.streamService.getPreviewHeatmap(this.cameraID, this.selectedDate, start, end).subscribe((preview) => {
-      this.previewSrc = `data:image/png;base64,${preview}`;
+      this.previewHeatmapSrc = `data:image/png;base64,${preview}`;
+
     });
   }
 
@@ -128,6 +130,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       self.cameraDetail = camera;
+      this.previewSrc =  this.cameraDetail.imageUrl;
     }, (error) => {
       console.log(error);
     });
@@ -169,6 +172,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   playPreview() {
     let i = 0;
+    let endTime;
     if (this.selectedDate !== 'noSelected') {
       if (this.play === false) {
         this.play = true;
@@ -178,9 +182,11 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
           }
         }
         this.interval = setInterval(() => {
+          endTime = this.listTime[i + 1];
           this.selectedTime = this.listTime[i];
+          this.getPreviewHeatmap(this.selectedTime, endTime);
           i++;
-        }, 2000);
+        }, 1500);
       } else {
         this.play = false;
         clearInterval(this.interval);

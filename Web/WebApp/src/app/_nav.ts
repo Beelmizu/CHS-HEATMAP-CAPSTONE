@@ -40,23 +40,8 @@ export const navItems = [
         name: 'Camera',
         url: '/statistic/camera',
         icon: 'icon-camera'
-      },
-      {
-        name: 'Customer Age',
-        url: '/statistic/age',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Customer Gender',
-        url: '/statistic/gender',
-        icon: 'icon-people'
       }
     ]
-  },
-  {
-    name: 'About Us',
-    url: '/about',
-    icon: 'icon-info '
   },
   {
     name: 'Log out',

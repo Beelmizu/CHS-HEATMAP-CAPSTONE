@@ -27,7 +27,7 @@
           <label class="col-md-3 col-form-label" for="text-input">Username: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" formControlName="accUsername" [ngClass]="{'is-invalid': isInvalid('accUsername') || isExisted == true,
-              'is-valid' : isValid('accUsername')}">
+              'is-valid' : isValid('accUsername')}"  pattern="^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$">
             <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accUsername')">
               Fullname is required !
             </div>
@@ -37,6 +37,9 @@
             <div class="invalid-feedback" *ngIf="isExisted == true">
               Username is existed !
             </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('pattern','accUsername')">
+              Username is not valid !
+             </div>
           </div>
         </div>
 
@@ -133,13 +136,16 @@
           <label class="col-md-3 col-form-label" for="text-input">Fullname: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" formControlName="accFullname" [ngClass]="{'is-invalid': isInvalid('accFullname'),
-              'is-valid' : isValid('accFullname')}">
+              'is-valid' : isValid('accFullname')}"  pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$">
             <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accFullname')">
               Fullname is required !
             </div>
             <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accFullname')">
               Max length &lt; 45
             </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('pattern','accFullname')">
+              Name is not valid !
+             </div>
           </div>
         </div>
 

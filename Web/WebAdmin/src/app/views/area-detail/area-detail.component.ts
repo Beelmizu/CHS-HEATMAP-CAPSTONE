@@ -95,6 +95,7 @@ export class AreaDetailComponent implements OnInit {
   inactiveAreaByID(): void {
     const self = this;
     if (window.confirm('Do you want to inactive ?')) {
+      this.areaDetail.updatedBy = localStorage.getItem('accountUsername');
       this.areaDetailService.inactiveAreaByID(this.areaDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Inactive ' + this.areaDetail.name + ' successfully !', 'Success');
@@ -113,6 +114,7 @@ export class AreaDetailComponent implements OnInit {
   activeAreaByID(): void {
     const self = this;
     if (window.confirm('Do you want to active ?')) {
+      this.areaDetail.updatedBy = localStorage.getItem('accountUsername');
       this.areaDetailService.activeAreaByID(this.areaDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Active ' + this.areaDetail.name + ' successfully !', 'Success');

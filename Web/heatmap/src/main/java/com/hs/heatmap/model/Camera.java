@@ -46,6 +46,10 @@ public class Camera implements Serializable {
     private String status;
 
     @Basic
+    @Column(name = "cam_image_url")
+    private String imageUrl;
+
+    @Basic
     @Column(name = "cam_updated_by")
     private String updatedBy;
 

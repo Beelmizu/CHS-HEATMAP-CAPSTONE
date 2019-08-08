@@ -128,7 +128,7 @@ export class StatisticAreaComponent implements OnInit {
 
   ngOnInit() {
     const self = this;
-    this.accountID  = localStorage.getItem('accountID');
+    this.accountID = localStorage.getItem('accountID');
 
     this.modeStatistic = 'month';
     this.listTimeFrom = this.listTimeFromRoot;
@@ -187,33 +187,44 @@ export class StatisticAreaComponent implements OnInit {
     });
   }
 
-  getTheLargestList(report: any[]) {
-    let maxValue = 0;
-    for (let i = 1; i < report.length; i++) {
-      if (report[i].length > report[maxValue].length) {
-        maxValue = i;
-      }
-    }
-    return maxValue;
-  }
-
   bindingChartForDate(reports: any[]) {
     let time: String;
     let arr: any[];
+    let haveValue = false;
+    let allDate = [];
     this.lineChartData.length = 0;
-    const max = this.getTheLargestList(reports);
-    for (let j = 0; j < reports[max].length; j++) {
-      time = reports[max][j].time.split(' ')[1].split(':')[0] + ':' + reports[max][j].time.split(' ')[1].split(':')[1];
+    // tslint:disable-next-line: prefer-const
+    let dateOfReport = [];
+    for (let i = 0; i < reports.length; i++) {
+      for (let j = 0; j < reports[i].length; j++) {
+        dateOfReport.push(reports[i][j].time);
+      }
+    }
+    allDate = dateOfReport.filter(function (item, index) {
+      return dateOfReport.indexOf(item) >= index;
+    });
+    allDate.sort();
+    for (let j = 0; j < allDate.length; j++) {
+      time = allDate[j].split(' ')[1].split(':')[0] + ':' + allDate[j].split(' ')[1].split(':')[1];
       this.lineChartLabels.push(time);
     }
-    for (let index = 0; index < reports.length; index++) {
+    for (let i = 0; i < reports.length; i++) {
       arr = [];
-      for (let j = 0; j < reports[index].length; j++) {
-        arr.push(reports[index][j].count);
+      for (let k = 0; k < allDate.length; k++) {
+        haveValue = false;
+        for (let j = 0; j < reports[i].length; j++) {
+          if (reports[i][j].time === allDate[k]) {
+            haveValue = true;
+            arr.push(reports[i][j].count);
+          }
+        }
+        if (!haveValue) {
+          arr.push(0);
+        }
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Camera: ' + reports[index][0].cameraID,
+        label: 'Camera: ' + reports[i][0].cameraID,
         yAxisID: 'y-axis-0'
       });
     }
@@ -221,19 +232,40 @@ export class StatisticAreaComponent implements OnInit {
 
   bindingChartForMonth(reports: any[]) {
     let arr: any[];
+    let haveValue = false;
+    let allDate = [];
     this.lineChartData.length = 0;
-    const max = this.getTheLargestList(reports);
-    for (let j = 0; j < reports[max].length; j++) {
-      this.lineChartLabels.push(reports[max][j].time);
+    // tslint:disable-next-line: prefer-const
+    let dateOfReport = [];
+    for (let i = 0; i < reports.length; i++) {
+      for (let j = 0; j < reports[i].length; j++) {
+        dateOfReport.push(reports[i][j].time);
+      }
     }
-    for (let index = 0; index < reports.length; index++) {
+    allDate = dateOfReport.filter(function (item, index) {
+      return dateOfReport.indexOf(item) >= index;
+    });
+    allDate.sort();
+    for (let j = 0; j < allDate.length; j++) {
+      this.lineChartLabels.push(allDate[j].split('-')[2]);
+    }
+    for (let i = 0; i < reports.length; i++) {
       arr = [];
-      for (let j = 0; j < reports[index].length; j++) {
-        arr.push(reports[index][j].count);
+      for (let k = 0; k < allDate.length; k++) {
+        haveValue = false;
+        for (let j = 0; j < reports[i].length; j++) {
+          if (reports[i][j].time === allDate[k]) {
+            haveValue = true;
+            arr.push(reports[i][j].count);
+          }
+        }
+        if (!haveValue) {
+          arr.push(0);
+        }
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Camera: ' + reports[index][0].cameraID,
+        label: 'Camera: ' + reports[i][0].cameraID,
         yAxisID: 'y-axis-0'
       });
     }

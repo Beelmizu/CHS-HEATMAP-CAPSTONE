@@ -6,6 +6,7 @@ export class Camera  {
     public createdDate: String;
     public updatedDate: String;
     public status: String;
+    public imageUrl: String;
     public updatedBy: String;
     public areaID: number;
 }

@@ -75,7 +75,6 @@ export class ChangePasswordComponent implements OnInit {
         // tslint:disable-next-line: max-line-length
         this.accountDetailService.changePasswordOfProfile(this.accountDetail.id + '', this.oldPassword, this.newPassword, localStorage.getItem('accountUsername')).subscribe((message) => {
           if (message) {
-            // this.toastr.success('Change password successfully !', 'Success');
             localStorage.clear();
             this.router.navigate(['/login']);
           } else {

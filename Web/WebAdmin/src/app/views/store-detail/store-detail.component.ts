@@ -32,6 +32,7 @@ export class StoreDetailComponent implements OnInit {
   storeDetailToAddForm: FormGroup;
 
   mode: String;
+  isExisted = false;
 
   constructor(
     private router: Router,
@@ -168,6 +169,7 @@ export class StoreDetailComponent implements OnInit {
   inactiveStoreByID(): void {
     const self = this;
     if (window.confirm('Do you want to inactive ?')) {
+      this.storeDetail.updatedBy = localStorage.getItem('accountUsername');
       this.storeDetailService.inactiveStoreByID(this.storeDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Inactive ' + this.storeDetail.name + ' successfully !', 'Success');
@@ -186,6 +188,7 @@ export class StoreDetailComponent implements OnInit {
   activeStoreByID(): void {
     const self = this;
     if (window.confirm('Do you want to active ?')) {
+      this.storeDetail.updatedBy = localStorage.getItem('accountUsername');
       this.storeDetailService.activeStoreByID(this.storeDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Active ' + this.storeDetail.name + ' successfully !', 'Success');
@@ -227,7 +230,8 @@ export class StoreDetailComponent implements OnInit {
           this.toastr.success('Add ' + this.storeDetail.name + ' successfully !', 'Success');
           this.location.back();
         } else {
-          this.toastr.error('Add ' + this.storeDetail.name + ' unsuccessfully !', 'Error');
+          this.toastr.error('The ' + this.storeDetail.name + '  is existed !', 'Error');
+          this.isExisted = true;
         }
       }, (error) => {
         console.log(error);
