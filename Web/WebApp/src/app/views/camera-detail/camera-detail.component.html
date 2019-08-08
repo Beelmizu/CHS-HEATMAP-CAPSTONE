@@ -62,9 +62,10 @@
 
         <!-- Tab Preview of Camera -->
         <div class="tab-pane " id="previewHeatmap" role="tabpanel" [ngClass]="{'active show': choosedTab == 'preview'}">
-          <div class="row">
-            <div class="col-sm-9">
+          <div class="row" id="rowPreview">
+            <div class="col-sm-9"id="divImagePreview">
               <img [src]="previewSrc" id="imgPreview" />
+              <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" />
             </div>
             <div class="col-sm-3" id="controlPreviewDiv">
               <div id="headerPreviewTime">

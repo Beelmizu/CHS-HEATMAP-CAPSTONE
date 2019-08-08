@@ -34,7 +34,7 @@ public class CameraController {
     @PostMapping("/camera/inactive")
     public boolean inactiveCamera(@RequestBody Camera camera) { return cameraService.inactiveCamera(camera); }
 
-    @PostMapping("/camera/delete")
+    @PostMapping("/camera/active")
     public boolean activeCamera(@RequestBody Camera camera) { return cameraService.activeCamera(camera); }
 
     @PostMapping("/camera/update")

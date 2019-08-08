@@ -8,6 +8,10 @@ import { CameraDetailService } from '../../services/camera-detail.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
+class ImageSnippet {
+  constructor(public src: string, public file: File) { }
+}
+
 @Component({
   selector: 'app-camera-detail',
   templateUrl: './camera-detail.component.html',
@@ -20,9 +24,12 @@ export class CameraDetailComponent implements OnInit {
   areaID: number;
   areas: Area[];
   cameraDetailForm: FormGroup;
+  url: String = 'empty';
 
   mode: String;
   isExisted = false;
+
+  selectedFile: ImageSnippet;
 
   constructor(
     private router: Router,
@@ -76,6 +83,7 @@ export class CameraDetailComponent implements OnInit {
 
   // Get detail by ID
   getCameraByID(cameraID): void {
+    const reader = new FileReader();
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       this.cameraDetail = camera;
@@ -90,14 +98,18 @@ export class CameraDetailComponent implements OnInit {
         'cameraUpdatedBy': this.cameraDetail.updatedBy,
         'cameraArea': this.cameraDetail.areaID
       });
+      this.url = this.cameraDetail.imageUrl;
+      // this.selectedFile = new ImageSnippet(event.target.result, file);
     }, (error) => {
       console.log(error);
     });
   }
 
+
   inactiveCameraByID(): void {
     const self = this;
     if (window.confirm('Do you want to inactive ?')) {
+      this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
       this.cameraDetailService.inactiveCameraByID(this.cameraDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Inactive ' + this.cameraDetail.ip + ' successfully !', 'Success');
@@ -116,6 +128,7 @@ export class CameraDetailComponent implements OnInit {
   activeCameraByID(): void {
     const self = this;
     if (window.confirm('Do you want to active ?')) {
+      this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
       this.cameraDetailService.activeCameraByID(this.cameraDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Active ' + this.cameraDetail.ip + ' successfully !', 'Success');
@@ -168,6 +181,21 @@ export class CameraDetailComponent implements OnInit {
     }
   }
 
+  processFile(imageInput: any) {
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.url = this.selectedFile.src;
+
+    });
+
+    reader.readAsDataURL(file);
+  }
+
+
   valueIsChecked(): boolean {
     if (this.cameraDetailForm.valid) {
       if (!this.cameraDetailForm.get('cameraIP').value.valid) {
@@ -182,6 +210,7 @@ export class CameraDetailComponent implements OnInit {
       if (this.mode === 'detail') {
         this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
       }
+      this.cameraDetail.imageUrl = this.url;
       if (this.cameraDetailForm.get('cameraArea').value !== true) {
         this.cameraDetail.areaID = this.cameraDetailForm.get('cameraArea').value;
       } else {

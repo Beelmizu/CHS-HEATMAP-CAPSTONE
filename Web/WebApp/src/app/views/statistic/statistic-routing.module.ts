@@ -34,21 +34,7 @@ const routes: Routes = [
         data: {
           title: 'Camera'
         }
-      },
-      {
-        path: 'age',
-        component: StatisticAgeComponent,
-        data: {
-          title: 'Customer Age'
-        }
-      },
-      {
-        path: 'gender',
-        component: StatisticGenderComponent,
-        data: {
-          title: 'Customer Gender'
-        }
-      },
+      }
     ]
   }
 ];

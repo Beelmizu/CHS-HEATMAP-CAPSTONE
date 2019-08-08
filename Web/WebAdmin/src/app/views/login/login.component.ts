@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { first } from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import { AccountDetailService } from '../../services/account-detail.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,16 +31,18 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private route: ActivatedRoute,
-    private accountService: AccountDetailService
+    private accountService: AccountDetailService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
 
     const self = this;
+    localStorage.setItem('role', 'Administrator');
 
     self.loginForm = self.fb.group({
-      'username': [''],
-      'password': ['']
+      'username': ['', Validators.required],
+      'password': ['', Validators.required]
     });
 
     // reset login status
@@ -53,42 +56,41 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     let username;
     let role;
-    this.loading = true;
-    this.user.username = this.loginForm.get('username').value;
-    this.user.password = this.loginForm.get('password').value;
-    this.loginService.login(this.user).subscribe(
-      (response: any) => {
-        if (response !== '') {
-          const token = response.headers.get('authorization');
-          this.decoded = jwt_decode(token);
-          role = this.decoded['JWTAuthoritiesKey'];
-          if (role === 'Administrator') {
-            this.router.navigate([this.returnUrl]);
-            localStorage.setItem('currentUser', JSON.stringify(token));
-            username = this.decoded['sub'];
-            this.accountService.getIDAccountByUsername(username).subscribe((id) => {
-              this.accountID = id;
-              localStorage.setItem('accountID', '' + id);
-              localStorage.setItem('accountUsername', '' + username);
-              localStorage.setItem('role', '' + role);
-            },
-              error => {
-                console.log(error);
-              }
-            );
+    if (this.valueIsChecked()) {
+      this.loading = true;
+      this.loginService.login(this.user).subscribe(
+        (response: any) => {
+          if (response !== '') {
+            const token = response.headers.get('authorization');
+            this.decoded = jwt_decode(token);
+            role = this.decoded['JWTAuthoritiesKey'];
+            if (role === 'Administrator') {
+              this.router.navigate([this.returnUrl]);
+              localStorage.setItem('currentUser', JSON.stringify(token));
+              username = this.decoded['sub'];
+              this.accountService.getIDAccountByUsername(username).subscribe((id) => {
+                this.accountID = id;
+                localStorage.setItem('accountID', '' + this.accountID);
+                localStorage.setItem('accountUsername', '' + username);
+              },
+                error => {
+                  console.log(error);
+                }
+              );
+            } else {
+              this.error = 'Your account cannot access this !';
+              this.loading = false;
+            }
           } else {
-            this.error = 'Your account cannot access this !';
-            this.loading = false;
+            console.log('error when logging');
           }
-        } else {
-          console.log('error when logging');
+        },
+        error => {
+          this.error = 'Username or password is incorrect !';
+          this.loading = false;
         }
-      },
-      error => {
-        this.error = 'Username or password is incorrect !';
-        this.loading = false;
-      }
-    );
+      );
+    }
   }
 
   public get loggedIn(): boolean {
@@ -96,7 +98,7 @@ export class LoginComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.clear();
+    window.localStorage.clear();
   }
 
 

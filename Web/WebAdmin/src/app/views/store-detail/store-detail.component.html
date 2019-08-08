@@ -19,12 +19,15 @@
           <label class="col-md-3 col-form-label" for="text-input">Name: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" formControlName="storeName"
-              [ngClass]="{'is-invalid': isInvalid('storeName'), 'is-valid' : isValid('storeName')}">
+              [ngClass]="{'is-invalid': isInvalid('storeName') || isExisted == true, 'is-valid' : isValid('storeName')}">
             <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeName')">
               Name is required !
             </div>
             <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('maxlength','storeName')">
               Max length &lt; 45
+            </div>
+            <div class="invalid-feedback" *ngIf="isExisted == true">
+              This store is existed !
             </div>
           </div>
         </div>
@@ -34,7 +37,7 @@
           <label class="col-md-3 col-form-label" for="text-input">Address: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" formControlName="storeAddress"
-              [ngClass]="{'is-invalid': isInvalid('storeAddress'), 'is-valid' : isValid('storeAddress')}">
+              [ngClass]="{'is-invalid': isInvalid('storeAddress'), 'is-valid' : isValid('storeAddress')}" >
             <div class="invalid-feedback" *ngIf="storeDetailForm.hasError('required','storeAddress')">
               Address is required !
             </div>

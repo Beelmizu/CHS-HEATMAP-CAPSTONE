@@ -76,6 +76,7 @@ export class CompanyDetailComponent implements OnInit {
   inactiveCompany(): void {
     const self = this;
     if (window.confirm('Do you want to inactive ?')) {
+      this.companyDetail.updatedBy = localStorage.getItem('accountUsername');
       this.companyDetailService.inactiveCompanyByID(this.companyDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Inactive ' + this.companyDetail.name + ' successfully !', 'Success');
@@ -94,6 +95,7 @@ export class CompanyDetailComponent implements OnInit {
   activeCompany(): void {
     const self = this;
     if (window.confirm('Do you want to active ?')) {
+      this.companyDetail.updatedBy = localStorage.getItem('accountUsername');
       this.companyDetailService.activeCompanyByID(this.companyDetail).subscribe((message) => {
         if (message) {
           this.toastr.success('Active ' + this.companyDetail.name + ' successfully !', 'Success');
