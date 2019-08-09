@@ -565,7 +565,7 @@
 											"top": 488,
 											"width": 215,
 											"height": 13,
-											"text": "-phone: Integer",
+											"text": "-phone: String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4168,7 +4168,7 @@
 							},
 							"name": "phone",
 							"visibility": "private",
-							"type": "Integer"
+							"type": "String"
 						},
 						{
 							"_type": "UMLAttribute",
