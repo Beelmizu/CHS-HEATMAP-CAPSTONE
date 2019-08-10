@@ -115,32 +115,37 @@ public class ReportServiceImpl implements ReportService {
         String time, comparedTime;
         int id = 1;
         float sum, count;
-        for (int i = 0; i < areas.size(); i++) {
-            flag = new ArrayList<>();
-            id = 1;
-            reportArea = getReportAreaByMonth(month, areas.get(i).getId());
-            if (reportArea != null) {
-                for (int j = 0; j < reportArea.get(0).size(); j++) {
-                    time = reportArea.get(0).get(j).getTime();
-                    sum = reportArea.get(0).get(j).getCount();
-                    count = 1;
-                    for (int k = 1; k < reportArea.size(); k++) {
-                        for (int l = 0; l < reportArea.get(k).size(); l++) {
-                            comparedTime = reportArea.get(k).get(l).getTime();
-                            if (time.equals(comparedTime)) {
-                                sum += reportArea.get(k).get(l).getCount();
-                                count++;
+        if (areas != null) {
+            for (int i = 0; i < areas.size(); i++) {
+                flag = new ArrayList<>();
+                id = 1;
+                reportArea = getReportAreaByMonth(month, areas.get(i).getId());
+                if (reportArea != null) {
+                    for (int j = 0; j < reportArea.get(0).size(); j++) {
+                        time = reportArea.get(0).get(j).getTime();
+                        sum = reportArea.get(0).get(j).getCount();
+                        count = 1;
+                        for (int k = 1; k < reportArea.size(); k++) {
+                            for (int l = 0; l < reportArea.get(k).size(); l++) {
+                                comparedTime = reportArea.get(k).get(l).getTime();
+                                if (time.equals(comparedTime)) {
+                                    sum += reportArea.get(k).get(l).getCount();
+                                    count++;
+                                }
                             }
                         }
+                        reportDate = setElementForReportStoreByMonth(id, sum, count, areas.get(i).getId(), time);
+                        id++;
+                        flag.add(reportDate);
                     }
-                    reportDate = setElementForReportStoreByMonth(id, sum, count, areas.get(i).getId(), time);
-                    id++;
-                    flag.add(reportDate);
+                    result.add(flag);
                 }
-                result.add(flag);
             }
-        }
-        if (result.size() == 0 ){
+            if (result.size() == 0 ){
+                return null;
+            }
+        } else {
+            System.out.println("Reports is null");
             return null;
         }
         return result;
@@ -317,32 +322,37 @@ public class ReportServiceImpl implements ReportService {
         float sum, count;
         String time, comparedTime;
         List<Area> areas = areaRepository.findActiveAreaByStoID(storeID);
-        for (int i = 0; i < areas.size(); i++) {
-            flag = new ArrayList<>();
-            id = 1;
-            reportArea = getReportAreaByTime(date, areas.get(i).getId(), timeFrom, timeTo);
-            if (reportArea != null){
-                for (int j = 0; j < reportArea.get(0).size(); j++) {
-                    time = reportArea.get(0).get(j).getTime();
-                    sum = reportArea.get(0).get(j).getCount();
-                    count = 1;
-                    for (int k = 1; k < reportArea.size(); k++) {
-                        for (int l = 0; l < reportArea.get(k).size(); l++) {
-                            comparedTime = reportArea.get(k).get(l).getTime();
-                            if (time.equals(comparedTime)) {
-                                sum += reportArea.get(k).get(l).getCount();
-                                count++;
+        if (areas != null){
+            for (int i = 0; i < areas.size(); i++) {
+                flag = new ArrayList<>();
+                id = 1;
+                reportArea = getReportAreaByTime(date, areas.get(i).getId(), timeFrom, timeTo);
+                if (reportArea != null){
+                    for (int j = 0; j < reportArea.get(0).size(); j++) {
+                        time = reportArea.get(0).get(j).getTime();
+                        sum = reportArea.get(0).get(j).getCount();
+                        count = 1;
+                        for (int k = 1; k < reportArea.size(); k++) {
+                            for (int l = 0; l < reportArea.get(k).size(); l++) {
+                                comparedTime = reportArea.get(k).get(l).getTime();
+                                if (time.equals(comparedTime)) {
+                                    sum += reportArea.get(k).get(l).getCount();
+                                    count++;
+                                }
                             }
                         }
+                        reportDate = setElementForReportStore(id, sum, count, areas.get(i).getId(), time);
+                        id++;
+                        flag.add(reportDate);
                     }
-                    reportDate = setElementForReportStore(id, sum, count, areas.get(i).getId(), time);
-                    id++;
-                    flag.add(reportDate);
+                    result.add(flag);
                 }
-                result.add(flag);
             }
-        }
-        if (result.size() == 0 ){
+            if (result.size() == 0 ){
+                return null;
+            }
+        } else {
+            System.out.println("Reports is null");
             return null;
         }
         return result;
