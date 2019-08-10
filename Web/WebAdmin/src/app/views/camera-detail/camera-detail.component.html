@@ -108,7 +108,7 @@
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1">Image: </label>
           <div class="col-md-9">
             <img [src]="url" height="200" *ngIf="url !== 'empty'"> <br />
-            <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)">
+            <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)" id="btnChooseFile">
           </div>
         </div>
 
