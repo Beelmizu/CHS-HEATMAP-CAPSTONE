@@ -35,7 +35,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   heatmapSrc: any;
   objectSrc: any;
   previewSrc: any;
-  previewHeatmapSrc: any;
+  previewHeatmapSrc = '';
 
   // Subcription
   subImg: Subscription;
