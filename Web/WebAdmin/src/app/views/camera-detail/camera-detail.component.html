@@ -26,7 +26,7 @@
               IP is required !
             </div>
             <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('pattern','cameraIP')">
-              IP must be number and with format (xxx.xxx.xxx.xxx)
+              IP must be number and with format (xxx.xxx.xxx.xxx:port)
             </div>
             <div class="invalid-feedback" *ngIf="isExisted == true">
               This IP is existed !

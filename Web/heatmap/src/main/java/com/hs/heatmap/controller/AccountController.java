@@ -20,7 +20,9 @@ public class AccountController {
     AccountService accountService;
 
     @GetMapping("/account/getAll")
-    public List<Account> getAllAccounts(){ return accountService.getAllAccount(); }
+    public List<Account> getAllAccounts(){
+        return accountService.getAllAccount();
+    }
 
     @GetMapping("/account/getAccountByCompany/{id}")
     public List<Account> getAccountByCompany(@PathVariable(value = "id") int id){ return accountService.getAccountByCompany(id); }
