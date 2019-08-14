@@ -1408,7 +1408,7 @@
 												"$ref": "AAAAAAFsYzwzmSXe4Og="
 											},
 											"edgePosition": 1,
-											"text": "7 : return result"
+											"text": "6 : return result"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1520,7 +1520,7 @@
 												"$ref": "AAAAAAFsYzyT9iX1Nhw="
 											},
 											"edgePosition": 1,
-											"text": "8 : rturn result"
+											"text": "7 : rturn result"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1632,7 +1632,7 @@
 												"$ref": "AAAAAAFsO6Y5quud6aU="
 											},
 											"edgePosition": 1,
-											"text": "9.1.1 : return false"
+											"text": "8 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1744,7 +1744,7 @@
 												"$ref": "AAAAAAFsO6bbeOu0ZbE="
 											},
 											"edgePosition": 1,
-											"text": "9.1.2 : return false"
+											"text": "9 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1837,7 +1837,7 @@
 									"top": 408,
 									"width": 105,
 									"height": 38,
-									"text": "[result == null]"
+									"text": "else"
 								},
 								{
 									"_type": "UMLSeqMessageView",
@@ -1869,7 +1869,7 @@
 												"$ref": "AAAAAAFsYz1JiyYPsEo="
 											},
 											"edgePosition": 1,
-											"text": "9.1.3 : Display error notification"
+											"text": "10 : Display error notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1981,7 +1981,7 @@
 												"$ref": "AAAAAAFsO6844exf6hM="
 											},
 											"edgePosition": 1,
-											"text": "9.2.1 : save()"
+											"text": "11 : save()"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2092,7 +2092,7 @@
 												"$ref": "AAAAAAFsPbctBgd3Vl8="
 											},
 											"edgePosition": 1,
-											"text": "9.2.2 : execute query"
+											"text": "12 : execute query"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2192,7 +2192,6 @@
 											"model": {
 												"$ref": "AAAAAAFsY0BkpCZHemk="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1431,
 											"top": 508,
@@ -2203,7 +2202,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsY0BkpCZI0nQ="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "13 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2304,7 +2304,6 @@
 											"model": {
 												"$ref": "AAAAAAFsY0CnTSZfeAg="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1114,
 											"top": 520,
@@ -2315,7 +2314,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsY0CnTSZgFlQ="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "14 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2427,7 +2427,7 @@
 												"$ref": "AAAAAAFsO7FIx+ykdNQ="
 											},
 											"edgePosition": 1,
-											"text": "9.2.3 : return true"
+											"text": "15 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2539,7 +2539,7 @@
 												"$ref": "AAAAAAFsO7F0Q+y7wzc="
 											},
 											"edgePosition": 1,
-											"text": "9.2.4 : return true"
+											"text": "16 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2651,7 +2651,7 @@
 												"$ref": "AAAAAAFsY0GRICaTfHs="
 											},
 											"edgePosition": 1,
-											"text": "9.2.5 : Display previous site with success notification"
+											"text": "17 : Display previous site with success notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -2850,8 +2850,7 @@
 										"$ref": "AAAAAAFsQcO/D2FWVvo="
 									}
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -2867,8 +2866,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOPluF+d/bEA="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -2882,8 +2880,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOQgv3+egBb4="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -2897,8 +2894,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOR8ZhufEuhA="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -2912,8 +2908,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOTMUBegxEsY="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -2927,8 +2922,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOTPA5+hYDYQ="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -2943,8 +2937,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOTMUBegxEsY="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "7"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -2959,8 +2952,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOR8ZhufEuhA="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -2975,8 +2967,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOQgv3+egBb4="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -2991,8 +2982,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOPluF+d/bEA="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.1.2"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -3007,8 +2997,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQcO/D2FPrHs="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.1.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -3022,8 +3011,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOTMUBegxEsY="
-							},
-							"sequenceNumber": "9.2.1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -3037,8 +3025,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsOTPA5+hYDYQ="
-							},
-							"sequenceNumber": "9.2.2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -3081,8 +3068,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOQgv3+egBb4="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.2.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -3097,8 +3083,7 @@
 							"target": {
 								"$ref": "AAAAAAFsOPluF+d/bEA="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.2.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -3113,8 +3098,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQcO/D2FPrHs="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.2.5"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -3254,7 +3238,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFsOODBuecLlUs="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -4684,7 +4669,7 @@
 									"top": 488,
 									"width": 105,
 									"height": 38,
-									"text": "[result != null]"
+									"text": "else"
 								},
 								{
 									"_type": "UMLSeqMessageView",
@@ -4827,7 +4812,7 @@
 												"$ref": "AAAAAAFsY0cg8CcoGo0="
 											},
 											"edgePosition": 1,
-											"text": "8 : return result"
+											"text": "7 : return result"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -4939,7 +4924,7 @@
 												"$ref": "AAAAAAFsPZH4bu9HBe4="
 											},
 											"edgePosition": 1,
-											"text": "9 : return result"
+											"text": "8 : return result"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5051,7 +5036,7 @@
 												"$ref": "AAAAAAFsPZRnJu+fC48="
 											},
 											"edgePosition": 1,
-											"text": "10.1.1 : return false"
+											"text": "9 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5163,7 +5148,7 @@
 												"$ref": "AAAAAAFsPZSFFe+1Ui8="
 											},
 											"edgePosition": 1,
-											"text": "10.1.2 : return false"
+											"text": "10 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5275,7 +5260,7 @@
 												"$ref": "AAAAAAFsY0gXUidMcIc="
 											},
 											"edgePosition": 1,
-											"text": "10.1.3 : Display error notification"
+											"text": "11 : Display error notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5387,7 +5372,7 @@
 												"$ref": "AAAAAAFsPZZ4UPAXaKg="
 											},
 											"edgePosition": 1,
-											"text": "10.2.1 : save()"
+											"text": "12 : save()"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5498,7 +5483,7 @@
 												"$ref": "AAAAAAFsPZeidfAuaJI="
 											},
 											"edgePosition": 1,
-											"text": "10.2.2 : execute query"
+											"text": "13 : execute query"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5598,7 +5583,6 @@
 											"model": {
 												"$ref": "AAAAAAFsPa5RAvQ9Q7I="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1493,
 											"top": 556,
@@ -5609,7 +5593,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsPa5RAvQ+mZ8="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "14 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5827,17 +5812,18 @@
 											"model": {
 												"$ref": "AAAAAAFsY0lqsCdunu0="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1230,
+											"left": 1218,
 											"top": 573,
+											"width": 25.29541015625,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
 											"hostEdge": {
 												"$ref": "AAAAAAFsY0lqsCdvoJg="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "15 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -5949,7 +5935,7 @@
 												"$ref": "AAAAAAFsPZhNp/BcB8Q="
 											},
 											"edgePosition": 1,
-											"text": "10.2.3 : return true"
+											"text": "16 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -6061,7 +6047,7 @@
 												"$ref": "AAAAAAFsPZhqx/BytXU="
 											},
 											"edgePosition": 1,
-											"text": "10.2.4 : return true"
+											"text": "17 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -6173,7 +6159,7 @@
 												"$ref": "AAAAAAFsY0pNtCehodA="
 											},
 											"edgePosition": 1,
-											"text": "10.2.5 : Display previous site with success notification"
+											"text": "18 : Display previous site with success notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -6255,8 +6241,7 @@
 										"$ref": "AAAAAAFsY0pNtCelQUw="
 									}
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -6272,8 +6257,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPItr6O1xMP0="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6287,8 +6271,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPItr6O1xMP0="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6302,8 +6285,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPYtq+e401eg="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6317,8 +6299,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPYweFu5WGgI="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6332,8 +6313,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPYxWu+555oc="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6347,8 +6327,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPY1SFu7DHWk="
-							},
-							"sequenceNumber": "6"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6363,8 +6342,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPYxWu+555oc="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6379,8 +6357,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPYweFu5WGgI="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6395,8 +6372,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPYtq+e401eg="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6411,8 +6387,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPItr6O1xMP0="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1.2"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6427,8 +6402,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQpdTX2GLZ8k="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6442,8 +6416,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPYxWu+555oc="
-							},
-							"sequenceNumber": "10.2.1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6457,8 +6430,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPY1SFu7DHWk="
-							},
-							"sequenceNumber": "10.2.2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -6501,8 +6473,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPYtq+e401eg="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6517,8 +6488,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPItr6O1xMP0="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -6533,8 +6503,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQpdTX2GLZ8k="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.5"
+							"messageSort": "reply"
 						}
 					],
 					"participants": [
@@ -6659,7 +6628,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFsPIUXq+zQrME="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -7989,7 +7959,7 @@
 									"top": 560,
 									"width": 105,
 									"height": 38,
-									"text": "[result != null]"
+									"text": "else"
 								},
 								{
 									"_type": "UMLSeqMessageView",
@@ -8356,7 +8326,7 @@
 												"$ref": "AAAAAAFsPaq4nvOEPfs="
 											},
 											"edgePosition": 1,
-											"text": "8.1.1 : return false"
+											"text": "8 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -8468,7 +8438,7 @@
 												"$ref": "AAAAAAFsParZ2POa1GU="
 											},
 											"edgePosition": 1,
-											"text": "8.1.2 : return false"
+											"text": "9 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -8580,7 +8550,7 @@
 												"$ref": "AAAAAAFsZRmn1igkZ+c="
 											},
 											"edgePosition": 1,
-											"text": "8.1.3 : Display error notification"
+											"text": "10 : Display error notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -8692,7 +8662,7 @@
 												"$ref": "AAAAAAFsPayLNvP6YL0="
 											},
 											"edgePosition": 1,
-											"text": "8.2.1 : save()"
+											"text": "11 : save()"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -8803,7 +8773,7 @@
 												"$ref": "AAAAAAFsPazen/QRkjY="
 											},
 											"edgePosition": 1,
-											"text": "8.2.2 : execute query"
+											"text": "12 : execute query"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9020,7 +8990,6 @@
 											"model": {
 												"$ref": "AAAAAAFsPaz9NvQmpXw="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1459,
 											"top": 612,
@@ -9031,7 +9000,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsPaz9NvQn0N8="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "13 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9132,7 +9102,6 @@
 											"model": {
 												"$ref": "AAAAAAFsPa9QEvSQHos="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1139,
 											"top": 620,
@@ -9143,7 +9112,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsPa9QE/SRHmo="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "14 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9255,7 +9225,7 @@
 												"$ref": "AAAAAAFsPa9tffSnwsg="
 											},
 											"edgePosition": 1,
-											"text": "8.2.3 : return true"
+											"text": "15 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9367,7 +9337,7 @@
 												"$ref": "AAAAAAFsPa+Pl/S9Jcc="
 											},
 											"edgePosition": 1,
-											"text": "8.2.4 : return true"
+											"text": "16 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9479,7 +9449,7 @@
 												"$ref": "AAAAAAFsZRpuUihF4Tw="
 											},
 											"edgePosition": 1,
-											"text": "8.2.5 : Display previous site with success notification"
+											"text": "17 : Display previous site with success notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -9561,8 +9531,7 @@
 										"$ref": "AAAAAAFsZRpuUihJgZA="
 									}
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -9578,8 +9547,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPZ6cbPHkv3s="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9593,8 +9561,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPZ8pf/IEBP0="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9608,8 +9575,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPaAm3PImP8A="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9623,8 +9589,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPaBXzPJG/3Q="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9638,8 +9603,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPaFXq/KJf/I="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9654,8 +9618,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPaBXzPJG/3Q="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "6"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9670,8 +9633,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPaAm3PImP8A="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "7"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9686,8 +9648,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPZ8pf/IEBP0="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9702,8 +9663,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPZ6cbPHkv3s="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.2"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9718,8 +9678,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQphOw2HJGlg="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9733,8 +9692,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPaBXzPJG/3Q="
-							},
-							"sequenceNumber": "8.2.1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9748,8 +9706,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPaFXq/KJf/I="
-							},
-							"sequenceNumber": "8.2.2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -9792,8 +9749,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPZ8pf/IEBP0="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9808,8 +9764,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPZ6cbPHkv3s="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -9824,8 +9779,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQphOw2HJGlg="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.5"
+							"messageSort": "reply"
 						}
 					],
 					"participants": [
@@ -11942,7 +11896,7 @@
 												"$ref": "AAAAAAFsZSd5jym17Dg="
 											},
 											"edgePosition": 1,
-											"text": "9.1.1 : Display \"Cannot find company by value\" notification"
+											"text": "10 : Display \"Cannot find company by value\" notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -12054,7 +12008,7 @@
 												"$ref": "AAAAAAFsZSgMzynMXuE="
 											},
 											"edgePosition": 1,
-											"text": "9.2.1 : Display result in table"
+											"text": "11 : Display result in table"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -12135,9 +12089,34 @@
 									"activation": {
 										"$ref": "AAAAAAFsZSgMzynQhC4="
 									}
+								},
+								{
+									"_type": "UMLTextView",
+									"_id": "AAAAAAFsjzlBv3SR1pk=",
+									"_parent": {
+										"$ref": "AAAAAAFsPbJZdAbXjyw="
+									},
+									"font": "Arial;13;0",
+									"left": 176,
+									"top": 392,
+									"width": 105,
+									"height": 38,
+									"text": "[result == null]"
+								},
+								{
+									"_type": "UMLTextView",
+									"_id": "AAAAAAFsjzlPWnSWYg8=",
+									"_parent": {
+										"$ref": "AAAAAAFsPbJZdAbXjyw="
+									},
+									"font": "Arial;13;0",
+									"left": 176,
+									"top": 528,
+									"width": 105,
+									"height": 38,
+									"text": "else"
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -12153,8 +12132,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPbgBLgep6fU="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -12168,8 +12146,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPbht8QfKY8M="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -12183,8 +12160,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPbiq8wfq3Ok="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -12198,8 +12174,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPbjqpQgKI8c="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -12213,8 +12188,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPboMLggzlJg="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -12229,8 +12203,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPbjqpQgKI8c="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "6"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -12245,8 +12218,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPbiq8wfq3Ok="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "7"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -12261,8 +12233,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPbht8QfKY8M="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -12277,8 +12248,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPbgBLgep6fU="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -12293,8 +12263,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQpoXSmIJ4VU="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -12309,8 +12278,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQpoXSmIJ4VU="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9.2.1"
+							"messageSort": "reply"
 						}
 					],
 					"participants": [
@@ -13726,7 +13694,7 @@
 									"top": 616,
 									"width": 105,
 									"height": 38,
-									"text": "[result != null]"
+									"text": "else"
 								},
 								{
 									"_type": "UMLSeqMessageView",
@@ -14093,7 +14061,7 @@
 												"$ref": "AAAAAAFsPcdAtAqzBG0="
 											},
 											"edgePosition": 1,
-											"text": "8.1.1 : return false"
+											"text": "8 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14205,7 +14173,7 @@
 												"$ref": "AAAAAAFsPceAOgrJwwg="
 											},
 											"edgePosition": 1,
-											"text": "8.1.2 : return false"
+											"text": "9 : return false"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14317,7 +14285,7 @@
 												"$ref": "AAAAAAFsZSDIVCkzLdU="
 											},
 											"edgePosition": 1,
-											"text": "8.1.3 : Display error notification"
+											"text": "10 : Display error notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14429,7 +14397,7 @@
 												"$ref": "AAAAAAFsPcjA3QsjiyU="
 											},
 											"edgePosition": 1,
-											"text": "8.2.1 : save()"
+											"text": "11 : save()"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14540,7 +14508,7 @@
 												"$ref": "AAAAAAFsPckWGAs8qME="
 											},
 											"edgePosition": 1,
-											"text": "8.2.2 : execute query"
+											"text": "12 : execute query"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14754,7 +14722,6 @@
 											"model": {
 												"$ref": "AAAAAAFsPclA2gtSro0="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1731,
 											"top": 740,
@@ -14765,7 +14732,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsPclA2wtTIAI="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "13 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14866,7 +14834,6 @@
 											"model": {
 												"$ref": "AAAAAAFsPcmFBAtqhUo="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1313,
 											"top": 756,
@@ -14877,7 +14844,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsPcmFBAtrGcQ="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "14 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14989,7 +14957,7 @@
 												"$ref": "AAAAAAFsPcoPAAuOxIA="
 											},
 											"edgePosition": 1,
-											"text": "8.2.3 : return true"
+											"text": "15 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -15101,7 +15069,7 @@
 												"$ref": "AAAAAAFsPcomRQukueY="
 											},
 											"edgePosition": 1,
-											"text": "8.2.4 : return true"
+											"text": "16 : return true"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -15213,7 +15181,7 @@
 												"$ref": "AAAAAAFsZSITfClb6gw="
 											},
 											"edgePosition": 1,
-											"text": "8.2.5 : Display previous site with success notification"
+											"text": "17 : Display previous site with success notification"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -15295,8 +15263,7 @@
 										"$ref": "AAAAAAFsZSITfClfYls="
 									}
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -15312,8 +15279,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcG1HglAbWw="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15327,8 +15293,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcHIBAlfS9w="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15342,8 +15307,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcPUGAmAg/0="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15357,8 +15321,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcQQlgmjR6Y="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15372,8 +15335,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcS3gQnnW7o="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15388,8 +15350,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcQQlgmjR6Y="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "6"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15404,8 +15365,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcPUGAmAg/0="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "7"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15420,8 +15380,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcHIBAlfS9w="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15436,8 +15395,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcG1HglAbWw="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.2"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15452,8 +15410,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQptePGJL/UY="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.1.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15467,8 +15424,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcQQlgmjR6Y="
-							},
-							"sequenceNumber": "8.2.1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15482,8 +15438,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPcS3gQnnW7o="
-							},
-							"sequenceNumber": "8.2.2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -15526,8 +15481,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcHIBAlfS9w="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15542,8 +15496,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPcG1HglAbWw="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -15558,8 +15511,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQptePGJL/UY="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8.2.5"
+							"messageSort": "reply"
 						}
 					],
 					"participants": [
@@ -16753,9 +16705,9 @@
 												"$ref": "AAAAAAFsYwTnXSKRjrk="
 											},
 											"font": "Arial;13;0",
-											"left": 169,
+											"left": 168,
 											"top": 115,
-											"width": 130.634765625,
+											"width": 132,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -17891,7 +17843,7 @@
 									"top": 496,
 									"width": 137,
 									"height": 38,
-									"text": "[result != null]"
+									"text": "else"
 								},
 								{
 									"_type": "UMLSeqMessageView",
@@ -17923,7 +17875,7 @@
 												"$ref": "AAAAAAFsYxUFmSO6Mvs="
 											},
 											"edgePosition": 1,
-											"text": "10.1.1 : throw  UserNotFoundException"
+											"text": "10 : throw  UserNotFoundException"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18024,7 +17976,6 @@
 											"model": {
 												"$ref": "AAAAAAFsYxfT4CPR/MI="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 908,
 											"top": 401,
@@ -18035,7 +17986,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsYxfT4CPSRDc="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "11 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18147,7 +18099,7 @@
 												"$ref": "AAAAAAFsYx5xfyPpb9Y="
 											},
 											"edgePosition": 1,
-											"text": "10.1..3 : return 401 response code"
+											"text": "12 : return 401 response code"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18259,7 +18211,7 @@
 												"$ref": "AAAAAAFsYyFfTCQB2w4="
 											},
 											"edgePosition": 1,
-											"text": "10.1.4 : HTTP Réponse"
+											"text": "13 : HTTP Réponse"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18371,7 +18323,7 @@
 												"$ref": "AAAAAAFsYyG9LyQZJcU="
 											},
 											"edgePosition": 1,
-											"text": "Display \"Username or password is not correct\" message"
+											"text": "14 : Display \"Username or password is not correct\" message"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18483,7 +18435,7 @@
 												"$ref": "AAAAAAFsYyM8VCQ4JMw="
 											},
 											"edgePosition": 1,
-											"text": "10.2.1 : return UserDetail"
+											"text": "15 : return UserDetail"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18708,7 +18660,7 @@
 												"$ref": "AAAAAAFsYybiLSR2wGI="
 											},
 											"edgePosition": 1,
-											"text": "10.2.2 : create token"
+											"text": "16 : create token"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18819,7 +18771,7 @@
 												"$ref": "AAAAAAFsYydINiSNmYw="
 											},
 											"edgePosition": 1,
-											"text": "10.2.3 : return token"
+											"text": "17 : return token"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -18920,7 +18872,6 @@
 											"model": {
 												"$ref": "AAAAAAFsYyeHDyShbgQ="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
 											"left": 905,
 											"top": 580,
@@ -18931,7 +18882,8 @@
 											"hostEdge": {
 												"$ref": "AAAAAAFsYyeHDySidyw="
 											},
-											"edgePosition": 1
+											"edgePosition": 1,
+											"text": "18 : "
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -19043,7 +18995,7 @@
 												"$ref": "AAAAAAFsYys+gyS/Ozs="
 											},
 											"edgePosition": 1,
-											"text": "10.2.4 : response token in header"
+											"text": "19 : response token in header"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -19155,7 +19107,7 @@
 												"$ref": "AAAAAAFsYywHvyTW0XA="
 											},
 											"edgePosition": 1,
-											"text": "10.2.6.1 : display website"
+											"text": "20 : display website"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -19267,7 +19219,7 @@
 												"$ref": "AAAAAAFsYy188yTu+lw="
 											},
 											"edgePosition": 1,
-											"text": "10.2.5 : HTTP Response"
+											"text": "21 : HTTP Response"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -19550,7 +19502,7 @@
 												"$ref": "AAAAAAFsYzSr/CVJCTY="
 											},
 											"edgePosition": 1,
-											"text": "Display \"your cannot access this\" message"
+											"text": "22 : Display \"your cannot access this\" message"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -19632,8 +19584,7 @@
 										"$ref": "AAAAAAFsYzSr/CVNYcg="
 									}
 								}
-							],
-							"sequenceNumbering": "custom"
+							]
 						}
 					],
 					"messages": [
@@ -19649,8 +19600,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPlgapAvN4ag="
-							},
-							"sequenceNumber": "1"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19664,8 +19614,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsYwSLIiJwSE4="
-							},
-							"sequenceNumber": "2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19679,8 +19628,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPlhBuwvtClA="
-							},
-							"sequenceNumber": "3"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19694,8 +19642,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPlieCgwO0Ig="
-							},
-							"sequenceNumber": "4"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19709,8 +19656,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPtk0agwxPtk="
-							},
-							"sequenceNumber": "5"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19724,8 +19670,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPuQJYQxV494="
-							},
-							"sequenceNumber": "6"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19739,8 +19684,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsPxS/gQ2y6is="
-							},
-							"sequenceNumber": "7"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19755,8 +19699,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPuQJYQxV494="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "8"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19771,8 +19714,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPtk0agwxPtk="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "9"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19787,8 +19729,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPlieCgwO0Ig="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19817,8 +19758,7 @@
 							"target": {
 								"$ref": "AAAAAAFsYwSLIiJwSE4="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1..3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19833,8 +19773,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPlgapAvN4ag="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.1.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19864,8 +19803,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPlieCgwO0Ig="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19879,8 +19817,7 @@
 							},
 							"target": {
 								"$ref": "AAAAAAFsYyYYQCRSURY="
-							},
-							"sequenceNumber": "10.2.2"
+							}
 						},
 						{
 							"_type": "UMLMessage",
@@ -19895,8 +19832,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPlieCgwO0Ig="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.3"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19925,8 +19861,7 @@
 							"target": {
 								"$ref": "AAAAAAFsYwSLIiJwSE4="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.4"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19941,8 +19876,7 @@
 							"target": {
 								"$ref": "AAAAAAFsQpxTT2KQwBY="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.6.1"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -19957,8 +19891,7 @@
 							"target": {
 								"$ref": "AAAAAAFsPlgapAvN4ag="
 							},
-							"messageSort": "reply",
-							"sequenceNumber": "10.2.5"
+							"messageSort": "reply"
 						},
 						{
 							"_type": "UMLMessage",
@@ -20148,7 +20081,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFsPcyorwu5r1Q="
 					},
-					"name": "Role1"
+					"name": "Role1",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -20212,7 +20146,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFsPcyorwu5r1Q="
 					},
-					"name": "Role8"
+					"name": "Role8",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
