@@ -84,11 +84,6 @@ def setup_app(app):
 			thread_camera.start()
 			thread_worker = threading.Thread(target=detect_object, args=(socketio, rd, id_camera,))
 			thread_worker.start()
-def signal_handler(sig, frame):
-	# cleanup_stop_thread()
-	print("-----END-----")
-	sys.exit(0)
 if __name__ == '__main__':
 	setup_app(app)
-	signal.signal(signal.SIGINT, signal_handler)
 	socketio.run(app)

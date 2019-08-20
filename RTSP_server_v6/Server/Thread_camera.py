@@ -63,7 +63,7 @@ def run_camera(socketio, rd, id_camera, port_camera):
             else:
                 rd.set(str(id_camera)+"_ERROR", image_text)
                 cam = cv2.VideoCapture(port_camera)
-            time.sleep(0.075)
+            time.sleep(0.12)
         except Exception as e:
             print("--------------------                  ERROR              ------------------------")
             rd.set(str(id_camera)+"_ERROR", image_text)
@@ -89,7 +89,7 @@ def save_video(socketio, rd, id_camera, port_camera):
     np_data = np.fromstring(decoded_data,np.uint8)
     image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
     height, width, channel = image.shape
-    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),10.0, (width, height))
+    save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),5, (width, height))
     while True:
         try:
             start_time = datetime.datetime.now()
@@ -110,7 +110,7 @@ def save_video(socketio, rd, id_camera, port_camera):
                 image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
                 save_camera.write(image)
             
-            time.sleep(0.1)
+            time.sleep(0.2)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)

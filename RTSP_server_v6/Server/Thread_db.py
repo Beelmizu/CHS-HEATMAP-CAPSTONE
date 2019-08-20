@@ -136,7 +136,7 @@ def get_all_camera():
         #kết nối DB
         connection = thread_db.get_connection()
         cursor = connection.cursor()
-        sql = "SELECT cam_id, cam_ip, cam_account, cam_password FROM heatmapsystem.camera Where cam_status = 'active';"
+        sql = "SELECT cam_id, cam_ip, cam_account, cam_password FROM heatmapsystem.camera Where cam_status != 'deleted';"
         cursor.execute(sql)
         records = cursor.fetchall()
         cursor.close()

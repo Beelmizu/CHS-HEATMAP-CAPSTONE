@@ -7,6 +7,7 @@ import redis
 def check_error_camera(socketio,rd, id_camera,):
     while True:
         try:
+            time.sleep(60)
             check_flag = 1
             # Check ảnh lúc lỗi và ảnh hiện tại có trùng không để nhận biết việc camera chết
             image_base64 = rd.get(str(id_camera))
@@ -15,7 +16,6 @@ def check_error_camera(socketio,rd, id_camera,):
                 if image_base64.decode() == image_error.decode():
                     check_flag = 0
             rd.set(str(id_camera)+"_RUN", check_flag)
-            time.sleep(10)
         except Exception as e:
             if hasattr(e, 'message'):
                 print(e.message)
