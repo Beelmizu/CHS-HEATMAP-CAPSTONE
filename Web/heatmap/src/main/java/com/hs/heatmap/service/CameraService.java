@@ -1,6 +1,7 @@
 package com.hs.heatmap.service;
 
 import com.hs.heatmap.model.Camera;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface CameraService {
 
     List<Camera> getAllCameraByAccountID(int accountID);
 
+    boolean deleteCamera(Integer ip);
+
+    Page<Camera> getAllCameraByPage(int page);
 }

@@ -8,10 +8,10 @@
         </div>
         <div class="col-sm-7 d-none d-md-block" id="divSelectType" *ngIf="storeDetail != null">
           <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
-            <label class="btn btn-outline-secondary active" (click)="modeStatistic = 'month'">
+            <label class="btn btn-outline-secondary " (click)="modeStatistic = 'month'">
               <input id="btnDay" type="radio" name="options" autocomplete="off" checked="true"> Month
             </label>
-            <label class="btn btn-outline-secondary" (click)="modeStatistic = 'day'">
+            <label class="btn btn-outline-secondary active" (click)="modeStatistic = 'day'">
               <input id="btnDay" type="radio" name="options" autocomplete="off" checked="true"> Day
             </label>
             <label class="btn btn-outline-secondary" (click)="modeStatistic = 'time'">
@@ -25,10 +25,10 @@
         </div>
         <div class="col-sm-9 d-none d-md-block">
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'month'">
-            <app-monthyearpicker (month)="catchSelectedMonth($event)"></app-monthyearpicker>
+            <app-monthyearpicker [monthFromParentComponent]="selectedValueMonth" (month)="catchSelectedMonth($event)"></app-monthyearpicker>
           </div>
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'day'">
-            <app-fulldatepicker (date)="catchDate($event)"></app-fulldatepicker>
+            <app-fulldatepicker [dateFromParentComponent]="selectedValueDate" (date)="catchDate($event)"></app-fulldatepicker>
           </div>
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'time'">
             <form [formGroup]="selectTimeForm">

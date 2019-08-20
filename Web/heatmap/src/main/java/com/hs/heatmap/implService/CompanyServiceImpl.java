@@ -30,7 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> getCompanyByName(String searchValue) { return companyRepository.searchCompaniesByName(searchValue); }
+    public List<Company> getCompanyByName(String searchValue) {
+        return companyRepository.searchCompaniesByName(searchValue);
+    }
 
     @Override
     public boolean createNewCompany(Company company) {

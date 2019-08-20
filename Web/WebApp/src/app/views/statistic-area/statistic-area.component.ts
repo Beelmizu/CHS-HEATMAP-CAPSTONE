@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, SimpleChanges, OnDestroy } from '@angular/core';
 import { ChartOptions, ChartDataSets } from 'chart.js';
 import { BaseChartDirective, Color } from 'ng2-charts';
 
@@ -14,13 +14,16 @@ import { CameraDetailService } from '../../services/camera-detail.service';
 import { AreaService } from '../../services/area.service';
 import { Area } from '../../models/area.model';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 
 @Component({
   selector: 'app-statistic-area',
   templateUrl: './statistic-area.component.html',
   styleUrls: ['./statistic-area.component.scss']
 })
-export class StatisticAreaComponent implements OnInit {
+export class StatisticAreaComponent implements OnInit, OnDestroy {
+
 
   areaDetail: Area;
   cameraDetail: Camera;
@@ -31,6 +34,8 @@ export class StatisticAreaComponent implements OnInit {
 
   // Chart
   selectedValue = null;
+  selectedValueMonth = null;
+  selectedValueDate = null;
   timeForm: String;
   timeTo: String;
   modeStatistic: String;
@@ -123,14 +128,16 @@ export class StatisticAreaComponent implements OnInit {
     private cameraDetailService: CameraDetailService,
     private areaService: AreaService,
     private cameraService: CameraService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     const self = this;
     this.accountID = localStorage.getItem('accountID');
 
-    this.modeStatistic = 'month';
+    this.openDialog();
+
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
 
@@ -153,6 +160,10 @@ export class StatisticAreaComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.dialog.closeAll();
+  }
+
   getAllAreaOfAccount(accountID: number) {
     const self = this;
     this.areaService.getAllAreaOfAccount(accountID).subscribe((area) => {
@@ -165,6 +176,31 @@ export class StatisticAreaComponent implements OnInit {
   chooseArea() {
     const self = this;
     this.areaService.getAreaByID(this.areaDetailForm.get('areaName').value).subscribe((area) => {
+      this.areaDetail = area;
+      this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
+        this.listCamera = cameralist;
+      });
+      this.areaDetailForm.setValue({
+        'areaName': this.areaDetail.id,
+        'areaFloor': this.areaDetail.floor,
+        'areaStore': this.areaDetail.store.name,
+        'areaStatus': this.areaDetail.status
+      });
+      if (this.selectedValue !== null) {
+        if (this.modeStatistic === 'month') {
+          this.getReportByMonth();
+        } else {
+          this.getReport();
+        }
+      }
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  chooseAreaAfterChoose(areaID: number) {
+    const self = this;
+    this.areaService.getAreaByID(areaID).subscribe((area) => {
       this.areaDetail = area;
       this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
         this.listCamera = cameralist;
@@ -247,7 +283,7 @@ export class StatisticAreaComponent implements OnInit {
     });
     allDate.sort();
     for (let j = 0; j < allDate.length; j++) {
-      this.lineChartLabels.push(allDate[j].split('-')[2]);
+      this.lineChartLabels.push(allDate[j].split('-')[2] + '-' + allDate[j].split('-')[1]);
     }
     for (let i = 0; i < reports.length; i++) {
       arr = [];
@@ -276,6 +312,8 @@ export class StatisticAreaComponent implements OnInit {
       this.toastr.warning('Please choose area !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
+      this.selectedValueDate = this.selectedValue;
+      this.selectedValueMonth = null;
       this.selectTimeForm.setValue({
         'timeFrom': '08:00',
         'timeTo': '20:00',
@@ -293,6 +331,8 @@ export class StatisticAreaComponent implements OnInit {
       this.toastr.warning('Please choose area !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
+      this.selectedValueMonth = this.selectedValue;
+      this.selectedValueDate = null;
       this.selectTimeForm.get('timeFrom').disable();
       this.selectTimeForm.get('timeTo').disable();
       this.listTimeTo = this.listTimeToRoot;
@@ -373,5 +413,34 @@ export class StatisticAreaComponent implements OnInit {
     console.log(event, active);
   }
 
+  // Dialog
+  openDialog() {
 
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+      id: this.accountID,
+      title: 'area'
+    };
+
+    setTimeout(() => this.dialog.open(StatisticDialogComponent, dialogConfig).afterClosed().subscribe((data) => {
+      this.modeStatistic = 'day';
+      this.selectedValue = data.date;
+      this.selectedValueDate = this.selectedValue;
+      this.selectTimeForm.setValue({
+        'timeFrom': '08:00',
+        'timeTo': '20:00'
+      });
+      this.selectTimeForm.get('timeFrom').enable();
+      this.selectTimeForm.get('timeTo').enable();
+      this.listTimeTo = this.listTimeToRoot;
+      this.listTimeFrom = this.listTimeFromRoot;
+      this.chooseAreaAfterChoose(data.value);
+    }, (error) => {
+      console.log(error);
+    }));
+  }
 }

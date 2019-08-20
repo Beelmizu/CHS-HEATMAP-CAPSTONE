@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Area } from '../models/area.model';
 import { Camera } from '../models/camera.model';
@@ -35,5 +35,11 @@ export class CameraDetailService {
 
   addNewCamera(camera: Camera): Observable<any> {
     return this.http.post<any>(this.cameraUrl + 'create/',  camera);
+  }
+
+  deleteCamera(cameraID: number): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('cameraID', '' + cameraID);
+    return this.http.post<any>(this.cameraUrl + 'deleteCamera/', body);
   }
 }

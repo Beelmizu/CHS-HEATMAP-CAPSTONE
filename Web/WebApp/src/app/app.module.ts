@@ -45,6 +45,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { NgxPasswordToggleModule } from 'ngx-password-toggle';
 import { ToastrModule } from 'ngx-toastr';
+import {MatDialogModule} from '@angular/material';
+import { StatisticDialogComponent } from './views/statistic-dialog/statistic-dialog.component';
+import { ViewHeatmapDialogComponent } from './views/view-heatmap-dialog/view-heatmap-dialog.component';
 
 @NgModule({
   imports: [
@@ -70,6 +73,7 @@ import { ToastrModule } from 'ngx-toastr';
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -77,7 +81,7 @@ import { ToastrModule } from 'ngx-toastr';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   providers: [
     {

@@ -22,6 +22,11 @@ export const navItems = [
     icon: 'icon-layers'
   },
   {
+    name: 'Camera Status',
+    url: '/cameras',
+    icon: 'icon-camrecorder'
+  },
+  {
     name: 'Log out',
     url: '/login',
     icon: 'icon-logout'

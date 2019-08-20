@@ -14,7 +14,8 @@ import {
   MatInputModule,
   MatRippleModule,
   MatNativeDateModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatDialogModule
 } from '@angular/material';
 import { ChartsModule } from 'ng2-charts';
 import { MonthyearpickerComponent } from '../monthyearpicker/monthyearpicker.component';
@@ -25,6 +26,8 @@ import { StatisticStoreComponent } from '../statistic-store/statistic-store.comp
 import { StatisticAreaComponent } from '../statistic-area/statistic-area.component';
 import { StatisticAgeComponent } from '../statistic-age/statistic-age.component';
 import { StatisticGenderComponent } from '../statistic-gender/statistic-gender.component';
+import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
+import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
 
 
 const modules = [
@@ -45,7 +48,8 @@ const modules = [
     FormsModule,
     ReactiveFormsModule,
     FulldatepickerModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    MatDialogModule
   ],
   exports: [
     modules
@@ -57,8 +61,11 @@ const modules = [
     StatisticStoreComponent,
     MonthyearpickerComponent,
     StatisticAgeComponent,
-    StatisticGenderComponent
+    StatisticGenderComponent,
+    StatisticDialogComponent,
+    ViewHeatmapDialogComponent
   ],
-  providers: [  ]
+  providers: [  ],
+  entryComponents: [StatisticDialogComponent, ViewHeatmapDialogComponent]
 })
 export class StatisticModule { }

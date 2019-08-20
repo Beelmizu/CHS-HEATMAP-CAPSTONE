@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDatepicker } from '@angular/material';
 import * as _moment from 'moment';
@@ -34,7 +34,7 @@ export const MY_FORMATS = {
 })
 export class MonthyearpickerComponent implements OnInit {
 
-
+  @Input() monthFromParentComponent: string;
   constructor() { }
 
   selectedMonth = new FormControl(moment());
@@ -42,7 +42,11 @@ export class MonthyearpickerComponent implements OnInit {
 
 
   ngOnInit() {
-    this.selectedMonth.setValue('');
+    if (this.monthFromParentComponent !== undefined) {
+      this.selectedMonth.setValue(this.monthFromParentComponent);
+    } else {
+      this.selectedMonth.setValue('');
+    }
   }
 
   chosenYearHandler(normalizedYear: Moment) {

@@ -1,0 +1,52 @@
+.mat-dialog-content label{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+
+.mat-dialog-content .row {
+    margin-bottom: 10px;
+}
+
+
+#container {
+    width: 1000px;
+    height: 600px;
+}
+
+#title {
+    margin: 0 auto ;
+    display: block;
+    font-weight: bold;
+}
+
+#secondTitle {
+    margin-bottom: 20px;
+}
+#btnCancel {
+    margin: 0 auto ;
+    display: block;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+#divImagePreview {
+    width: 100%;
+    height: 450px;
+}
+
+#imgPreview{
+    height: 100%; width: 100%;
+    z-index:1;  
+    margin-left: 15px;
+}
+
+
+#imgPreviewHeatmap{
+    height: 450px; width: 1000px;
+    position: absolute;
+    z-index:2;
+    margin-left: 15px;
+
+}
+

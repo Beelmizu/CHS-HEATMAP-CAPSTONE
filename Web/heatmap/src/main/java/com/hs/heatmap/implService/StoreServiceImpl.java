@@ -18,10 +18,14 @@ public class StoreServiceImpl implements StoreService {
     private StoreRepository storeRepository;
 
     @Override
-    public List<Store> getAllStores() {return storeRepository.findAll(); }
+    public List<Store> getAllStores() {
+        return storeRepository.findAll();
+    }
 
     @Override
-    public List<Store> getStoreByCompany(int id) { return storeRepository.getStoreInCompany(id); }
+    public List<Store> getStoreByCompany(int id) {
+        return storeRepository.getStoreInCompany(id);
+    }
 
     @Override
     public List<Store> getAllStoreInCompanyNotBelongAccount(int comID, int accID) {
@@ -33,10 +37,14 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store getDetailStore(int id) { return storeRepository.findStoreById(id); }
+    public Store getDetailStore(int id) {
+        return storeRepository.findStoreById(id);
+    }
 
     @Override
-    public List<Store> getStoreByName(String searchValue) { return storeRepository.searchStoreByName(searchValue); }
+    public List<Store> getStoreByName(String searchValue) {
+        return storeRepository.searchStoreByName(searchValue);
+    }
 
     @Override
     public boolean createNewStore(Store store) {
@@ -101,7 +109,9 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getAllStoreByAccountIdWithoutStatus(int id) { return storeRepository.findStoreByAccountIDWithoutStatus(id); }
+    public List<Store> getAllStoreByAccountIdWithoutStatus(int id) {
+        return storeRepository.findStoreByAccountIDWithoutStatus(id);
+    }
 
     @Override
     public boolean addStoreToAccount(String accountID, String storeID) {

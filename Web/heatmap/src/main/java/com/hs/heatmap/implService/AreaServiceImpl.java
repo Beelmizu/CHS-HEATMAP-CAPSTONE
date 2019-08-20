@@ -33,14 +33,20 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<Area> getActiveAreaByStoreID(int id) { return areaRepository.findActiveAreaByStoID(id); }
+    public List<Area> getActiveAreaByStoreID(int id) {
+        return areaRepository.findActiveAreaByStoID(id);
+    }
 
     @Override
-    public List<Area> getAreaInStore(int id) { return areaRepository.getAreaInStore(id); }
+    public List<Area> getAreaInStore(int id) {
+        return areaRepository.getAreaInStore(id);
+    }
 
 
     @Override
-    public List<Area> getAreasByFloor(int searchValue, int stoID) { return areaRepository.searchAreasByFloor(searchValue, stoID); }
+    public List<Area> getAreasByFloor(int searchValue, int stoID) {
+        return areaRepository.searchAreasByFloor(searchValue, stoID);
+    }
 
 
     @Override
@@ -49,10 +55,10 @@ public class AreaServiceImpl implements AreaService {
 //        if (existedArea != null) {
 //            return false;
 //        } else {
-            area.setCreatedDate(LocalDateTime.now().toString());
-            area.setStatus("active");
-            areaRepository.save(area);
-            return true;
+        area.setCreatedDate(LocalDateTime.now().toString());
+        area.setStatus("active");
+        areaRepository.save(area);
+        return true;
 //        }
     }
 
@@ -105,7 +111,7 @@ public class AreaServiceImpl implements AreaService {
         for (int i = 0; i < stores.size(); i++) {
             System.out.println(stores.get(i).getId());
             for (int j = 0; j < areas.size(); j++) {
-                if (stores.get(i).getId() == areas.get(j).getStoID()){
+                if (stores.get(i).getId() == areas.get(j).getStoID()) {
                     results.add(areas.get(j));
                 }
             }

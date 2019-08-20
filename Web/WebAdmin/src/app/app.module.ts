@@ -48,7 +48,10 @@ import { ChangePasswordComponent } from './views/change-password/change-password
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
-
+import {DataTableModule} from 'angular-6-datatable';
+import { PaginationModule } from 'ngx-bootstrap';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 // Import other service
 @NgModule({
   imports: [
@@ -73,6 +76,10 @@ import { ToastrModule } from 'ngx-toastr';
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    DataTableModule,
+    PaginationModule.forRoot(),
+    Ng2SearchPipeModule,
+    FilterPipeModule
   ],
   declarations: [
     AppComponent,

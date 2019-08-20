@@ -87,14 +87,6 @@
           </div>
         </div>
 
-        <!-- Show Status  -->
-        <div class="form-group row" *ngIf="mode == 'detail'">
-          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="cameraStatus">
-          </div>
-        </div>
-
         <!-- Show Updated By -->
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
@@ -119,10 +111,6 @@
             <select class="form-control" id="select1" name="select1" formControlName="cameraArea" disabled="">
               <option *ngFor="let area of areas" value="{{area.id}}">{{area.name}}</option>
             </select>
-            <!-- <select class="form-control" id="select1" name="select1" formControlName="cameraArea"
-              *ngIf="mode == 'detail'">
-              <option *ngFor="let area of areas" value="{{area.id}}">{{area.name}}</option>
-            </select> -->
           </div>
         </div>
       </form>
@@ -136,15 +124,10 @@
     <div class="card-footer" *ngIf="mode == 'detail'">
       <button class="btn btn-sm btn-primary" (click)="goBack()">
         <i class="icon-action-undo"></i> Back</button>
-      <button type="submit" class="btn btn-sm btn-warning" (click)="updateCameraByID()"
-        *ngIf="cameraDetail.status == 'active'">
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateCameraByID()">
         <i class="icon-book-open"></i> Update</button>
-      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveCameraByID()"
-        *ngIf="cameraDetail.status == 'active'">
-        <i class="icon-trash"></i> Inactive </button>
-      <button type="button" class="btn btn-sm btn-success" (click)="activeCameraByID()"
-        *ngIf="cameraDetail.status == 'inactive'">
-        <i class="icon-check"></i> Active </button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="deleteCameraByID()">
+        <i class="icon-trash"></i> Delete </button>
     </div>
   </div>
 </div>

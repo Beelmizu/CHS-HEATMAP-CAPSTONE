@@ -1,3 +1,5 @@
+import { Area } from './area.model';
+
 export class Camera  {
     public id: number;
     public ip: String;
@@ -9,4 +11,5 @@ export class Camera  {
     public imageUrl: String;
     public updatedBy: String;
     public areaID: number;
+    public area: Area;
 }

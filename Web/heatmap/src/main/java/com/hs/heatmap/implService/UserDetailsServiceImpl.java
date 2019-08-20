@@ -42,11 +42,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Collection<GrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority(role));
 
-        System.out.println(account.getUsername()+
+        System.out.println(account.getUsername() +
                 account.getPassword());
 
         return new User(account.getUsername(),
-                        account.getPassword(),
+                account.getPassword(),
                 authorities);
     }
 }

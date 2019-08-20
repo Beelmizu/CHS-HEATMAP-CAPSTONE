@@ -1,12 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDatepicker } from '@angular/material';
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
-import {default as _rollupMoment, Moment} from 'moment';
-import { FormControl } from '@angular/forms';
+import { default as _rollupMoment, Moment } from 'moment';
+import { FormControl, Form } from '@angular/forms';
 import { Camera } from '../../models/camera.model';
 import { ReportService } from '../../services/report.service';
+import { DateFormatter } from 'ngx-bootstrap';
 
 
 const moment = _rollupMoment || _moment;
@@ -23,6 +24,8 @@ export const MY_FORMATS = {
   },
 };
 
+
+
 @Component({
   selector: 'app-fulldatepicker',
   templateUrl: './fulldatepicker.component.html',
@@ -36,6 +39,8 @@ export const MY_FORMATS = {
 })
 export class FulldatepickerComponent implements OnInit {
 
+  @Input() dateFromParentComponent: string;
+
   selectedDate = new FormControl(moment());
   // @Input() cameraDetail: Camera;
   @Output() date: EventEmitter<any> = new EventEmitter<any>();
@@ -47,7 +52,11 @@ export class FulldatepickerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedDate.setValue('');
+    if (this.dateFromParentComponent !== undefined) {
+      this.selectedDate.setValue(this.dateFromParentComponent);
+    } else {
+      this.selectedDate.setValue('');
+    }
   }
 
   change(dateEvent) {

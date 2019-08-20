@@ -1,0 +1,19 @@
+<div class="animated fadeIn" id="container">
+  <div class="row" id="firstTitle">
+    <h2 mat-dialog-title id="title">Heatmap in {{date}} </h2>
+  </div>
+  <div class="row" id="secondTitle">
+    <h5 mat-dialog-title id="title">From: {{from}} - To: {{to}}</h5>
+  </div>
+  <mat-dialog-content>
+    <div class="row" id="divImagePreview">
+      <img [src]="previewSrc" id="imgPreview" />
+      <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== ''" />
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="submit" class="btn btn-secondary " id="btnCancel" (click)="close()">
+      <i class="icon-close"></i> Close</button>
+  </mat-dialog-actions>
+</div>

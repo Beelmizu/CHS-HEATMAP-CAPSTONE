@@ -35,7 +35,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   heatmapSrc: any;
   objectSrc: any;
   previewSrc: any;
-  previewHeatmapSrc = '';
+  previewHeatmapSrc: any;
 
   // Subcription
   subImg: Subscription;
@@ -64,6 +64,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const self = this;
+    this.connectSocket();
     this.listTime = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
     // set value for stream
@@ -93,6 +94,11 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     if (this.subPreview != null) {
       this.subPreview.unsubscribe();
     }
+  }
+
+  connectSocket() {
+    const self = this;
+    this.streamService.connect(this.cameraDetail.id);
   }
 
   // Socket

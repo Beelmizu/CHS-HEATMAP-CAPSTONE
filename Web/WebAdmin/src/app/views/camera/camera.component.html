@@ -23,7 +23,6 @@
             <tr>
               <th>IP</th>
               <th>Account</th>
-              <th>Status</th>
               <th id="thAction">Action</th>
             </tr>
           </thead>
@@ -31,12 +30,6 @@
             <tr  *ngFor="let camera of cameras">
               <td>{{camera.ip}}</td>
               <td>{{camera.account}}</td>
-              <td  *ngIf="camera.status == 'active'"> 
-                <span class="badge badge-success">Active</span>
-              </td>
-              <td *ngIf="camera.status == 'inactive'">
-                <span class="badge badge-secondary" >Inactive</span>
-              </td>
               <td id="tdAction">
                 <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', camera.id]" routerLinkActive="active">
                   Detail

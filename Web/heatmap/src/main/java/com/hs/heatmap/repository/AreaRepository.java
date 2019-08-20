@@ -25,5 +25,5 @@ public interface AreaRepository extends JpaRepository<Area, Integer> {
     List<Area> getAreaInStore(@Param("id") int id);
 
     @Query("SELECT a FROM Area a WHERE a.stoID = :id and a.status = 'active'")
-    List<Area> findActiveAreaByStoID(@Param("id")int id);
+    List<Area> findActiveAreaByStoID(@Param("id") int id);
 }

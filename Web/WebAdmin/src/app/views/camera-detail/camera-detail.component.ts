@@ -59,7 +59,6 @@ export class CameraDetailComponent implements OnInit {
       'cameraPassword': ['', [Validators.required, Validators.maxLength(45)]],
       'cameraCreatedDate': [''],
       'cameraUpdatedDate': [''],
-      'cameraStatus': [''],
       'cameraUpdatedBy': [''],
       'cameraArea': [this.areaID]
     });
@@ -94,7 +93,6 @@ export class CameraDetailComponent implements OnInit {
         'cameraPassword': this.cameraDetail.password,
         'cameraCreatedDate': this.cameraDetail.createdDate,
         'cameraUpdatedDate': this.cameraDetail.updatedDate,
-        'cameraStatus': this.cameraDetail.status,
         'cameraUpdatedBy': this.cameraDetail.updatedBy,
         'cameraArea': this.cameraDetail.areaID
       });
@@ -106,35 +104,15 @@ export class CameraDetailComponent implements OnInit {
   }
 
 
-  inactiveCameraByID(): void {
+  deleteCameraByID(): void {
     const self = this;
-    if (window.confirm('Do you want to inactive ?')) {
-      this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
-      this.cameraDetailService.inactiveCameraByID(this.cameraDetail).subscribe((message) => {
+    if (window.confirm('Do you want to delete this camera ?')) {
+      this.cameraDetailService.deleteCamera(this.cameraDetail.id).subscribe((message) => {
         if (message) {
-          this.toastr.success('Inactive ' + this.cameraDetail.ip + ' successfully !', 'Success');
+          this.toastr.success('Delete ' + this.cameraDetail.ip + ' successfully !', 'Success');
           this.location.back();
         } else {
-          this.toastr.error('Inactive ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
-        }
-      }, (error) => {
-        console.log(error);
-      });
-    } else {
-      return;
-    }
-  }
-
-  activeCameraByID(): void {
-    const self = this;
-    if (window.confirm('Do you want to active ?')) {
-      this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
-      this.cameraDetailService.activeCameraByID(this.cameraDetail).subscribe((message) => {
-        if (message) {
-          this.toastr.success('Active ' + this.cameraDetail.ip + ' successfully !', 'Success');
-          this.location.back();
-        } else {
-          this.toastr.error('Active ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
+          this.toastr.error('Delete ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
         }
       }, (error) => {
         console.log(error);
@@ -189,7 +167,6 @@ export class CameraDetailComponent implements OnInit {
 
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.url = this.selectedFile.src;
-
     });
 
     reader.readAsDataURL(file);

@@ -65,7 +65,7 @@
           <div class="row" id="rowPreview">
             <div class="col-sm-9"id="divImagePreview">
               <img [src]="previewSrc" id="imgPreview" />
-              <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc != ''"/>
+              <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== undefined"/>
             </div>
             <div class="col-sm-3" id="controlPreviewDiv">
               <div id="headerPreviewTime">

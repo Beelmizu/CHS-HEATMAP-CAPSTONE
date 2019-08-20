@@ -9,31 +9,45 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class CompanyController {
 
     @Autowired
     CompanyService companyService;
 
     @GetMapping("/company/getAll")
-    public List<Company> getAllCompanies(){ return companyService.getAllCompanies(); }
+    public List<Company> getAllCompanies() {
+        return companyService.getAllCompanies();
+    }
 
     @GetMapping("/company/getDetail/{id}")
-    public Company getDetailCgetompany(@PathVariable(value = "id") int id){ return companyService.getDetailCompany(id); }
+    public Company getDetailCgetompany(@PathVariable(value = "id") int id) {
+        return companyService.getDetailCompany(id);
+    }
 
     @GetMapping("/company/search/{searchValue}")
-    public List<Company> searchCompany(@PathVariable(value = "searchValue") String searchValue) { return companyService.getCompanyByName(searchValue); }
+    public List<Company> searchCompany(@PathVariable(value = "searchValue") String searchValue) {
+        return companyService.getCompanyByName(searchValue);
+    }
 
     @PostMapping("/company/inactive")
-    public boolean inactiveCompany(@RequestBody Company company) { return companyService.inactiveCompany(company); }
+    public boolean inactiveCompany(@RequestBody Company company) {
+        return companyService.inactiveCompany(company);
+    }
 
     @PostMapping("/company/active")
-    public boolean activeCompany(@RequestBody Company company) { return companyService.activeCompany(company); }
+    public boolean activeCompany(@RequestBody Company company) {
+        return companyService.activeCompany(company);
+    }
 
     @PostMapping("/company/update")
-    public boolean updateCompany(@RequestBody Company company) { return companyService.updateCompany(company); }
+    public boolean updateCompany(@RequestBody Company company) {
+        return companyService.updateCompany(company);
+    }
 
     @PostMapping("/company/create")
-    public boolean createCompany(@RequestBody Company company) { return companyService.createNewCompany(company); }
+    public boolean createCompany(@RequestBody Company company) {
+        return companyService.createNewCompany(company);
+    }
 
 }

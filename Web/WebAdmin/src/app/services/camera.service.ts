@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Camera } from '../models/camera.model';
+import { Page } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +30,9 @@ export class CameraService {
   getCameraByValue(searchValue: String, areaID: number): Observable<Camera[]> {
     return this.http.get<Camera[]>(this.cameraUrl + 'search/' + searchValue + '/' + areaID);
   }
+
+  getAllCameraByPage(pageNumber: number): Observable<Page> {
+    return this.http.get<Page>(this.cameraUrl + 'getAllCameraByPage/' + pageNumber);
+  }
+
 }

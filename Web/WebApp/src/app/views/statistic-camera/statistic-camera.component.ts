@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, SimpleChanges, OnDestroy } from '@angular/core';
 import { ChartOptions, ChartDataSets } from 'chart.js';
 import { BaseChartDirective, Color } from 'ng2-charts';
 
@@ -14,6 +14,10 @@ import { CameraService } from '../../services/camera.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { AreaService } from '../../services/area.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
+import { FulldatepickerComponent } from '../fulldatepicker/fulldatepicker.component';
+import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
 
 
 @Component({
@@ -21,7 +25,8 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './statistic-camera.component.html',
   styleUrls: ['./statistic-camera.component.scss']
 })
-export class StatisticCameraComponent implements OnInit {
+export class StatisticCameraComponent implements OnInit, OnDestroy {
+
 
   cameraDetail: Camera;
   accountID: string;
@@ -32,6 +37,9 @@ export class StatisticCameraComponent implements OnInit {
 
   // Chart
   selectedValue = null;
+  selectedValueMonth = null;
+  selectedValueDate = null;
+
   timeForm: String;
   timeTo: String;
   modeStatistic: String;
@@ -122,14 +130,15 @@ export class StatisticCameraComponent implements OnInit {
     private cameraDetailService: CameraDetailService,
     private areaService: AreaService,
     private cameraService: CameraService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     const self = this;
-    this.accountID  = localStorage.getItem('accountID');
+    this.accountID = localStorage.getItem('accountID');
 
-    this.modeStatistic = 'month';
+    this.openDialog();
 
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
@@ -139,7 +148,7 @@ export class StatisticCameraComponent implements OnInit {
       'cameraIP': [''],
       'cameraArea': [''],
       'cameraStore': [''],
-      'cameraStatus': [''],
+      // 'cameraStatus': [''],
     });
 
     this.selectTimeForm = this.fb.group({
@@ -151,6 +160,10 @@ export class StatisticCameraComponent implements OnInit {
 
     this.getAllCameraOfAccount(+this.accountID);
 
+  }
+
+  ngOnDestroy(): void {
+    this.dialog.closeAll();
   }
 
   getAllCameraOfAccount(accountID: number) {
@@ -170,10 +183,32 @@ export class StatisticCameraComponent implements OnInit {
         'cameraIP': this.cameraDetailForm.get('cameraIP').value,
         'cameraArea': camera.area.name,
         'cameraStore': camera.area.store.name,
-        'cameraStatus': camera.status
+        // 'cameraStatus': camera.status
       });
       if (this.selectedValue !== null) {
-        if ( this.modeStatistic === 'month' ) {
+        if (this.modeStatistic === 'month') {
+          this.getReportByMonth();
+        } else {
+          this.getReport();
+        }
+      }
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  chooseCameraAfterChoose(ip: String) {
+    const self = this;
+    this.cameraService.getCameraByIP(ip).subscribe((camera) => {
+      this.cameraDetail = camera;
+      this.cameraDetailForm.setValue({
+        'cameraIP': ip,
+        'cameraArea': camera.area.name,
+        'cameraStore': camera.area.store.name,
+        // 'cameraStatus': camera.status
+      });
+      if (this.selectedValue !== null) {
+        if (this.modeStatistic === 'month') {
           this.getReportByMonth();
         } else {
           this.getReport();
@@ -207,7 +242,7 @@ export class StatisticCameraComponent implements OnInit {
     this.lineChartData.length = 0;
     reports.forEach(element => {
       arr.push(element.count);
-      this.lineChartLabels.push(element.time);
+      this.lineChartLabels.push(element.time.split('-')[2] + '-' + element.time.split('-')[1]);
     });
     this.lineChartData.push({
       data: arr,
@@ -221,6 +256,8 @@ export class StatisticCameraComponent implements OnInit {
       this.toastr.warning('Please choose camera !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
+      this.selectedValueDate = this.selectedValue;
+      this.selectedValueMonth = null;
       this.selectTimeForm.setValue({
         'timeFrom': '08:00',
         'timeTo': '20:00'
@@ -238,6 +275,8 @@ export class StatisticCameraComponent implements OnInit {
       this.toastr.warning('Please choose camera !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
+      this.selectedValueMonth = this.selectedValue;
+      this.selectedValueDate = null;
       this.selectTimeForm.get('timeFrom').disable();
       this.selectTimeForm.get('timeTo').disable();
       this.listTimeTo = this.listTimeToRoot;
@@ -319,12 +358,58 @@ export class StatisticCameraComponent implements OnInit {
 
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+      id: this.cameraDetail.id,
+      date: this.selectedValueDate,
+      from: this.lineChartLabels[active[0]['_index']],
+      to: this.lineChartLabels[active[0]['_index'] + 1],
+    };
+
+    const dialogRef = this.dialog.open(ViewHeatmapDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((data) => {
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
   }
 
+  // Dialog
+  openDialog() {
 
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+      id: this.accountID,
+      title: 'camera'
+    };
+
+    setTimeout(() => this.dialog.open(StatisticDialogComponent, dialogConfig).afterClosed().subscribe((data) => {
+      this.modeStatistic = 'day';
+      this.selectedValue = data.date;
+      this.selectedValueDate = this.selectedValue;
+      this.selectTimeForm.setValue({
+        'timeFrom': '08:00',
+        'timeTo': '20:00'
+      });
+      this.selectTimeForm.get('timeFrom').enable();
+      this.selectTimeForm.get('timeTo').enable();
+      this.listTimeTo = this.listTimeToRoot;
+      this.listTimeFrom = this.listTimeFromRoot;
+      this.chooseCameraAfterChoose(data.value);
+    }, (error) => {
+      console.log(error);
+    }));
+  }
 }

@@ -13,36 +13,46 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class AccountController {
 
     @Autowired
     AccountService accountService;
 
     @GetMapping("/account/getAll")
-    public List<Account> getAllAccounts(){
+    public List<Account> getAllAccounts() {
         return accountService.getAllAccount();
     }
 
     @GetMapping("/account/getAccountByCompany/{id}")
-    public List<Account> getAccountByCompany(@PathVariable(value = "id") int id){ return accountService.getAccountByCompany(id); }
+    public List<Account> getAccountByCompany(@PathVariable(value = "id") int id) {
+        return accountService.getAccountByCompany(id);
+    }
 
     @GetMapping("/account/getAllAccountByCompanyNotBelongToThisStore/{comID}/{stoID}")
-    public List<Account> getAllAccountByCompanyNotBelongToThisStore(@PathVariable(value = "comID") int comID, @PathVariable(value = "stoID") int stoID){
+    public List<Account> getAllAccountByCompanyNotBelongToThisStore(@PathVariable(value = "comID") int comID, @PathVariable(value = "stoID") int stoID) {
         return accountService.getAllAccountByCompanyNotBelongToThisStore(comID, stoID);
     }
 
     @GetMapping("/account/getAccountByStore/{id}")
-    public List<Account> getAccountByStore(@PathVariable(value = "id") int id){ return accountService.getAccountByStore(id); }
+    public List<Account> getAccountByStore(@PathVariable(value = "id") int id) {
+        return accountService.getAccountByStore(id);
+    }
 
     @GetMapping("account/getDetail/{id}")
-    public Account getDetailAccount(@PathVariable(value = "id") int id){ return accountService.getDetailAccount(id); }
+    public Account getDetailAccount(@PathVariable(value = "id") int id) {
+        return accountService.getDetailAccount(id);
+    }
 
     @GetMapping("account/getIDByUsername/{username}")
-    public Integer getIDByUsername(@PathVariable(value = "username") String username){ return accountService.getIDByUsername(username); }
+    public Integer getIDByUsername(@PathVariable(value = "username") String username) {
+        return accountService.getIDByUsername(username);
+    }
 
     @GetMapping("/account/search/{searchValue}")
-    public List<Account> searchAccount(@PathVariable(value = "searchValue") String searchValue) { return accountService.getAccountsByUsername(searchValue); }
+    public List<Account> searchAccount(@PathVariable(value = "searchValue") String searchValue) {
+        return accountService.getAccountsByUsername(searchValue);
+    }
 
     @GetMapping("/account/searchInCompany/{searchValue}/{id}")
     public List<Account> searchInCompany(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int companyID) {
@@ -55,10 +65,14 @@ public class AccountController {
     }
 
     @PostMapping("/account/inactive")
-    public boolean inactiveAccount(@RequestBody Account account) { return accountService.inactiveAccount(account); }
+    public boolean inactiveAccount(@RequestBody Account account) {
+        return accountService.inactiveAccount(account);
+    }
 
     @PostMapping("/account/active")
-    public boolean activeAccount(@RequestBody Account account) { return accountService.activeAccount(account); }
+    public boolean activeAccount(@RequestBody Account account) {
+        return accountService.activeAccount(account);
+    }
 
     @PostMapping("/account/update")
     public boolean updateAccount(@RequestBody Account account) {
@@ -82,17 +96,17 @@ public class AccountController {
 
     @PostMapping("/account/changePasswordOfProfile/")
     public boolean changePasswordOfProfile(@RequestParam(name = "accountID") String accountID,
-                                  @RequestParam(name = "oldPass") String oldPass,
-                                  @RequestParam(name = "newPass") String newPass,
-                                  @RequestParam(name = "updatedBy") String updatedBy) {
+                                           @RequestParam(name = "oldPass") String oldPass,
+                                           @RequestParam(name = "newPass") String newPass,
+                                           @RequestParam(name = "updatedBy") String updatedBy) {
         return accountService.changePasswordOfProfile(accountID, oldPass, newPass, updatedBy);
     }
 
     @PostMapping("/account/changePasswordOfAccount/")
     public boolean changePasswordOfAccount(@RequestParam(name = "accountID") String accountID,
-                                  @RequestParam(name = "oldPass") String oldPass,
-                                  @RequestParam(name = "newPass") String newPass,
-                                  @RequestParam(name = "updatedBy") String updatedBy) {
+                                           @RequestParam(name = "oldPass") String oldPass,
+                                           @RequestParam(name = "newPass") String newPass,
+                                           @RequestParam(name = "updatedBy") String updatedBy) {
         return accountService.changePasswordOfAccount(accountID, oldPass, newPass, updatedBy);
     }
 }

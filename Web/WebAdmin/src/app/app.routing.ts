@@ -7,6 +7,7 @@ import { DefaultLayoutComponent } from './containers';
 import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './views/_guards';
 import { LoginComponent } from './views/login/login.component';
+import { CheckCameraComponent } from './views/check-camera/check-camera.component';
 export const routes: Routes = [
   {
     path: '',
@@ -35,6 +36,10 @@ export const routes: Routes = [
       {
         path: 'company',
         loadChildren: './views/company/company.module#CompanyModule'
+      },
+      {
+        path: 'cameras',
+        loadChildren: './views/check-camera/check-camera.module#CheckCameraModule'
       }
     ]
   }

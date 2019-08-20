@@ -18,8 +18,11 @@ export class StreamService {
 
 
   constructor() {
-    this.socket =  socketIo('http://127.0.0.1:5000');
-    this.socket.emit('stream_camera', '1');
+    this.socket =  socketIo('http://192.168.1.11:5000');
+  }
+
+  connect(cameraID: number) {
+    this.socket.emit('stream_camera', '' + cameraID);
   }
 
   // Image -----------------------------------

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, SimpleChanges, OnDestroy } from '@angular/core';
 import { ChartOptions, ChartDataSets } from 'chart.js';
 import { BaseChartDirective, Color } from 'ng2-charts';
 
@@ -16,13 +16,16 @@ import { Area } from '../../models/area.model';
 import { Store } from '../../models/store.model';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 
 @Component({
   selector: 'app-statistic-store',
   templateUrl: './statistic-store.component.html',
   styleUrls: ['./statistic-store.component.scss']
 })
-export class StatisticStoreComponent implements OnInit {
+export class StatisticStoreComponent implements OnInit, OnDestroy {
+
 
   areaDetail: Area;
   storeDetail: Store;
@@ -35,9 +38,15 @@ export class StatisticStoreComponent implements OnInit {
 
   // Chart
   selectedValue = null;
+  selectedValueMonth = null;
+  selectedValueDate = null;
   timeForm: String;
   timeTo: String;
   modeStatistic: String;
+
+  // List
+  listTimeFromRoot = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+  listTimeToRoot = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   // List
   listTime: String[];
@@ -126,19 +135,19 @@ export class StatisticStoreComponent implements OnInit {
     private areaService: AreaService,
     private storeService: StoreService,
     private cameraService: CameraService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     const self = this;
     this.accountID = localStorage.getItem('accountID');
 
-    this.modeStatistic = 'month';
+    this.openDialog();
+
     // tslint:disable-next-line: max-line-length
-    this.listTime = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
-    // tslint:disable-next-line: max-line-length
-    this.listTimeFrom = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
-    this.listTimeTo = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+    this.listTimeFrom = this.listTimeFromRoot;
+    this.listTimeTo = this.listTimeToRoot;
 
     // declare Form
     this.storeDetailForm = this.fb.group({
@@ -149,13 +158,17 @@ export class StatisticStoreComponent implements OnInit {
     });
 
     this.selectTimeForm = this.fb.group({
-      'timeFrom': [this.listTime[0]],
-      'timeTo': [this.listTime[12]]
+      'timeFrom': [this.listTimeFromRoot[0]],
+      'timeTo': [this.listTimeToRoot[12]]
     });
     this.selectTimeForm.get('timeFrom').disable();
     this.selectTimeForm.get('timeTo').disable();
 
     this.getAllStoreOfAccount(+this.accountID);
+  }
+
+  ngOnDestroy(): void {
+    this.dialog.closeAll();
   }
 
   getAllStoreOfAccount(accountID: number) {
@@ -192,9 +205,33 @@ export class StatisticStoreComponent implements OnInit {
     });
   }
 
+  chooseStoreAfterChoose(storeID: number) {
+    const self = this;
+    this.storeService.getStoreByID(storeID).subscribe((store) => {
+      this.storeDetail = store;
+      this.areaService.getAllAreaInStore(this.storeDetail.id).subscribe((areaList) => {
+        this.listArea = areaList;
+      });
+      this.storeDetailForm.setValue({
+        'storeName': this.storeDetail.id,
+        'storeAddress': this.storeDetail.address,
+        'storePhone': this.storeDetail.phone,
+        'storeStatus': this.storeDetail.status,
+      });
+      if (this.selectedValue !== null) {
+        if (this.modeStatistic === 'month') {
+          this.getReportByMonth();
+        } else {
+          this.getReport();
+        }
+      }
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
   bindingChartForDate(reports: any[]) {
     let arr: any[];
-    let time: String;
     let haveValue = false;
     let allDate = [];
     this.lineChartData.length = 0;
@@ -252,7 +289,7 @@ export class StatisticStoreComponent implements OnInit {
     });
     allDate.sort();
     for (let j = 0; j < allDate.length; j++) {
-      this.lineChartLabels.push(allDate[j].split('-')[2]);
+      this.lineChartLabels.push(allDate[j].split('-')[2] + '-' + allDate[j].split('-')[1]);
     }
     for (let i = 0; i < reports.length; i++) {
       arr = [];
@@ -281,12 +318,16 @@ export class StatisticStoreComponent implements OnInit {
       this.toastr.warning('Please choose store !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
+      this.selectedValueDate = this.selectedValue;
+      this.selectedValueMonth = null;
       this.selectTimeForm.setValue({
         'timeFrom': '08:00',
         'timeTo': '20:00',
       });
       this.selectTimeForm.get('timeFrom').enable();
       this.selectTimeForm.get('timeTo').enable();
+      this.listTimeTo = this.listTimeToRoot;
+      this.listTimeFrom = this.listTimeFromRoot;
       this.getReport();
     }
   }
@@ -296,8 +337,12 @@ export class StatisticStoreComponent implements OnInit {
       this.toastr.warning('Please choose store !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
+      this.selectedValueMonth = this.selectedValue;
+      this.selectedValueDate = null;
       this.selectTimeForm.get('timeFrom').disable();
       this.selectTimeForm.get('timeTo').disable();
+      this.listTimeTo = this.listTimeToRoot;
+      this.listTimeFrom = this.listTimeFromRoot;
       this.getReportByMonth();
     }
   }
@@ -307,8 +352,7 @@ export class StatisticStoreComponent implements OnInit {
     const listTimeFlag = Array<String>();
     this.timeForm = this.selectTimeForm.get('timeFrom').value;
     this.timeTo = this.selectTimeForm.get('timeTo').value;
-    this.listTimeTo.length = 0;
-    this.listTime.forEach(element => {
+    this.listTimeFromRoot.forEach(element => {
       if (Number.parseInt(element.split(':')[0]) > Number.parseInt(this.timeForm.split(':')[0])) {
         listTimeFlag.push(element);
       }
@@ -321,8 +365,7 @@ export class StatisticStoreComponent implements OnInit {
     const listTimeFlag = Array<String>();
     this.timeForm = this.selectTimeForm.get('timeFrom').value;
     this.timeTo = this.selectTimeForm.get('timeTo').value;
-    this.listTimeFrom.length = 0;
-    this.listTime.forEach(element => {
+    this.listTimeFromRoot.forEach(element => {
       if (Number.parseInt(element.split(':')[0]) < Number.parseInt(this.timeTo.split(':')[0])) {
         listTimeFlag.push(element);
       }
@@ -376,4 +419,34 @@ export class StatisticStoreComponent implements OnInit {
     console.log(event, active);
   }
 
+  // Dialog
+  openDialog() {
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+      id: this.accountID,
+      title: 'store'
+    };
+
+    setTimeout(() => this.dialog.open(StatisticDialogComponent, dialogConfig).afterClosed().subscribe((data) => {
+      this.modeStatistic = 'day';
+      this.selectedValue = data.date;
+      this.selectedValueDate = this.selectedValue;
+      this.selectTimeForm.setValue({
+        'timeFrom': '08:00',
+        'timeTo': '20:00'
+      });
+      this.selectTimeForm.get('timeFrom').enable();
+      this.selectTimeForm.get('timeTo').enable();
+      this.listTimeTo = this.listTimeToRoot;
+      this.listTimeFrom = this.listTimeFromRoot;
+      this.chooseStoreAfterChoose(data.value);
+    }, (error) => {
+      console.log(error);
+    }));
+  }
 }

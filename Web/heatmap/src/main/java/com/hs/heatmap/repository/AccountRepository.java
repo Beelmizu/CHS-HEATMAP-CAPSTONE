@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account,Integer> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     //Get all Account had role 'Managee'
     @Query("SELECT a FROM Account a WHERE a.role = false")
@@ -31,7 +31,7 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
     Account findAccountByUsername(String name);
 
     @Query("SELECT a.account FROM AccountStore a WHERE a.sto_id = :id")
-    List<Account> findAccountByStore(@Param("id")int id);
+    List<Account> findAccountByStore(@Param("id") int id);
 
     //Find account by company
     @Query("SELECT a FROM Account a WHERE a.cpn_acc_id = :id and a.role = false")
@@ -48,15 +48,15 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
     int deleteAccountInStore(@Param("accountID") int accID, @Param("storeID") int storeID);
 
     @Query("SELECT a FROM Account a JOIN AccountStore s ON a.id = s.acc_id WHERE a.cpn_acc_id = :comID and s.sto_id = :stoID")
-    List<Account> getAllAccountByCompanyBelongToThisStore(@Param("comID")int comID, @Param("stoID")int stoID);
+    List<Account> getAllAccountByCompanyBelongToThisStore(@Param("comID") int comID, @Param("stoID") int stoID);
 
     @Query("SELECT a FROM Account a WHERE " +
             "(LOWER(a.fullName) like %:searchValue% or a.username like %:searchValue%) and a.role = false and a.cpn_acc_id = :companyID")
-    List<Account> getAccountInCompanyByUsernameOrFullname(@Param("searchValue")String searchValue, @Param("companyID")int companyID);
+    List<Account> getAccountInCompanyByUsernameOrFullname(@Param("searchValue") String searchValue, @Param("companyID") int companyID);
 
     @Query("SELECT a FROM Account a JOIN AccountStore s ON a.id = s.acc_id WHERE " +
             "(LOWER(a.fullName) like %:searchValue% or a.username like %:searchValue%) and " +
             "a.role = false and s.sto_id = :stoID")
-    List<Account> getAccountInStoreByUsernameOrFullname(@Param("searchValue")String searchValue, @Param("stoID")int storeID);
+    List<Account> getAccountInStoreByUsernameOrFullname(@Param("searchValue") String searchValue, @Param("stoID") int storeID);
 }
 
