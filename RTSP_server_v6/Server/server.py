@@ -71,7 +71,7 @@ def connected(data):
 	report = ""
 	try:
 		cameras = thread_db.get_all_camera()
-		print(cameras)
+		# print(cameras)
 		for camera in cameras:
 			id_camera = str(camera[0])
 			try:
@@ -104,6 +104,8 @@ def setup_app(app):
 		if camera[2] == "admin":
 			# port_camera = 0
 			print("Start Camera: ", port_camera)
+			rd.set(str(id_camera)+"_RUN", 1)
+			rd.set(str(id_camera)+"_AVAIABLE", 1)
 			thread_camera = threading.Thread(target=run_camera, args=(socketio, rd, id_camera, port_camera,))
 			thread_camera.start()
 			thread_worker = threading.Thread(target=detect_object, args=(socketio, rd, id_camera,))
