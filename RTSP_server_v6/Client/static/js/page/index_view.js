@@ -14,6 +14,7 @@
 		//rtsp://admin:Admin@123@192.168.1.64/1
 		// socket.emit('stream_camera', "1:rtsp://admin:Admin@123@192.168.1.64/1");
 		socket.emit('get_all_camera_status', "");
+		// socket.emit('delete_camera', "1");
 	});
 	//Đón message từ server
 	socket.on('message', function(msg) {

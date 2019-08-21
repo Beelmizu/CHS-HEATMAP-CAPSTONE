@@ -65,7 +65,16 @@ def connected(data):
 			print(e.message)
 		else:
 			print(e)
-
+@socketio.on('delete_camera')
+def connected(data):
+	try:
+		id_camera = str(data)
+		rd.set(str(id_camera)+"_AVAIABLE", 0)
+	except Exception as e:
+		if hasattr(e, 'message'):
+			print(e.message)
+		else:
+			print(e)
 @socketio.on('get_all_camera_status')
 def connected(data):
 	report = ""
