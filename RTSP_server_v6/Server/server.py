@@ -66,7 +66,23 @@ def connected(data):
 		else:
 			print(e)
 
-
+@socketio.on('get_all_camera_status')
+def connected(data):
+	report = ""
+	try:
+		cameras = thread_db.get_all_camera()
+		for camera in cameras:
+			id_camera = str(camera[0])
+			try:
+				status = rd.get(str(id_camera)+"_RUN")
+			except Exception as e:
+				status = 0
+			report = report + id_camera + "," + status.decode() + ";"
+	except Exception as e:
+		if hasattr(e, 'message'):
+			print(e.message)
+		else:
+			print(e)
 def setup_app(app):
 	# port_camera = "rtsp://admin:Admin@123@192.168.1.64/1"
 	# port_camera = "rtsp://admin:Admin@123@14.187.178.200:10554"
