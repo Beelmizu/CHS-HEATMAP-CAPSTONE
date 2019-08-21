@@ -71,13 +71,21 @@ def connected(data):
 	report = ""
 	try:
 		cameras = thread_db.get_all_camera()
+		print(cameras)
 		for camera in cameras:
 			id_camera = str(camera[0])
 			try:
 				status = rd.get(str(id_camera)+"_RUN")
+				if status is not None:
+					status = status.decode()
+				else:
+					status = 0
 			except Exception as e:
 				status = 0
-			report = report + id_camera + "," + status.decode() + ";"
+			status = str(status)
+			report = report + id_camera + "," + status + ";"
+			# print(report)
+		socketio.emit("get_all_camera_status", report)
 	except Exception as e:
 		if hasattr(e, 'message'):
 			print(e.message)

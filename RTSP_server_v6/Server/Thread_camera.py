@@ -34,8 +34,6 @@ from Thread_control import *
 import redis
 
 def run_camera(socketio, rd, id_camera, port_camera):
-    # Flag để biết camera có runable không
-    rd.set(str(id_camera)+"_RUN", 1)
     cam = cv2.VideoCapture(port_camera)
     width = int(cam.get(3)) #width camera
     height = int(cam.get(4)) #height camera
@@ -51,19 +49,24 @@ def run_camera(socketio, rd, id_camera, port_camera):
     image_text = ""
     while True:
         try:
-            retval, image_read = cam.read()
-            # print("image: ",image_read)
-            if image_read is not None:
-                image = cv2.resize(image_read, (new_w, new_h))
-                retval, buffer = cv2.imencode('.jpg', image)
-                jpg_as_text = base64.b64encode(buffer)
-                image_text = str(jpg_as_text, "utf-8")
-                rd.set(str(id_camera), image_text)
-                # save_camera.write(image)
+            check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
+            print("camera run ", check_avaiable.decode())
+            if int(check_avaiable.decode()) == 1:
+                retval, image_read = cam.read()
+                # print("image: ",image_read)
+                if image_read is not None:
+                    image = cv2.resize(image_read, (new_w, new_h))
+                    retval, buffer = cv2.imencode('.jpg', image)
+                    jpg_as_text = base64.b64encode(buffer)
+                    image_text = str(jpg_as_text, "utf-8")
+                    rd.set(str(id_camera), image_text)
+                    # save_camera.write(image)
+                else:
+                    rd.set(str(id_camera)+"_ERROR", image_text)
+                    cam = cv2.VideoCapture(port_camera)
+                time.sleep(0.12)
             else:
-                rd.set(str(id_camera)+"_ERROR", image_text)
-                cam = cv2.VideoCapture(port_camera)
-            time.sleep(0.12)
+                break
         except Exception as e:
             print("--------------------                  ERROR              ------------------------")
             rd.set(str(id_camera)+"_ERROR", image_text)
@@ -99,17 +102,19 @@ def save_video(socketio, rd, id_camera, port_camera):
                 # Xuống dưới chạy
                 print("--------------------------UPLOAD TO CLOUD---------------------------------")
                 break
-            
-            check_flag = rd.get(str(id_camera)+"_RUN")
-            if int(check_flag.decode()) == 1:
-                # Lấy ảnh từ redis và decode
-                image_base64 = rd.get(str(id_camera))
-                # Từ base64 chuyển thành image
-                decoded_data = base64.b64decode(image_base64.decode())
-                np_data = np.fromstring(decoded_data,np.uint8)
-                image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
-                save_camera.write(image)
-            
+            # check xem camera co1 bi5 delete hay khong
+            check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
+            # print("camera run ", check_avaiable.decode())
+            if int(check_avaiable.decode()) == 1:
+                check_flag = rd.get(str(id_camera)+"_RUN")
+                if int(check_flag.decode()) == 1:
+                    # Lấy ảnh từ redis và decode
+                    image_base64 = rd.get(str(id_camera))
+                    # Từ base64 chuyển thành image
+                    decoded_data = base64.b64decode(image_base64.decode())
+                    np_data = np.fromstring(decoded_data,np.uint8)
+                    image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+                    save_camera.write(image)
             time.sleep(0.2)
         except Exception as e:
             if hasattr(e, 'message'):

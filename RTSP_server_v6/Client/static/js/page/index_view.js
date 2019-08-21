@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
 	var socket = io.connect('http://127.0.0.1:5000');
 
@@ -13,6 +13,7 @@ $(document).ready(function() {
 		socket.emit('preview_heatmap', "1;2019-07-16 23:02:31.280025,2019-07-16 23:23:43.259128");
 		//rtsp://admin:Admin@123@192.168.1.64/1
 		// socket.emit('stream_camera', "1:rtsp://admin:Admin@123@192.168.1.64/1");
+		socket.emit('get_all_camera_status', "");
 	});
 	//Đón message từ server
 	socket.on('message', function(msg) {
@@ -27,19 +28,22 @@ $(document).ready(function() {
 		// console.log(image);
 		img.src = `data:image/jpeg;base64,${image}`;
 	});
+	socket.on('get_all_camera_status', (report) => {
+		console.log(report);
+	});
 	socket.on('stream_object', (image) => {
 		img = document.getElementById('frame_2');
-		console.log(image);
+		// console.log(image);
 		img.src = `data:image/png;base64,${image}`;
 	});
 	socket.on('stream_heatmap', (image) => {
 		img = document.getElementById('frame_3');
-		console.log(image);
+		// console.log(image);
 		img.src = `data:image/png;base64,${image}`;
 	});
 	socket.on('preview_heatmap', (image) => {
 		img = document.getElementById('frame_4');
-		console.log(image);
+		// console.log(image);
 		img.src = `data:image/png;base64,${image}`;
 	});
 
