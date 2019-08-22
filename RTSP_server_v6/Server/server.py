@@ -65,6 +65,45 @@ def connected(data):
 			print(e.message)
 		else:
 			print(e)
+@socketio.on('camera_image')
+def connected(data):
+	id_camera = str(data)
+	print("Connect to Camera: "+id_camera)
+	try:
+		image = rd.get(str(id_camera))
+        if image is not None:
+            socketio.emit("stream_object", image.decode())
+	except Exception as e:
+		if hasattr(e, 'message'):
+			print(e.message)
+		else:
+			print(e)
+@socketio.on('heatmap_image')
+def connected(data):
+	id_camera = str(data)
+	print("Connect to Camera: "+id_camera)
+	try:
+		image = rd.get(str(id_camera)+"_HM")
+        if image is not None:
+            socketio.emit("stream_object", image.decode())
+	except Exception as e:
+		if hasattr(e, 'message'):
+			print(e.message)
+		else:
+			print(e)
+@socketio.on('object_image')
+def connected(data):
+	id_camera = str(data)
+	print("Connect to Camera: "+id_camera)
+	try:
+		image = rd.get(str(id_camera)+"_OD")
+        if image is not None:
+            socketio.emit("stream_object", image.decode())
+	except Exception as e:
+		if hasattr(e, 'message'):
+			print(e.message)
+		else:
+			print(e)
 @socketio.on('delete_camera')
 def connected(data):
 	try:
