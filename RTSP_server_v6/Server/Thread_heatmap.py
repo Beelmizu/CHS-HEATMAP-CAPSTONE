@@ -88,6 +88,8 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
         # img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # im_pil = Image.fromarray(img)
         # height, width, channel = image.shape
+        height = "640"
+        width = "320"
         height = rd.get(str(id_camera)+"_HEIGHT")
         if height is not None:
             height = height.decode()
