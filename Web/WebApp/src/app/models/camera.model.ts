@@ -9,6 +9,7 @@ export class Camera  {
     public updatedDate: String;
     public status: String;
     public imageUrl: String;
+    public imagePreview: String;
     public updatedBy: String;
     public areaID: number;
     public area: Area;

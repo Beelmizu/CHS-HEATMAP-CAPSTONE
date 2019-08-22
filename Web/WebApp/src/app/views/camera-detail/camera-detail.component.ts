@@ -64,7 +64,6 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const self = this;
-    this.connectSocket();
     this.listTime = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
     // set value for stream
@@ -80,6 +79,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.connectSocket();
+
     // start stream
     this.getImageData();
     this.getHeatmap();
@@ -88,9 +89,15 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subImg.unsubscribe();
-    this.subHeat.unsubscribe();
-    this.subObject.unsubscribe();
+    if (this.subImg != null) {
+      this.subImg.unsubscribe();
+    }
+    if (this.subHeat != null) {
+      this.subHeat.unsubscribe();
+    }
+    if (this.subObject != null) {
+      this.subObject.unsubscribe();
+    }
     if (this.subPreview != null) {
       this.subPreview.unsubscribe();
     }
@@ -98,7 +105,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   connectSocket() {
     const self = this;
-    this.streamService.connect(this.cameraDetail.id);
+    this.streamService.connect(this.cameraID);
   }
 
   // Socket
@@ -135,7 +142,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   getCameraByID(cameraID): void {
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
-      self.cameraDetail = camera;
+      this.cameraDetail = camera;
       this.previewSrc =  this.cameraDetail.imageUrl;
     }, (error) => {
       console.log(error);

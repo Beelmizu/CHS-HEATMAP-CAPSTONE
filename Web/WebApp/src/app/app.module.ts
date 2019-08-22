@@ -48,6 +48,7 @@ import { ToastrModule } from 'ngx-toastr';
 import {MatDialogModule} from '@angular/material';
 import { StatisticDialogComponent } from './views/statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogComponent } from './views/view-heatmap-dialog/view-heatmap-dialog.component';
+import { ViewHeatmapDialogAreaComponent } from './views/view-heatmap-dialog-area/view-heatmap-dialog-area.component';
 
 @NgModule({
   imports: [

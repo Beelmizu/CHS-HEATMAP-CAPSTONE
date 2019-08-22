@@ -52,6 +52,7 @@ import {DataTableModule} from 'angular-6-datatable';
 import { PaginationModule } from 'ngx-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { CheckCameraComponent } from './views/check-camera/check-camera.component';
 // Import other service
 @NgModule({
   imports: [

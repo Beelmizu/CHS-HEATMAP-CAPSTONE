@@ -34,7 +34,6 @@ export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCameraByID(this.cameraID);
-    this.connectSocket();
   }
 
   ngOnDestroy(): void {
@@ -45,13 +44,15 @@ export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
 
   connectSocket() {
     const self = this;
-    this.streamService.connect(this.cameraID);
+    // this.streamService.connect(this.cameraID);
   }
   getCameraByID(cameraID): void {
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       self.cameraDetail = camera;
       this.previewSrc = this.cameraDetail.imageUrl;
+      this.getPreviewHeatmap();
+
     }, (error) => {
       console.log(error);
     });
@@ -61,7 +62,7 @@ export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  getPreviewHeatmap(start: String, end: String) {
+  getPreviewHeatmap() {
     const self = this;
     this.subPreview = this.streamService.getPreviewHeatmap(this.cameraID, this.date, this.from, this.to).subscribe((preview) => {
       this.previewHeatmapSrc = `data:image/png;base64,${preview}`;

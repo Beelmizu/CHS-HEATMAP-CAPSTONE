@@ -236,7 +236,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<List<Report>> getReportAreaByTime(String date, int areaID, String timeFrom, String timeTo) {
-        List<Camera> cameras = cameraRepository.getCameraByArea(areaID);
+        List<Camera> cameras = cameraRepository.findActiveCameraByAreaID(areaID);
         List<List<Report>> result = new ArrayList<>();
         List<Report> flag;
         if (cameras != null) {
