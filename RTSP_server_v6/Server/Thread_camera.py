@@ -46,12 +46,11 @@ def run_camera(socketio, rd, id_camera, port_camera):
     thread_camera.start()
     thread_control = threading.Thread(target=check_error_camera, args=(socketio, rd, id_camera,))
     thread_control.start()
-    image_text = ""
+    image_text = None
     while True:
         try:
             check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
             # print("camera run ", check_avaiable.decode())
-            image_text = None
             if int(check_avaiable.decode()) == 1:
                 retval, image_read = cam.read()
                 # print("image: ",image_read)
