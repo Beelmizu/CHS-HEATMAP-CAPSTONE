@@ -51,6 +51,7 @@ def run_camera(socketio, rd, id_camera, port_camera):
         try:
             check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
             # print("camera run ", check_avaiable.decode())
+            image_text = None
             if int(check_avaiable.decode()) == 1:
                 retval, image_read = cam.read()
                 # print("image: ",image_read)
