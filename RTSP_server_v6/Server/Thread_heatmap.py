@@ -88,10 +88,10 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
         # img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # im_pil = Image.fromarray(img)
         # height, width, channel = image.shape
-        height = rd.get(str(id_camera)+"HEIGHT")
+        height = rd.get(str(id_camera)+"_HEIGHT")
         if height is not None:
             height = height.decode()
-            width = rd.get(str(id_camera)+"WIDTH")
+            width = rd.get(str(id_camera)+"_WIDTH")
             if width is not None:
                 width = width.decode()
                 save_background_location = "./Server_data/Background/"+ width +"x" + height + ".png"
