@@ -86,48 +86,54 @@ def save_video(socketio, rd, id_camera, port_camera):
     # print(start_time)
     # print(upload_time)
     upload_time = upload_time.replace(hour=0, minute=0, second=0, microsecond=0)
-    image_base64 = rd.get(str(id_camera))
-    if image_base64 is not None:
-        # Từ base64 chuyển thành image
-        decoded_data = base64.b64decode(image_base64.decode())
-        np_data = np.fromstring(decoded_data,np.uint8)
-        image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
-        height, width, channel = image.shape
-        save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),5, (width, height))
-        while True:
-            try:
-                start_time = datetime.datetime.now()
-                # print(start_time)
-                # print(upload_time)
-                if start_time > upload_time:
-                    # Xuống dưới chạy
-                    print("--------------------------UPLOAD TO CLOUD---------------------------------")
-                    break
-                # check xem camera co1 bi5 delete hay khong
-                check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
-                # print("camera run ", check_avaiable.decode())
-                if int(check_avaiable.decode()) == 1:
-                    check_flag = rd.get(str(id_camera)+"_RUN")
-                    if int(check_flag.decode()) == 1:
-                        # Lấy ảnh từ redis và decode
-                        image_base64 = rd.get(str(id_camera))
-                        # Từ base64 chuyển thành image
-                        if image_base64 is not None:
-                            decoded_data = base64.b64decode(image_base64.decode())
-                            np_data = np.fromstring(decoded_data,np.uint8)
-                            image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
-                            save_camera.write(image)
-                time.sleep(0.2)
-            except Exception as e:
-                if hasattr(e, 'message'):
-                    print(e.message)
-                else:
-                    print(e)
-                pass
-        print("Camera have been stop.")
-        time.sleep(1)
-        upload = threading.Thread(target=upload_to_cloud, args=(socketio, rd, id_camera, port_camera,))
-        upload.start()
+    # image_base64 = rd.get(str(id_camera))
+    # if image_base64 is not None:
+    #     # Từ base64 chuyển thành image
+    #     decoded_data = base64.b64decode(image_base64.decode())
+    #     np_data = np.fromstring(decoded_data,np.uint8)
+    #     image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+    #     height, width, channel = image.shape
+    height = rd.get(str(id_camera)+"_HEIGHT")
+    if height is not None:
+        height = height.decode()
+        width = rd.get(str(id_camera)+"_WIDTH")
+        if width is not None:
+            width = width.decode()
+            save_camera = cv2.VideoWriter(save_file_location, cv2.VideoWriter_fourcc(*'MJPG'),5, (int(width), int(height)))
+            while True:
+                try:
+                    start_time = datetime.datetime.now()
+                    # print(start_time)
+                    # print(upload_time)
+                    if start_time > upload_time:
+                        # Xuống dưới chạy
+                        print("--------------------------UPLOAD TO CLOUD---------------------------------")
+                        break
+                    # check xem camera co1 bi5 delete hay khong
+                    check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
+                    # print("camera run ", check_avaiable.decode())
+                    if int(check_avaiable.decode()) == 1:
+                        check_flag = rd.get(str(id_camera)+"_RUN")
+                        if int(check_flag.decode()) == 1:
+                            # Lấy ảnh từ redis và decode
+                            image_base64 = rd.get(str(id_camera))
+                            # Từ base64 chuyển thành image
+                            if image_base64 is not None:
+                                decoded_data = base64.b64decode(image_base64.decode())
+                                np_data = np.fromstring(decoded_data,np.uint8)
+                                image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+                                save_camera.write(image)
+                    time.sleep(0.2)
+                except Exception as e:
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    pass
+            print("Camera have been stop.")
+            time.sleep(1)
+            upload = threading.Thread(target=upload_to_cloud, args=(socketio, rd, id_camera, port_camera,))
+            upload.start()
 
 def create_dir(file_path):
     directory = os.path.dirname(file_path)
