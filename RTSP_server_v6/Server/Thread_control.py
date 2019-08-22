@@ -7,7 +7,7 @@ import redis
 def check_error_camera(socketio,rd, id_camera,):
     while True:
         try:
-            time.sleep(60)
+            time.sleep(5)
             # check xem camera co1 bi5 delete hay khong
             check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
             if int(check_avaiable.decode()) == 1:
