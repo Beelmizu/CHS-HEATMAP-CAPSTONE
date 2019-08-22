@@ -72,7 +72,7 @@ def connected(data):
 	try:
 		image = rd.get(str(id_camera))
         if image is not None:
-            socketio.emit("stream_object", image.decode())
+            socketio.emit("stream_camera", image.decode())
 	except Exception as e:
 		if hasattr(e, 'message'):
 			print(e.message)
@@ -85,7 +85,7 @@ def connected(data):
 	try:
 		image = rd.get(str(id_camera)+"_HM")
         if image is not None:
-            socketio.emit("stream_object", image.decode())
+            socketio.emit("stream_heatmap", image.decode())
 	except Exception as e:
 		if hasattr(e, 'message'):
 			print(e.message)
