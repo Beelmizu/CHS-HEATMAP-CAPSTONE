@@ -15,10 +15,11 @@ def check_error_camera(socketio,rd, id_camera,):
                 # Check ảnh lúc lỗi và ảnh hiện tại có trùng không để nhận biết việc camera chết
                 image_base64 = rd.get(str(id_camera))
                 image_error = rd.get(str(id_camera)+"_ERROR")
-                if image_error is not None:
-                    if image_base64.decode() == image_error.decode():
-                        check_flag = 0
-                rd.set(str(id_camera)+"_RUN", check_flag)
+                if image_base64 is not None:
+                    if image_error is not None:
+                        if image_base64.decode() == image_error.decode():
+                            check_flag = 0
+                    rd.set(str(id_camera)+"_RUN", check_flag)
             else:
                 break
         except Exception as e:
