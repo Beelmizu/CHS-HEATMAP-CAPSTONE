@@ -110,7 +110,7 @@ def detect_object(socketio, rd, id_camera):
                         if int(check_flag.decode()) == 1:
                             # Lấy ảnh từ redis và decode
                             image_base64 = rd.get(str(id_camera))
-                            if image_base is not None:
+                            if image_base64 is not None:
                                 # Từ base64 chuyển thành image
                                 decoded_data = base64.b64decode(image_base64.decode())
                                 np_data = np.fromstring(decoded_data,np.uint8)
