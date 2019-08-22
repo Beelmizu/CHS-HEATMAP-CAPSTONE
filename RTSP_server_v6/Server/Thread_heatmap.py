@@ -75,9 +75,9 @@ def draw_heatmap(socketio, rd, id_camera, matrix_heatmap, box, width, height, cu
 
 def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
     try:
-        matrix_heatmap = []
-        db = threading.Thread(target=thread_db.get_preview_heatmap, args=(matrix_heatmap, id_camera, start_date, end_date,))
-        db.start()
+        matrix_heatmap = thread_db.get_preview_heatmap(id_camera, start_date, end_date,)
+        # db = threading.Thread(target=thread_db.get_preview_heatmap, args=(matrix_heatmap, id_camera, start_date, end_date,))
+        # db.start()
         # image_base64 = rd.get(str(id_camera))
         # # Từ base64 chuyển thành image
         # decoded_data = base64.b64decode(image_base64.decode())
@@ -88,22 +88,24 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
         # img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # im_pil = Image.fromarray(img)
         # height, width, channel = image.shape
-        HEIGHT = "640"
-        WIDTH = "320"
+        height = "320"
+        width = "640"
 
-        height = rd.get(str(id_camera)+"_HEIGHT")
-        if height is not None:
-            height = height.decode()
-        else:
-            height = HEIGHT
+        # height = rd.get(str(id_camera)+"_HEIGHT")
+        # if height is not None:
+        #     height = height.decode()
+        # else:
+        #     height = HEIGHT
 
-        width = rd.get(str(id_camera)+"_WIDTH")
-        if width is not None:
-            width = width.decode()
-        else:
-            width = WIDTH
+        # width = rd.get(str(id_camera)+"_WIDTH")
+        # if width is not None:
+        #     width = width.decode()
+        # else:
+        #     width = WIDTH
             
         save_background_location = "./Server_data/Background/"+ width +"x" + height + ".png"
+        print("Matrix: ", matrix_heatmap)
+        print(save_background_location)
         try:
             background = Image.open(save_background_location)
         except:
