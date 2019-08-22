@@ -137,7 +137,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     const self = this;
     this.accountID = localStorage.getItem('accountID');
 
-    // this.openDialog();
+    this.openDialog();
 
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
@@ -407,12 +407,10 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(active);
-    let listCamera: number[];
-    if (active.length > 0  && this.modeStatistic === 'day') {
-      for (let i = 0; i < active.length; i++) {
-        this.listCamera.push(active[i]['$datalabels']['$context']['dataset']['label'].split(':')[1]);
-      }
+
+    if (active.length > 0 && this.modeStatistic === 'day') {
+      const from = this.lineChartLabels[active[0]['_index']];
+      const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();
 
       dialogConfig.disableClose = true;
@@ -420,10 +418,9 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
       dialogConfig.data = {
         idArea: this.areaDetail.id,
-        listCamera: this.listCamera,
         date: this.selectedValueDate,
-        from: this.lineChartLabels[active[0]['_index']],
-        to: this.lineChartLabels[active[0]['_index'] + 1],
+        from: from,
+        to: to
       };
 
       const dialogRef = this.dialog.open(ViewHeatmapDialogAreaComponent, dialogConfig);
@@ -432,10 +429,9 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
       }, (error) => {
         console.log(error);
       });
-      console.log(active[0]['$datalabels']['$context']['dataset']['label'].split(':')[1]);
     }
   }
-  
+
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);

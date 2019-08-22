@@ -18,16 +18,23 @@ export class StreamService {
 
 
   constructor() {
-    this.socket =  socketIo('http://127.0.0.1:5000');
+    this.socket = socketIo('http://127.0.0.1:5000');
   }
 
   connect(cameraID: number) {
     this.socket.emit('stream_camera', '' + cameraID);
   }
 
+  disconnect() {
+    this.socket.emit('stop_stream', function () {
+      console.log('Connection disconnected');
+    });
+  }
+
+
   // Image -----------------------------------
-  getImgSrc(): Observable<any> {
-    this.socket.on('stream_camera', (image) => {
+  getImgSrc(id: number): Observable<any> {
+    this.socket.on('stream_camera_' + id, (image) => {
       this.observerImg.next(image);
     });
 
@@ -41,8 +48,8 @@ export class StreamService {
   }
 
   // Heatmap -----------------------------
-  getHeatmapSrc(): Observable<any> {
-    this.socket.on('stream_heatmap', (heatmap) => {
+  getHeatmapSrc(id: number): Observable<any> {
+    this.socket.on('stream_heatmap_' + id, (heatmap) => {
       this.observerHeatmap.next(heatmap);
     });
 
@@ -56,8 +63,8 @@ export class StreamService {
   }
 
   // Object ------------------------------
-  getObjectSrc(): Observable<any> {
-    this.socket.on('stream_object', (object) => {
+  getObjectSrc(id: number): Observable<any> {
+    this.socket.on('stream_object_' + id, (object) => {
       this.observerObject.next(object);
     });
 

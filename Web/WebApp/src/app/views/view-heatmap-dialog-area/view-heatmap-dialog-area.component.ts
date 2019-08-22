@@ -5,6 +5,7 @@ import { StreamService } from '../../services/stream.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CameraService } from '../../services/camera.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-heatmap-dialog-area',
@@ -16,7 +17,6 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
 
   date: any;
   listCameraDetail: Camera[];
-  listCamera: number[];
   cameraID: number;
   areaID: number;
   from: any;
@@ -33,7 +33,6 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) data) {
     this.date = data.date;
     this.areaID = data.idArea;
-    this.listCamera = data.listCamera;
     this.from = data.from;
     this.to = data.to;
   }
@@ -48,26 +47,36 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
 
   getCameraByID(): void {
     const self = this;
+    let listCameraToView: Camera[];
     this.cameraService.getAllCameraInArea(this.areaID).subscribe((cameras) => {
       this.listCameraDetail = cameras;
+      listCameraToView = cameras;
+      for (let i = 0; i < listCameraToView.length; i++) {
+
+        this.streamService.getPreviewHeatmap(listCameraToView[i].id, this.date, this.from, this.to).pipe(
+          first()
+        ).subscribe(
+          preview => { this.listCameraDetail[i].imagePreview = `data:image/png;base64,${preview}`;
+          console.log(this.listCameraDetail[i].id + '---' + this.listCameraDetail[i].imagePreview);
+         });
+      }
     }, (error) => {
       console.log(error);
     });
-    for (let i = 0; i < this.listCameraDetail.length; i++) {
-      this.streamService.getPreviewHeatmap(this.listCameraDetail[i].id, this.date, this.from, this.to).subscribe((preview) => {
-        this.listCameraDetail[i].imagePreview = `data:image/png;base64,${preview}`;
-      });
-    }
   }
 
   close() {
     this.dialogRef.close();
   }
 
-  getPreviewHeatmap() {
+  getPreviewHeatmap(id: number) {
     const self = this;
-    this.subPreview = this.streamService.getPreviewHeatmap(this.cameraID, this.date, this.from, this.to).subscribe((preview) => {
+    console.log(id);
+    console.log(this.date);
+
+    this.subPreview = this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to).subscribe((preview) => {
       this.previewHeatmapSrc = `data:image/png;base64,${preview}`;
+      console.log(`data:image/png;base64,${preview}`);
     });
   }
 }

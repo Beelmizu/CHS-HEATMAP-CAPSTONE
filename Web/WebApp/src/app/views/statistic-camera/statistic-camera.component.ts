@@ -361,6 +361,8 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
 
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
     if (active.length > 0 && this.modeStatistic === 'day') {
+      const from = this.lineChartLabels[active[0]['_index']];
+      const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();
 
       dialogConfig.disableClose = true;
@@ -369,8 +371,8 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
       dialogConfig.data = {
         id: this.cameraDetail.id,
         date: this.selectedValueDate,
-        from: this.lineChartLabels[active[0]['_index']],
-        to: this.lineChartLabels[active[0]['_index'] + 1],
+        from: from,
+        to: to,
       };
 
       const dialogRef = this.dialog.open(ViewHeatmapDialogComponent, dialogConfig);
