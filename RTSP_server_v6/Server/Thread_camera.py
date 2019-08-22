@@ -71,8 +71,6 @@ def run_camera(socketio, rd, id_camera, port_camera):
             else:
                 break
         except Exception as e:
-            print("--------------------                  ERROR              ------------------------")
-            rd.set(str(id_camera)+"_ERROR", image_text)
             if hasattr(e, 'message'):
                 print(e.message)
             else:

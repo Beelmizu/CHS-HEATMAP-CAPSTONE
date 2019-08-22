@@ -106,7 +106,7 @@ def detect_object(socketio, rd, id_camera):
                     if int(check_avaiable.decode()) == 1:
                         # Lấy flag để xem camera có chết không
                         check_flag = rd.get(str(id_camera)+"_RUN")
-                        status = "camera " + str(id_camera) + ":" + check_flag.decode()
+                        status = "camera " + str(id_camera) + ": " + check_flag.decode()
                         print(status)
                         if int(check_flag.decode()) == 1:
                             # Lấy ảnh từ redis và decode
@@ -193,9 +193,11 @@ def detect_object(socketio, rd, id_camera):
                                     #font chữ load ở bên trên
                                     dr.text((250, 10),"Person: " + str(count_number),(0,255,0), font=font)
                                     # Lấy kết quả của nhận dạng gender vs age
-                                    face_re = rd.get(str(id_camera) + "_FR").decode()
-                                    if face_re == None:
+                                    face_re = rd.get(str(id_camera) + "_FR")
+                                    if face_re is None:
                                         face_re = "Loading..."
+                                    else:
+                                        face_re = face_re.decode()
                                     dr.text((250, 30),face_re,(0,255,0), font=font_face_re)
                                     heatmap_time = datetime.datetime.now()
                                     # print(upload_time)
