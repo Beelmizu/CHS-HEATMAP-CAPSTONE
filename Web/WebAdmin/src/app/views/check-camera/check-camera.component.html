@@ -55,10 +55,10 @@
             <td>{{camera.account}}</td>
             <td>{{camera.area.name}}</td>
             <td>{{camera.area.store.name}}</td>
-            <td *ngIf="camera.status == ''" id="status">
+            <td *ngIf="camera.status == '1'" id="status">
               <span class="badge badge-success">Connected</span>
             </td>
-            <td *ngIf="camera.status != ''" id="status">
+            <td *ngIf="camera.status != '1'" id="status">
               <span class="badge badge-danger">Disconnected</span>
             </td>
           </tr>

@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { SocketConnectService } from '../../services/socket-connect.service';
+
 import { CommonModule } from '@angular/common';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +25,6 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     FilterPipeModule
   ],
   declarations: [ CheckCameraComponent ],
-  providers: [  ]
+  providers: [ SocketConnectService ]
 })
 export class CheckCameraModule { }

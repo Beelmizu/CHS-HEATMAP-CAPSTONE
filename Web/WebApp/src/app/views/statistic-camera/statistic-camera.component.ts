@@ -224,6 +224,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     let arr = [];
     let time: String;
     this.lineChartData.length = 0;
+
     reports.forEach(element => {
       arr.push(element.count);
       time = element.time.split(' ')[1].split(':')[0] + ':' + element.time.split(' ')[1].split(':')[1];
@@ -357,25 +358,28 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   }
 
   // events Chart
+
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    const dialogConfig = new MatDialogConfig();
+    if (active.length > 0 && this.modeStatistic === 'day') {
+      const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
 
-    dialogConfig.data = {
-      id: this.cameraDetail.id,
-      date: this.selectedValueDate,
-      from: this.lineChartLabels[active[0]['_index']],
-      to: this.lineChartLabels[active[0]['_index'] + 1],
-    };
+      dialogConfig.data = {
+        id: this.cameraDetail.id,
+        date: this.selectedValueDate,
+        from: this.lineChartLabels[active[0]['_index']],
+        to: this.lineChartLabels[active[0]['_index'] + 1],
+      };
 
-    const dialogRef = this.dialog.open(ViewHeatmapDialogComponent, dialogConfig);
+      const dialogRef = this.dialog.open(ViewHeatmapDialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe((data) => {
-    }, (error) => {
-      console.log(error);
-    });
+      dialogRef.afterClosed().subscribe((data) => {
+      }, (error) => {
+        console.log(error);
+      });
+    }
   }
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {

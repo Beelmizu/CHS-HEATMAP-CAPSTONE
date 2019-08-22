@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { SocketConnectService } from '../../services/socket-connect.service';
 import { CommonModule } from '@angular/common';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { NgModel } from '@angular/forms/src/directives/ng_model';
@@ -17,6 +18,6 @@ import { CameraDetailService } from '../../services/camera-detail.service';
     BsDropdownModule.forRoot()
   ],
   declarations: [ CameraDetailComponent ],
-  providers: [ CameraDetailService ]
+  providers: [ CameraDetailService, SocketConnectService]
 })
 export class CameraDetailModule { }

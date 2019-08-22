@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+// import { SocketConnectService } from '../../services/socket-connect.service';
 import { Camera } from '../../models/camera.model';
 import { Area } from '../../models/area.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AreaService } from '../../services/area.service';
+import { SocketConnectService } from '../../services/socket-connect.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -33,6 +35,8 @@ export class CameraDetailComponent implements OnInit {
 
   constructor(
     private router: Router,
+    // private socketService: SocketConnectService,
+    private socketService: SocketConnectService,
     private cameraDetailService: CameraDetailService,
     private areaService: AreaService,
     private fb: FormBuilder,
@@ -110,6 +114,7 @@ export class CameraDetailComponent implements OnInit {
       this.cameraDetailService.deleteCamera(this.cameraDetail.id).subscribe((message) => {
         if (message) {
           this.toastr.success('Delete ' + this.cameraDetail.ip + ' successfully !', 'Success');
+          this.socketService.deleteCamera(this.cameraDetail.id);
           this.location.back();
         } else {
           this.toastr.error('Delete ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
@@ -164,12 +169,17 @@ export class CameraDetailComponent implements OnInit {
     const reader = new FileReader();
 
     reader.addEventListener('load', (event: any) => {
-
+      // window.alert(event.target.files[0]);
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.url = this.selectedFile.src;
     });
 
     reader.readAsDataURL(file);
+  }
+
+  uploadFile(event) {
+    console.log(event);
+    window.alert(event.value);
   }
 
 

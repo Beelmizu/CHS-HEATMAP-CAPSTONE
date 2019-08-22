@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CameraService } from '../../services/camera.service';
 import { Camera } from '../../models/camera.model';
 import { Pipe, PipeTransform } from '@angular/core';
 import * as $ from 'jquery';
 import 'datatables.net';
+import { SocketConnectService } from '../../services/socket-connect.service';
 import { DataTable } from 'angular-6-datatable';
+import { Subscription, Observable } from 'rxjs';
+import { timer } from 'rxjs';
+
 @Component({
   selector: 'app-check-camera',
   templateUrl: './check-camera.component.html',
@@ -14,13 +18,12 @@ import { DataTable } from 'angular-6-datatable';
 @Pipe({
   name: 'FilterPipe',
 })
-export class CheckCameraComponent implements OnInit, PipeTransform {
-
-
+export class CheckCameraComponent implements OnInit, PipeTransform, OnDestroy {
 
   cameras: Camera[];
   dt: DataTable;
   selectedOption: number;
+  stringStatus: string;
   totalItems: number;
   searchText;
   selectedEntities: any[];
@@ -28,12 +31,66 @@ export class CheckCameraComponent implements OnInit, PipeTransform {
   end = 5;
   cameraFilter: any = { area: { store: { name: '' } } };
 
-  constructor(private cameraService: CameraService) { }
+  subStatus: Subscription;
+
+  constructor(
+    private cameraService: CameraService,
+    private socketService: SocketConnectService
+  ) { }
 
   ngOnInit() {
     this.selectedOption = 5;
-    this.getCamera();
+    this.getAllCamera();
   }
+
+  ngOnDestroy(): void {
+    if (this.subStatus != null) {
+      this.subStatus.unsubscribe();
+    }
+  }
+
+  getAllCamera() {
+    const self = this;
+    let listCamera: Camera[];
+    this.cameraService.getAllCamera().subscribe((cameraList) => {
+      listCamera = cameraList;
+      setInterval(() => this.getAllCameraStatus(listCamera), 5000);
+    }, (error) => {
+      console.log(error);
+    });
+
+    // while (true) {
+    //   this.getAllCameraStatus(listCamera);
+    //   this.wait(5000);
+    // }
+  }
+
+  wait(ms) {
+    var start = new Date().getTime();
+    var end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+    }
+  }
+  getAllCameraStatus(list: Camera[]): void {
+    const self = this;
+    this.stringStatus = '';
+
+    this.subStatus = this.socketService.getAllStatus().subscribe((status) => {
+      this.stringStatus = status;
+      let listStatus = this.stringStatus.split(';');
+      for (let i = 0; i < list.length; i++) {
+        for (let j = 0; j < listStatus.length; j++) {
+          if (+listStatus[j].split(',')[0] === list[i].id) {
+            list[i].status = listStatus[j].split(',')[1];
+          }
+        }
+      }
+    });
+    this.cameras = list;
+  }
+
+
 
   transform(value: any, input: string) {
     window.alert(input);
@@ -51,15 +108,6 @@ export class CheckCameraComponent implements OnInit, PipeTransform {
     this.cameraService.getAllCameraByPage(page - 1).subscribe((res) => {
       this.cameras = res.content;
       this.totalItems = res.totalElements;
-    }, (error) => {
-      console.log(error);
-    });
-  }
-
-  getCamera(): void {
-    const self = this;
-    this.cameraService.getAllCamera().subscribe((cameraList) => {
-      this.cameras = cameraList;
     }, (error) => {
       console.log(error);
     });

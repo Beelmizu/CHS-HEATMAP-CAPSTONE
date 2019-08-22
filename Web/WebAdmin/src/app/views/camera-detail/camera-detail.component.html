@@ -101,6 +101,7 @@
           <div class="col-md-9">
             <img [src]="url" height="200" *ngIf="url !== 'empty'"> <br />
             <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)" id="btnChooseFile">
+            <!-- <input type="file" (change)="uploadFile($event)" > -->
           </div>
         </div>
 

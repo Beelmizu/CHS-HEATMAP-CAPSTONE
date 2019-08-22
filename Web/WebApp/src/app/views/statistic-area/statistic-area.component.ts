@@ -16,6 +16,7 @@ import { Area } from '../../models/area.model';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
+import { ViewHeatmapDialogAreaComponent } from '../view-heatmap-dialog-area/view-heatmap-dialog-area.component';
 
 @Component({
   selector: 'app-statistic-area',
@@ -136,7 +137,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     const self = this;
     this.accountID = localStorage.getItem('accountID');
 
-    this.openDialog();
+    // this.openDialog();
 
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
@@ -406,8 +407,35 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
+    console.log(active);
+    let listCamera: number[];
+    if (active.length > 0  && this.modeStatistic === 'day') {
+      for (let i = 0; i < active.length; i++) {
+        this.listCamera.push(active[i]['$datalabels']['$context']['dataset']['label'].split(':')[1]);
+      }
+      const dialogConfig = new MatDialogConfig();
+
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+
+      dialogConfig.data = {
+        idArea: this.areaDetail.id,
+        listCamera: this.listCamera,
+        date: this.selectedValueDate,
+        from: this.lineChartLabels[active[0]['_index']],
+        to: this.lineChartLabels[active[0]['_index'] + 1],
+      };
+
+      const dialogRef = this.dialog.open(ViewHeatmapDialogAreaComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe((data) => {
+      }, (error) => {
+        console.log(error);
+      });
+      console.log(active[0]['$datalabels']['$context']['dataset']['label'].split(':')[1]);
+    }
   }
+  
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
