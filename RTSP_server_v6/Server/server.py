@@ -49,16 +49,25 @@ def connected(data):
 	# print("End day",end)
 	camera = threading.Thread(target=preview_heatmap, args=(socketio, rd, id_camera, start, end))
 	camera.start()
+@socketio.on('stop_stream')
+def connected():
+	id_client = request.sid
+	print("id stop connect:", id_client)
+	rd.set("CLIENT_" + id_client, 0)
+
 @socketio.on('stream_camera')
 def connected(data):
 	id_camera = str(data)
-	print("Connect to Camera: "+id_camera)
+	print("Connect to Camera: " + id_camera)
+	id_client = request.sid
+	print("id connect: ", id_client)
 	try:
-		camera = threading.Thread(target=get_frame_camera, args=(socketio, rd, id_camera,))
+		rd.set("CLIENT_" + id_client, 1)
+		camera = threading.Thread(target=get_frame_camera, args=(socketio, rd, id_camera, id_client,))
 		camera.start()
-		camera_OD = threading.Thread(target=get_object_detection, args=(socketio, rd, id_camera,))
+		camera_OD = threading.Thread(target=get_object_detection, args=(socketio, rd, id_camera, id_client,))
 		camera_OD.start()
-		camera_HM = threading.Thread(target=get_heatmap, args=(socketio, rd, id_camera,))
+		camera_HM = threading.Thread(target=get_heatmap, args=(socketio, rd, id_camera, id_client))
 		camera_HM.start()
 	except Exception as e:
 		if hasattr(e, 'message'):
