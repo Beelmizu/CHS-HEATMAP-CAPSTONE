@@ -88,29 +88,36 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
         # img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # im_pil = Image.fromarray(img)
         # height, width, channel = image.shape
-        height = "640"
-        width = "320"
+        HEIGHT = "640"
+        WIDTH = "320"
+
         height = rd.get(str(id_camera)+"_HEIGHT")
         if height is not None:
             height = height.decode()
-            width = rd.get(str(id_camera)+"_WIDTH")
-            if width is not None:
-                width = width.decode()
-                save_background_location = "./Server_data/Background/"+ width +"x" + height + ".png"
-                try:
-                    background = Image.open(save_background_location)
-                except:
-                    background_image = Image.new('RGBA', (int(width), int(height)), (255,255,255,0))
-                    background_image.save(save_background_location)
-                    background = Image.open(save_background_location)
-                heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
-                    
-                buffered = BytesIO()
-                heatmap.save(buffered, format="PNG")
-                img_str = base64.b64encode(buffered.getvalue())
-                socketio.emit('preview_heatmap', img_str.decode())
-                # Garbage collection
-                # gc.collect()
+        else:
+            height = HEIGHT
+
+        width = rd.get(str(id_camera)+"_WIDTH")
+        if width is not None:
+            width = width.decode()
+        else:
+            width = WIDTH
+            
+        save_background_location = "./Server_data/Background/"+ width +"x" + height + ".png"
+        try:
+            background = Image.open(save_background_location)
+        except:
+            background_image = Image.new('RGBA', (int(width), int(height)), (255,255,255,0))
+            background_image.save(save_background_location)
+            background = Image.open(save_background_location)
+        heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
+                
+        buffered = BytesIO()
+        heatmap.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue())
+        socketio.emit('preview_heatmap', img_str.decode())
+        # Garbage collection
+        # gc.collect()
     except Exception as e:
         if hasattr(e, 'message'):
             print(e.message)
