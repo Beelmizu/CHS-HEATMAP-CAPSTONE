@@ -62,10 +62,7 @@ def run_camera(socketio, rd, id_camera, port_camera):
                     rd.set(str(id_camera), image_text)
                     # save_camera.write(image)
                 else:
-                    if image_text is None:
-                        rd.set(str(id_camera)+"_RUN", 0)
-                    else:
-                        rd.set(str(id_camera)+"_ERROR", image_text)
+                    rd.delete(str(id_camera))
                     cam = cv2.VideoCapture(port_camera)
                 time.sleep(0.12)
             else:
