@@ -42,6 +42,8 @@ def run_camera(socketio, rd, id_camera, port_camera):
     new_w=width//2
     new_h = int(new_h)
     new_w = int(new_w)
+    rd.set(str(id_camera)+"_WIDTH", new_w)
+    rd.set(str(id_camera)+"_HEIGHT", new_h)
     thread_camera = threading.Thread(target=save_video, args=(socketio, rd, id_camera, port_camera,))
     thread_camera.start()
     thread_control = threading.Thread(target=check_error_camera, args=(socketio, rd, id_camera,))
