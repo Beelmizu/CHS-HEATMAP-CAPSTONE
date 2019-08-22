@@ -106,7 +106,8 @@ def detect_object(socketio, rd, id_camera):
                     if int(check_avaiable.decode()) == 1:
                         # Lấy flag để xem camera có chết không
                         check_flag = rd.get(str(id_camera)+"_RUN")
-                        print(check_flag.decode())
+                        status = "camera " + str(id_camera) + ":" + check_flag.decode()
+                        print(status)
                         if int(check_flag.decode()) == 1:
                             # Lấy ảnh từ redis và decode
                             image_base64 = rd.get(str(id_camera))

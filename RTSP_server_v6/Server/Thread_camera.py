@@ -116,10 +116,11 @@ def save_video(socketio, rd, id_camera, port_camera):
                         # Lấy ảnh từ redis và decode
                         image_base64 = rd.get(str(id_camera))
                         # Từ base64 chuyển thành image
-                        decoded_data = base64.b64decode(image_base64.decode())
-                        np_data = np.fromstring(decoded_data,np.uint8)
-                        image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
-                        save_camera.write(image)
+                        if image_base64 is not None:
+                            decoded_data = base64.b64decode(image_base64.decode())
+                            np_data = np.fromstring(decoded_data,np.uint8)
+                            image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+                            save_camera.write(image)
                 time.sleep(0.2)
             except Exception as e:
                 if hasattr(e, 'message'):

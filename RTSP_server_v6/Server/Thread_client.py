@@ -11,7 +11,8 @@ def get_frame_camera(socketio,rd, id_camera,):
             # socketio.sleep(0.05)
             image = rd.get(str(id_camera))
             # Lấy từ redis với key là id của camera
-            socketio.emit("stream_camera", image.decode())
+            if image is not None:
+                socketio.emit("stream_camera", image.decode())
             time.sleep(0.15)
             # socketio.sleep(0.15)
         except Exception as e:
@@ -27,7 +28,8 @@ def get_object_detection(socketio,rd, id_camera,):
             # socketio.sleep(0.1)
             # Lấy từ redis với key là id của camera + _OD (Object detection)
             image = rd.get(str(id_camera)+"_OD")
-            socketio.emit("stream_object", image.decode())
+            if image is not None:
+                socketio.emit("stream_object", image.decode())
             time.sleep(2)
             
         except Exception as e:
@@ -41,7 +43,8 @@ def get_heatmap(socketio,rd, id_camera,):
     while True:
         try:
             image = rd.get(str(id_camera)+"_HM")
-            socketio.emit("stream_heatmap", image.decode())
+            if image is not None:
+                socketio.emit("stream_heatmap", image.decode())
             time.sleep(60)
         except Exception as e:
             if hasattr(e, 'message'):
