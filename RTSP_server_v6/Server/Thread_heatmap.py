@@ -98,7 +98,7 @@ def preview_heatmap(socketio, rd, id_camera, start_date, end_date):
                 try:
                     background = Image.open(save_background_location)
                 except:
-                    background_image = Image.new('RGBA', (width, height), (255,255,255,0))
+                    background_image = Image.new('RGBA', (int(width), int(height)), (255,255,255,0))
                     background_image.save(save_background_location)
                     background = Image.open(save_background_location)
                 heatmap = heatmapper.heatmap_on_img(matrix_heatmap, background)
