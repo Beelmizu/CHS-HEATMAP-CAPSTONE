@@ -24,7 +24,7 @@
 		console.log("Camera DISSSSSSSSSSSSSSSSSSSSSSSSs");
 		// socket.emit('stream_camera', "1:webcam");
 	});
-	socket.on('stream_camera', (image) => {
+	socket.on('stream_camera_1', (image) => {
 		img = document.getElementById('frame_1');
 		// console.log(image);
 		img.src = `data:image/jpeg;base64,${image}`;
@@ -32,12 +32,12 @@
 	socket.on('get_all_camera_status', (report) => {
 		console.log(report);
 	});
-	socket.on('stream_object', (image) => {
+	socket.on('stream_object_1', (image) => {
 		img = document.getElementById('frame_2');
 		// console.log(image);
 		img.src = `data:image/png;base64,${image}`;
 	});
-	socket.on('stream_heatmap', (image) => {
+	socket.on('stream_heatmap_1', (image) => {
 		img = document.getElementById('frame_3');
 		// console.log(image);
 		img.src = `data:image/png;base64,${image}`;
