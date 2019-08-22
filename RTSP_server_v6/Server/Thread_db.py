@@ -77,7 +77,7 @@ def get_total_matrix(id_camera, current_date):
             except:
                 pass
 
-        print("total matrix heatmap: ", matrix_heatmap)
+        # print("total matrix heatmap: ", matrix_heatmap)
         cursor.close()
         return matrix_heatmap
     except Exception as e:
@@ -89,8 +89,8 @@ def get_total_matrix(id_camera, current_date):
             pass
     finally:
         connection.close()
-def get_preview_heatmap(matrix_heatmap, id_camera, start_date, end_date):
-    # matrix_heatmap = []
+def get_preview_heatmap(id_camera, start_date, end_date):
+    matrix_heatmap = []
     now = datetime.datetime.now()
     try:                     
         #kết nối DB
@@ -116,7 +116,8 @@ def get_preview_heatmap(matrix_heatmap, id_camera, start_date, end_date):
                 else:
                     number = number + str(char)
 
-        print("preview matrix heatmap: ", matrix_heatmap)
+        # print("preview matrix heatmap: ", matrix_heatmap)
+        return matrix_heatmap
         cursor.close()
         
     except Exception as e:
