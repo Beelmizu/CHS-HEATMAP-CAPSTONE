@@ -54,31 +54,21 @@ export class CheckCameraComponent implements OnInit, PipeTransform, OnDestroy {
     let listCamera: Camera[];
     this.cameraService.getAllCamera().subscribe((cameraList) => {
       listCamera = cameraList;
+      this.getAllCameraStatus(listCamera);
       setInterval(() => this.getAllCameraStatus(listCamera), 5000);
     }, (error) => {
       console.log(error);
     });
 
-    // while (true) {
-    //   this.getAllCameraStatus(listCamera);
-    //   this.wait(5000);
-    // }
   }
 
-  wait(ms) {
-    var start = new Date().getTime();
-    var end = start;
-    while (end < start + ms) {
-      end = new Date().getTime();
-    }
-  }
   getAllCameraStatus(list: Camera[]): void {
     const self = this;
     this.stringStatus = '';
 
     this.subStatus = this.socketService.getAllStatus().subscribe((status) => {
       this.stringStatus = status;
-      let listStatus = this.stringStatus.split(';');
+      const listStatus = this.stringStatus.split(';');
       for (let i = 0; i < list.length; i++) {
         for (let j = 0; j < listStatus.length; j++) {
           if (+listStatus[j].split(',')[0] === list[i].id) {

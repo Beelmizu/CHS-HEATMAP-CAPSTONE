@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, HostListener } from '@angular/core';
 import { Camera } from '../../models/camera.model';
 import { Location, DatePipe } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { CameraDetailService } from '../../services/camera-detail.service';
 
 import { StreamService } from '../../services/stream.service';
@@ -42,6 +42,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   subHeat: Subscription;
   subObject: Subscription;
   subPreview: Subscription;
+  subEvent: Subscription;
 
   // Checkbox
   chbHeatmap: boolean;
@@ -51,6 +52,12 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   selectedTime: String = 'noSelected';
 
   listTime: String[];
+  myValue = 'Hello world!';
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+    this.disconnectSocket();
+    // event.returnValue = true;
+  }
 
   constructor(
     private router: Router,
@@ -60,7 +67,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     private reportService: ReportService,
     private fb: FormBuilder,
     private toastr: ToastrService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     const self = this;
@@ -85,7 +93,6 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     this.getImageData();
     this.getHeatmap();
     this.getObject();
-
   }
 
   ngOnDestroy() {
@@ -101,6 +108,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     if (this.subPreview != null) {
       this.subPreview.unsubscribe();
     }
+    // this.subEvent.unsubscribe();
+    this.disconnectSocket();
   }
 
   connectSocket() {
@@ -108,24 +117,30 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     this.streamService.connect(this.cameraID);
   }
 
+  disconnectSocket() {
+    this.streamService.disconnect();
+  }
+
+
+
   // Socket
   getImageData() {
     const self = this;
-    this.subImg = this.streamService.getImgSrc().subscribe((value) => {
+    this.subImg = this.streamService.getImgSrc(this.cameraID).subscribe((value) => {
       this.imageSrc = `data:image/jpeg;base64,${value}`;
     });
   }
 
   getHeatmap() {
     const self = this;
-    this.subHeat = this.streamService.getHeatmapSrc().subscribe((heatmap) => {
+    this.subHeat = this.streamService.getHeatmapSrc(this.cameraID).subscribe((heatmap) => {
       this.heatmapSrc = `data:image/png;base64,${heatmap}`;
     });
   }
 
   getObject() {
     const self = this;
-    this.subObject = this.streamService.getObjectSrc().subscribe((object) => {
+    this.subObject = this.streamService.getObjectSrc(this.cameraID).subscribe((object) => {
       this.objectSrc = `data:image/png;base64,${object}`;
     });
   }
@@ -143,7 +158,7 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       this.cameraDetail = camera;
-      this.previewSrc =  this.cameraDetail.imageUrl;
+      this.previewSrc = this.cameraDetail.imageUrl;
     }, (error) => {
       console.log(error);
     });

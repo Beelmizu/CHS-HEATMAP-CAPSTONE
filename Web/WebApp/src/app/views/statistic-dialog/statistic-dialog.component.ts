@@ -59,7 +59,7 @@ export class StatisticDialogComponent implements OnInit {
 
   showStatistic() {
     this.data.value = this.form.get('value').value;
-    if (this.form.get('value').value !== '' && this.selectedValueDate !== '') {
+    if (this.form.get('value').value !== '' && this.selectedValueDate !== undefined) {
       this.dialogRef.close(this.data);
     } else {
       this.toastr.warning('Please choose all values in dialog !', 'Warning');
