@@ -26,6 +26,11 @@ public class Camera implements Serializable {
     private String ip;
 
     @Basic
+    @Column(name = "cam_name")
+    private String name;
+
+
+    @Basic
     @Column(name = "cam_account")
     private String account;
 

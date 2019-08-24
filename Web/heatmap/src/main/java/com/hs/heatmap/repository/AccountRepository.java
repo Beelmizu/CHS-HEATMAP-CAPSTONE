@@ -34,7 +34,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findAccountByStore(@Param("id") int id);
 
     //Find account by company
-    @Query("SELECT a FROM Account a WHERE a.cpn_acc_id = :id and a.role = false")
+    @Query("SELECT a FROM Account a WHERE a.cpn_acc_id = :id")
     List<Account> findAccountByCompany(int id);
 
     @Modifying

@@ -53,6 +53,8 @@ import { PaginationModule } from 'ngx-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { CheckCameraComponent } from './views/check-camera/check-camera.component';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 // Import other service
 @NgModule({
   imports: [
@@ -80,7 +82,14 @@ import { CheckCameraComponent } from './views/check-camera/check-camera.componen
     DataTableModule,
     PaginationModule.forRoot(),
     Ng2SearchPipeModule,
-    FilterPipeModule
+    FilterPipeModule,
+    AngularFireModule.initializeApp({
+      apiKey: 'AIzaSyABNUKB1bjzhKg6zui90wlK0OU0j8eUzDE',
+      authDomain: 'heatmapsystem.firebaseapp.com',
+      storageBucket: 'heatmapsystem.appspot.com',
+      projectId: 'heatmapsystem',
+    }),
+    AngularFireStorageModule
   ],
   declarations: [
     AppComponent,

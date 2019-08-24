@@ -49,7 +49,9 @@ import {MatDialogModule} from '@angular/material';
 import { StatisticDialogComponent } from './views/statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogComponent } from './views/view-heatmap-dialog/view-heatmap-dialog.component';
 import { ViewHeatmapDialogAreaComponent } from './views/view-heatmap-dialog-area/view-heatmap-dialog-area.component';
-
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   imports: [
     ChartsModule,
@@ -63,6 +65,7 @@ import { ViewHeatmapDialogAreaComponent } from './views/view-heatmap-dialog-area
     PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
+    NgbModule.forRoot(),
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -74,7 +77,14 @@ import { ViewHeatmapDialogAreaComponent } from './views/view-heatmap-dialog-area
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
-    MatDialogModule
+    MatDialogModule,
+    AngularFireModule.initializeApp({
+      apiKey: 'AIzaSyABNUKB1bjzhKg6zui90wlK0OU0j8eUzDE',
+      authDomain: 'heatmapsystem.firebaseapp.com',
+      storageBucket: 'heatmapsystem.appspot.com',
+      projectId: 'heatmapsystem',
+    }),
+    AngularFireStorageModule
   ],
   declarations: [
     AppComponent,

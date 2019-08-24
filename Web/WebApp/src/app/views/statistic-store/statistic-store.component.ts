@@ -72,7 +72,8 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
           position: 'left',
           ticks: {
             suggestedMin: 0,
-            beginAtZero: true
+            beginAtZero: true,
+            stepSize: 1
           }
         }
       ]
@@ -94,6 +95,21 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
         },
       ],
     },
+    elements:
+    {
+      point:
+      {
+        radius: 3,
+        hitRadius: 10,
+        hoverRadius: 10,
+        hoverBorderWidth: 2,
+        borderWidth: 10,
+      }
+    },
+    events: ['mousemove', 'click'],
+    onHover: (event, chartElement) => {
+      (<HTMLInputElement>event.target).style.cursor = chartElement[0] ? 'pointer' : 'default';
+    }
   };
   public lineChartColors: Color[] = [
     { // blue
@@ -265,7 +281,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Area: ' + reports[i][0].cameraID,
+        label: '' + this.listArea[i].name,
         yAxisID: 'y-axis-0'
       });
     }
@@ -307,7 +323,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Area: ' + reports[i][0].cameraID,
+        label: '' + this.listArea[i].name,
         yAxisID: 'y-axis-0'
       });
     }
@@ -444,7 +460,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
       this.selectTimeForm.get('timeTo').enable();
       this.listTimeTo = this.listTimeToRoot;
       this.listTimeFrom = this.listTimeFromRoot;
-      this.chooseStoreAfterChoose(data.value);
+      this.chooseStoreAfterChoose(data.idStore);
     }, (error) => {
       console.log(error);
     }));

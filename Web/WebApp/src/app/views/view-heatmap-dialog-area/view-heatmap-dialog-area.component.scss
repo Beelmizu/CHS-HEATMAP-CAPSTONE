@@ -22,8 +22,8 @@
 }
 
 #container {
-    width: 1000px;
-    height: 600px;
+    width: 800px;
+    height: 100%;
 }
 
 #title {
@@ -46,11 +46,12 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    height: 380px;
+    height: 100%;
 }
 
 
 #imgPreview{
+    position: absolute;
     height: 100%; width: 100%;
     z-index:1;  
     // margin-left: 15px;
@@ -58,16 +59,33 @@
 
 
 #imgPreviewHeatmap{
-    height: auto; width: auto;
+    top: 0px;
+    left: 0px;
     position: absolute;
     z-index:2;
     // margin-left: 15px;
 
 }
 
-#container {
-    width: 1000px;
-    height: 600px;
+
+#imgUrl{
+    height: 400px;
+    width: 800px;
+    z-index:1;  
+}
+
+
+#imgPreview{
+    height: 400px;
+    width: 800px;
+    top: 0px;
+    left: 0px;
+    // z-index:2;
+
+}
+
+h4 {
+    color:black;
 }
 
 // #header {

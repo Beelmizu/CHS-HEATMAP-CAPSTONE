@@ -16,7 +16,7 @@
         </div>
 
         <!-- Input IP -->
-        <div class="form-group row" *ngIf="mode == 'add'">
+        <div class="form-group row">
           <label class="col-md-3 col-form-label" for="text-input">IP: </label>
           <div class="col-md-9">
             <input type="text" class="form-control" formControlName="cameraIP"
@@ -34,12 +34,19 @@
           </div>
         </div>
 
-        <div class="form-group row" *ngIf="mode == 'detail'">
-          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> IP: </label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="cameraIP">
+        
+
+        <!-- Input Name -->
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Name: </label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" formControlName="cameraName"
+                [ngClass]="{'is-invalid': isInvalid('cameraName'), 'is-valid' : isValid('cameraName')}">
+              <div class="invalid-feedback" *ngIf="cameraDetailForm.hasError('required','cameraName')">
+                Name is required !
+              </div>
+            </div>
           </div>
-        </div>
 
         <!-- Input Account -->
         <div class="form-group row">
@@ -99,9 +106,12 @@
         <div class="form-group row">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1">Image: </label>
           <div class="col-md-9">
+
             <img [src]="url" height="200" *ngIf="url !== 'empty'"> <br />
-            <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)" id="btnChooseFile">
+            <!-- <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)" id="btnChooseFile"> -->
             <!-- <input type="file" (change)="uploadFile($event)" > -->
+            <input type="file" #imageInput (change)="upload($event, imageInput)" accept=".png,.jpg" id="btnChooseFile" />
+            <progress max="100" [value]="(uploadProgress | async)"></progress>
           </div>
         </div>
 

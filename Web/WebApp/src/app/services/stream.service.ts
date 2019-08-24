@@ -15,10 +15,11 @@ export class StreamService {
   observerHeatmap: Observer<any>;
   observerObject: Observer<any>;
   observerPreview: Observer<any>;
+  obStatus: Observer<any>;
 
 
   constructor() {
-    this.socket = socketIo('http://127.0.0.1:5000');
+    this.socket = io('http://127.0.0.1:5000');
   }
 
   connect(cameraID: number) {
@@ -89,6 +90,22 @@ export class StreamService {
   createObservablePreview(): Observable<any> {
     return new Observable(observer => {
       this.observerPreview = observer;
+    });
+  }
+
+   // get all Status
+   getAllStatus(): Observable<any> {
+    this.socket.emit('get_all_camera_status', '');
+    this.socket.on('get_all_camera_status', (stringStatus) => {
+      this.obStatus.next(stringStatus);
+    });
+
+    return this.createObservableStatus();
+  }
+
+  createObservableStatus(): Observable<any> {
+    return new Observable(observer => {
+      this.obStatus = observer;
     });
   }
 }

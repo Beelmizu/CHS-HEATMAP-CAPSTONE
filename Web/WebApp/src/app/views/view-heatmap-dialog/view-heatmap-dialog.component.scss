@@ -10,8 +10,8 @@
 
 
 #container {
-    width: 1000px;
-    height: 600px;
+    width: 700px;
+    height: 450px;
 }
 
 #title {
@@ -31,22 +31,21 @@
 }
 
 #divImagePreview {
-    width: 100%;
-    height: 450px;
+    width: 640px;
+    height: 320px;
+    margin: 0 auto;
 }
 
 #imgPreview{
     height: 100%; width: 100%;
     z-index:1;  
-    margin-left: 15px;
 }
 
 
 #imgPreviewHeatmap{
-    height: 450px; width: 1000px;
+    height: auto; width: auto;
     position: absolute;
     z-index:2;
-    margin-left: 15px;
 
 }
 

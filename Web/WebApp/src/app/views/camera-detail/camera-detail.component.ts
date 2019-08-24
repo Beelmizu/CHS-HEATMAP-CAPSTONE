@@ -10,6 +10,8 @@ import { ReportService } from '../../services/report.service';
 import { Report } from '../../models/report.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
+
 
 @Component({
   selector: 'app-camera-detail',
@@ -19,6 +21,9 @@ import { ToastrService } from 'ngx-toastr';
   ]
 })
 export class CameraDetailComponent implements OnInit, OnDestroy {
+
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
 
   cameraDetail = new Camera;
   heatmapList: Report[];
@@ -44,6 +49,11 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   subPreview: Subscription;
   subEvent: Subscription;
 
+  stringStatus: string;
+  subStatus: Subscription;
+
+  status = '1';
+
   // Checkbox
   chbHeatmap: boolean;
   chbObject: boolean;
@@ -66,6 +76,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     private streamService: StreamService,
     private reportService: ReportService,
     private fb: FormBuilder,
+    private afStorage: AngularFireStorage,
+    private location: Location,
     private toastr: ToastrService
   ) {
   }
@@ -107,6 +119,9 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
     }
     if (this.subPreview != null) {
       this.subPreview.unsubscribe();
+    }
+    if (this.subStatus != null) {
+      this.subStatus.unsubscribe();
     }
     // this.subEvent.unsubscribe();
     this.disconnectSocket();
@@ -155,14 +170,43 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   // Get detail Camera by ID
   getCameraByID(cameraID): void {
+    let userStorageRef;
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       this.cameraDetail = camera;
-      this.previewSrc = this.cameraDetail.imageUrl;
+      userStorageRef = this.afStorage.ref('' + this.cameraDetail.imageUrl);
+      userStorageRef.getDownloadURL().subscribe(url => {
+        this.previewSrc = url;
+      });
     }, (error) => {
       console.log(error);
     });
   }
+
+  getAllCameraStatus(): void {
+    const self = this;
+    this.stringStatus = '';
+
+    this.subStatus = this.streamService.getAllStatus().subscribe((status) => {
+      this.stringStatus = status;
+      const listStatus = this.stringStatus.split(';');
+      for (let j = 0; j < listStatus.length; j++) {
+        if (+listStatus[j].split(',')[0] === this.cameraID) {
+          status = listStatus[j].split(',')[1];
+        }
+      }
+    });
+
+    window.alert(this.status);
+    if (this.status === '0') {
+      this.location.back();
+    }
+  }
+
+  disconnectNotify() {
+    this.toastr.error('This camera is disconnected !', 'Error');
+  }
+
 
   catchDate(event) {
     this.selectedDate = event.format('YYYY-MM-DD');

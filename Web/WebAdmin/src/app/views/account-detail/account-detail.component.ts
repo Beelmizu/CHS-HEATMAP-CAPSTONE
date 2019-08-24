@@ -298,7 +298,11 @@ export class AccountDetailComponent implements OnInit {
         this.accountDetail.phone = this.accountDetailForm.get('accPhone').value;
       }
       this.accountDetail.gender = this.accountDetailForm.get('accGender').value;
-      this.accountDetail.role = this.accountDetailForm.get('accRole').value;
+      if (this.companyID === 7) {
+        this.accountDetail.role = this.accountDetailForm.get('accRole').value;
+      } else {
+        this.accountDetail.role = false;
+      }
       if (this.mode === 'detail') {
         this.accountDetail.updatedBy = localStorage.getItem('accountUsername');
       }

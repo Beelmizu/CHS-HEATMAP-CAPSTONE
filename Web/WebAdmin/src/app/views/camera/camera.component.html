@@ -22,17 +22,16 @@
           <thead>
             <tr>
               <th>IP</th>
+              <th>Name</th>
               <th>Account</th>
-              <th>Image</th>
               <th id="thAction">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr  *ngFor="let camera of cameras">
               <td>{{camera.ip}}</td>
+              <td>{{camera.name}}</td>
               <td>{{camera.account}}</td>
-              <td id="tdImg"> <img [src]="camera.imageUrl" *ngIf="camera.imageUrl !== null" id="imgURL"> </td>
-            
               <td id="tdAction">
                 <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', camera.id]" routerLinkActive="active">
                   Detail

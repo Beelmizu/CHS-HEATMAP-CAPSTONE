@@ -73,10 +73,21 @@
           <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
             [formGroup]="areaDetailForm">
             <div class="row" id="divSelectArea">
+                <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Store: </label>
+                <div class="col-md-8">
+                  <select class="form-control" id="select1" name="select1" formControlName="storeID"
+                    placeholder="Select store name: " (change)="chooseStore()">
+                    <option value="" disabled selected>Select Store: </option>
+                    <option *ngFor="let store of listStore" value="{{store.id}}">{{store.name}}</option>
+                  </select>
+                </div>
+              </div>
+
+            <div class="row" id="divSelectArea">
               <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
               <div class="col-md-8">
-                <select class="form-control" id="select1" name="select1" formControlName="areaName"
-                  placeholder="Select area: " (change)="chooseArea()">
+                <select class="form-control" id="select1" name="select1" formControlName="areaID"
+                  placeholder="Select area name: " (change)="chooseArea()">
                   <option value="" disabled selected>Select area: </option>
                   <option *ngFor="let area of listArea" value="{{area.id}}">{{area.name}}</option>
                 </select>
@@ -117,7 +128,7 @@
                   <div class="form-group row" *ngFor="let cameras of listCamera">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID">Camera {{cameras.id}}: </label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" readonly=true value="{{cameras.ip}}">
+                      <input type="text" class="form-control" readonly=true value="{{cameras.name}}">
                     </div>
                   </div>
                 </div>

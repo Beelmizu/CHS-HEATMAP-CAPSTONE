@@ -6,15 +6,21 @@
     <h5 mat-dialog-title id="title">From: {{from}} - To: {{to}}</h5>
   </div>
   <mat-dialog-content>
-    <div id="containerContent">
-      <div *ngFor="let camera of listCameraDetail" id="content">
-        <div class="card">
-          <div class="card-header" id="header">Camera {{camera.id}}
-          </div>
-          <div class="card-body" id="body">
-            <img [src]="camera.imageUrl" id="imgPreview" />
-            <img [src]="camera.imagePreview" id="imgPreviewHeatmap"/>
-          </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 py-3">
+          <ngb-carousel *ngIf="listCameraDetail">
+            
+            <ng-template ngbSlide *ngFor="let camera of listCameraDetail">
+              
+              <img [src]="camera.imageUrl" alt="Random slide" id="imgUrl"  *ngIf="camera.imageUrl !== undefined || camera.imagePreview != null">
+              <img [src]="camera.imagePreview" alt="Random slide" id="imgPreview"  *ngIf="camera.imagePreview !== undefined || camera.imagePreview != null ">
+              <div class="carousel-caption">
+                  <h4>{{ camera.name }}</h4>
+              </div>
+            </ng-template>
+          </ngb-carousel>
         </div>
       </div>
     </div>

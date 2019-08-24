@@ -9,6 +9,9 @@ import { SocketConnectService } from '../../services/socket-connect.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
+import { Observable } from 'rxjs';
+import { map, finalize } from 'rxjs/operators';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) { }
@@ -21,6 +24,11 @@ class ImageSnippet {
 })
 export class CameraDetailComponent implements OnInit {
 
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
+
+  eventUpload: any;
+
   cameraDetail = new Camera;
   cameraID: number;
   areaID: number;
@@ -32,6 +40,11 @@ export class CameraDetailComponent implements OnInit {
   isExisted = false;
 
   selectedFile: ImageSnippet;
+  uploadState: Observable<string>;
+  uploadProgress: Observable<number>;
+  downloadURL: Observable<string>;
+  idImage: string;
+
 
   constructor(
     private router: Router,
@@ -42,6 +55,7 @@ export class CameraDetailComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
+    private afStorage: AngularFireStorage,
     private toastr: ToastrService
   ) { }
 
@@ -58,6 +72,7 @@ export class CameraDetailComponent implements OnInit {
 
     this.cameraDetailForm = this.fb.group({
       'cameraID': [''],
+      'cameraName': ['', [Validators.required]],
       'cameraIP': ['', [Validators.required]],
       'cameraAccount': ['', [Validators.required, Validators.maxLength(45)]],
       'cameraPassword': ['', [Validators.required, Validators.maxLength(45)]],
@@ -86,12 +101,15 @@ export class CameraDetailComponent implements OnInit {
 
   // Get detail by ID
   getCameraByID(cameraID): void {
+    let userStorageRef;
     const reader = new FileReader();
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       this.cameraDetail = camera;
+      userStorageRef = this.afStorage.ref('' + this.cameraDetail.imageUrl);
       this.cameraDetailForm.setValue({
         'cameraID': this.cameraDetail.id,
+        'cameraName': this.cameraDetail.name,
         'cameraIP': this.cameraDetail.ip,
         'cameraAccount': this.cameraDetail.account,
         'cameraPassword': this.cameraDetail.password,
@@ -100,8 +118,9 @@ export class CameraDetailComponent implements OnInit {
         'cameraUpdatedBy': this.cameraDetail.updatedBy,
         'cameraArea': this.cameraDetail.areaID
       });
-      this.url = this.cameraDetail.imageUrl;
-      // this.selectedFile = new ImageSnippet(event.target.result, file);
+      userStorageRef.getDownloadURL().subscribe(url => {
+        this.url = url;
+      });
     }, (error) => {
       console.log(error);
     });
@@ -127,22 +146,58 @@ export class CameraDetailComponent implements OnInit {
     }
   }
 
-  updateCameraByID(): void {
+  uploadToFirebase() {
     const self = this;
-    if (this.valueIsChecked()) {
-      this.cameraDetailService.updateCameraByID(this.cameraDetail).subscribe((message) => {
-        if (message) {
-          this.toastr.success('Update ' + this.cameraDetail.ip + ' successfully !', 'Success');
-          this.location.back();
-        } else {
-          this.toastr.error('Update ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
-        }
-      }, (error) => {
-        console.log(error);
-      });
-    } else {
-      this.toastr.warning('Form is not valid', 'Warning');
-    }
+    const id = this.cameraID + '_camera';
+    this.idImage = id;
+    this.ref = this.afStorage.ref('/camera/' + id);
+    this.task = this.ref.put(this.eventUpload.target.files[0]);
+    this.uploadProgress = this.task.percentageChanges();
+    console.log('Image uploaded!');
+   this.task.snapshotChanges().pipe(
+      finalize(() => {
+        this.downloadURL = this.ref.getDownloadURL();
+        console.log(this.downloadURL);
+        this.downloadURL.subscribe(url => (this.url = url));
+      })
+    )
+      .subscribe();
+  }
+
+  updateCameraByID(): void {
+    const promises = [];
+    const self = this;
+    const id = this.cameraID + '_camera';
+    this.idImage = id;
+    this.ref = this.afStorage.ref('/camera/' + id);
+    this.task = this.ref.put(this.eventUpload.target.files[0]);
+    promises.push(this.task);
+    this.uploadProgress = this.task.percentageChanges();
+    console.log('Image uploaded!');
+    this.task.snapshotChanges().pipe(
+      finalize(() => {
+        this.downloadURL = this.ref.getDownloadURL();
+        console.log(this.downloadURL);
+        this.downloadURL.subscribe(url => (this.url = url));
+      })
+    )
+      .subscribe();
+    Promise.all(promises).then(tasks => {
+      if (this.valueIsChecked()) {
+        this.cameraDetailService.updateCameraByID(this.cameraDetail).subscribe((message) => {
+          if (message) {
+            this.toastr.success('Update ' + this.cameraDetail.ip + ' successfully !', 'Success');
+            this.location.back();
+          } else {
+            this.toastr.error('Update ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
+          }
+        }, (error) => {
+          console.log(error);
+        });
+      } else {
+        this.toastr.warning('Form is not valid', 'Warning');
+      }
+    });
   }
 
   addCamera() {
@@ -177,6 +232,34 @@ export class CameraDetailComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  upload(event, imageInput: any) {
+    this.eventUpload = event;
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+      // window.alert(event.target.files[0]);
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.url = this.selectedFile.src;
+    });
+
+    reader.readAsDataURL(file);
+    // const id = this.cameraID + '_camera';
+    // this.idImage = id;
+    // this.ref = this.afStorage.ref('/camera/' + id);
+    // this.task = this.ref.put(event.target.files[0]);
+    // this.uploadProgress = this.task.percentageChanges();
+    // console.log('Image uploaded!');
+    // this.task.snapshotChanges().pipe(
+    //   finalize(() => {
+    //     this.downloadURL = this.ref.getDownloadURL();
+    //     console.log(this.downloadURL);
+    //     this.downloadURL.subscribe(url => (this.url = url));
+    //   })
+    // )
+    //   .subscribe();
+  }
+
   uploadFile(event) {
     console.log(event);
     window.alert(event.value);
@@ -185,6 +268,9 @@ export class CameraDetailComponent implements OnInit {
 
   valueIsChecked(): boolean {
     if (this.cameraDetailForm.valid) {
+      if (!this.cameraDetailForm.get('cameraName').value.valid) {
+        this.cameraDetail.name = this.cameraDetailForm.get('cameraName').value;
+      }
       if (!this.cameraDetailForm.get('cameraIP').value.valid) {
         this.cameraDetail.ip = this.cameraDetailForm.get('cameraIP').value;
       }
@@ -197,7 +283,7 @@ export class CameraDetailComponent implements OnInit {
       if (this.mode === 'detail') {
         this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
       }
-      this.cameraDetail.imageUrl = this.url;
+      this.cameraDetail.imageUrl = '/camera/' + this.cameraDetail.id + '_camera';
       if (this.cameraDetailForm.get('cameraArea').value !== true) {
         this.cameraDetail.areaID = this.cameraDetailForm.get('cameraArea').value;
       } else {

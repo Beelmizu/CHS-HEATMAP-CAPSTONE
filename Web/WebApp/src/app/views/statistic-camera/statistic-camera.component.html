@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-5">
           <h4 class="card-title mb-0">Number of people</h4>
-          <div class="medium text-muted" id="txtMuted"  *ngIf="selectedValue != null">Date: {{selectedValue}}</div>
+          <div class="medium text-muted" id="txtMuted" *ngIf="selectedValue != null">Date: {{selectedValue}}</div>
         </div>
         <div class="col-sm-7 d-none d-md-block" id="divSelectType" *ngIf="cameraDetail != null">
           <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
@@ -23,12 +23,14 @@
       <div class="row" id="divSelectValue" *ngIf="cameraDetail != null">
         <div class="col-sm-3">
         </div>
-        <div class="col-sm-9 d-none d-md-block" >
+        <div class="col-sm-9 d-none d-md-block">
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'month'">
-              <app-monthyearpicker [monthFromParentComponent]="selectedValueMonth" (month)="catchSelectedMonth($event)" ></app-monthyearpicker>
+            <app-monthyearpicker [monthFromParentComponent]="selectedValueMonth" (month)="catchSelectedMonth($event)">
+            </app-monthyearpicker>
           </div>
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'day'">
-            <app-fulldatepicker [dateFromParentComponent]="selectedValueDate" (date)="catchDate($event)"></app-fulldatepicker>
+            <app-fulldatepicker [dateFromParentComponent]="selectedValueDate" (date)="catchDate($event)">
+            </app-fulldatepicker>
           </div>
           <div class="btn-group btn-group-toggle float-right mr-3" *ngIf="modeStatistic == 'time'">
             <form [formGroup]="selectTimeForm">
@@ -58,15 +60,9 @@
           <div class="flex">
             <div class="flex-item" id="itemSta">
               <div style="display: block;">
-                <canvas baseChart 
-                        [datasets]="lineChartData" 
-                        [labels]="lineChartLabels" 
-                        [options]="lineChartOptions"
-                        [colors]="lineChartColors" 
-                        [legend]="lineChartLegend" 
-                        [chartType]="lineChartType"
-                        (chartHover)="chartHovered($event)" 
-                        (chartClick)="chartClicked($event)">
+                <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+                  [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+                  (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
                 </canvas>
               </div>
             </div>
@@ -75,37 +71,63 @@
 
         <!-- Camera -->
         <div class="col-sm-3" id="divControlCamera">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="cameraDetailForm">
+          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+            [formGroup]="cameraDetailForm">
+
             <div class="row" id="divSelectCamera">
-              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Camera IP: </label>
+              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Store: </label>
               <div class="col-md-8">
-                <select class="form-control" id="select1" name="select1" formControlName="cameraIP" placeholder="Select camera IP" (change)="chooseCamera()">
-                  <option value="" disabled selected>Select camera IP</option>
-                  <option  *ngFor="let cam of listCamera" value="{{cam.ip}}" >{{cam.ip}}</option> 
+                <select class="form-control" id="select1" name="select1" formControlName="storeID"
+                  placeholder="Select store name" (change)="chooseStore()">
+                  <option value="" disabled selected>Select store name</option>
+                  <option *ngFor="let store of listStore" value="{{store.id}}">{{store.name}}</option>
                 </select>
               </div>
             </div>
+
+            <div class="row" id="divSelectCamera">
+              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
+              <div class="col-md-8">
+                <select class="form-control" id="select1" name="select1" formControlName="areaID"
+                  placeholder="Select area name" (change)="chooseArea()">
+                  <option value="" disabled selected>Select area name</option>
+                  <option *ngFor="let area of listArea" value="{{area.id}}">{{area.name}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row" id="divSelectCamera">
+              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Camera: </label>
+              <div class="col-md-8">
+                <select class="form-control" id="select1" name="select1" formControlName="cameraIP"
+                  placeholder="Select camera IP" (change)="chooseCamera()">
+                  <option value="" disabled selected>Select camera IP</option>
+                  <option *ngFor="let cam of listCamera" value="{{cam.ip}}">{{cam.name}}</option>
+                </select>
+              </div>
+            </div>
+
             <div class="row" id="divCardInfoCamera">
               <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Camera Detail</h4>
+                  <h4 class="card-title">Camera Detail</h4>
                 </div>
                 <div class="card-body">
-                  
-                   <!-- Area -->
-                   <div class="form-group row">
-                      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
-                      <div class="col-md-8">
-                        <input type="text" class="form-control" readonly=true formControlName="cameraArea">
-                      </div>
+
+                  <!-- Area -->
+                  <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Account: </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" readonly=true formControlName="cameraAccount">
+                    </div>
                   </div>
 
-                   <!-- Store -->
-                   <div class="form-group row">
-                      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Store: </label>
-                      <div class="col-md-8">
-                        <input type="text" class="form-control" readonly=true formControlName="cameraStore">
-                      </div>
+                  <!-- Store -->
+                  <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Password: </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" readonly=true formControlName="cameraPassword">
+                    </div>
                   </div>
 
                   <!-- Status

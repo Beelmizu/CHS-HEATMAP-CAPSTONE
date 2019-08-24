@@ -29,6 +29,7 @@ import { StatisticGenderComponent } from '../statistic-gender/statistic-gender.c
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
 import { ViewHeatmapDialogAreaComponent } from '../view-heatmap-dialog-area/view-heatmap-dialog-area.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 const modules = [
@@ -50,7 +51,8 @@ const modules = [
     ReactiveFormsModule,
     FulldatepickerModule,
     BsDropdownModule.forRoot(),
-    MatDialogModule
+    MatDialogModule,
+    NgbModule.forRoot()
   ],
   exports: [
     modules

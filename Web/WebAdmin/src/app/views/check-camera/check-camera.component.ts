@@ -39,7 +39,7 @@ export class CheckCameraComponent implements OnInit, PipeTransform, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.selectedOption = 5;
+    this.selectedOption = 10;
     this.getAllCamera();
   }
 

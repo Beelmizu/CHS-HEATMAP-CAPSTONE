@@ -18,6 +18,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 import { FulldatepickerComponent } from '../fulldatepicker/fulldatepicker.component';
 import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
+import { StoreService } from '../../services/store.service';
 
 
 @Component({
@@ -52,6 +53,13 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   listTimeFrom: String[];
   listCamera: Camera[];
 
+  storeID: any;
+  areaID: any;
+  cameraID: any;
+
+  listArea: any;
+  listStore: any;
+
   // Declare component of chart
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'People', yAxisID: 'y-axis-0' }
@@ -68,7 +76,8 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
           position: 'left',
           ticks: {
             suggestedMin: 0,
-            beginAtZero: true
+            beginAtZero: true,
+            stepSize: 1
           }
         }
       ]
@@ -90,6 +99,21 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
         },
       ],
     },
+    elements:
+    {
+      point:
+      {
+        radius: 3,
+        hitRadius: 10,
+        hoverRadius: 10,
+        hoverBorderWidth: 2,
+        borderWidth: 10,
+      }
+    },
+    events: ['mousemove', 'click'],
+    onHover: (event, chartElement) => {
+      (<HTMLInputElement>event.target).style.cursor = chartElement[0] ? 'pointer' : 'default';
+    }
   };
   public lineChartColors: Color[] = [
     { // blue
@@ -131,24 +155,29 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     private areaService: AreaService,
     private cameraService: CameraService,
     private toastr: ToastrService,
+    private storeService: StoreService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     const self = this;
+
     this.accountID = localStorage.getItem('accountID');
 
     this.openDialog();
+
+    this.getAllStoreOfAccount();
 
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
 
     // declare Form
     this.cameraDetailForm = this.fb.group({
+      'storeID': [''],
+      'areaID': [''],
       'cameraIP': [''],
-      'cameraArea': [''],
-      'cameraStore': [''],
-      // 'cameraStatus': [''],
+      'cameraAccount': [''],
+      'cameraPassword': [''],
     });
 
     this.selectTimeForm = this.fb.group({
@@ -157,8 +186,6 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     });
     this.selectTimeForm.get('timeFrom').disable();
     this.selectTimeForm.get('timeTo').disable();
-
-    this.getAllCameraOfAccount(+this.accountID);
 
   }
 
@@ -180,32 +207,11 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     this.cameraService.getCameraByIP(this.cameraDetailForm.get('cameraIP').value).subscribe((camera) => {
       this.cameraDetail = camera;
       this.cameraDetailForm.setValue({
+        'storeID': this.cameraDetailForm.get('storeID').value,
+        'areaID': this.cameraDetailForm.get('areaID').value,
         'cameraIP': this.cameraDetailForm.get('cameraIP').value,
-        'cameraArea': camera.area.name,
-        'cameraStore': camera.area.store.name,
-        // 'cameraStatus': camera.status
-      });
-      if (this.selectedValue !== null) {
-        if (this.modeStatistic === 'month') {
-          this.getReportByMonth();
-        } else {
-          this.getReport();
-        }
-      }
-    }, (error) => {
-      console.log(error);
-    });
-  }
-
-  chooseCameraAfterChoose(ip: String) {
-    const self = this;
-    this.cameraService.getCameraByIP(ip).subscribe((camera) => {
-      this.cameraDetail = camera;
-      this.cameraDetailForm.setValue({
-        'cameraIP': ip,
-        'cameraArea': camera.area.name,
-        'cameraStore': camera.area.store.name,
-        // 'cameraStatus': camera.status
+        'cameraAccount': camera.account,
+        'cameraPassword': camera.password,
       });
       if (this.selectedValue !== null) {
         if (this.modeStatistic === 'month') {
@@ -360,7 +366,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   // events Chart
 
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    if (active.length > 0 && this.modeStatistic === 'day') {
+    if (active.length > 0 && (this.modeStatistic === 'day' || this.modeStatistic === 'time')) {
       const from = this.lineChartLabels[active[0]['_index']];
       const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();
@@ -413,9 +419,92 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
       this.selectTimeForm.get('timeTo').enable();
       this.listTimeTo = this.listTimeToRoot;
       this.listTimeFrom = this.listTimeFromRoot;
-      this.chooseCameraAfterChoose(data.value);
+      this.chooseValueAfterChoose(data.idStore, data.idArea, data.ipCamera);
     }, (error) => {
       console.log(error);
     }));
+  }
+
+  chooseStore() {
+    this.storeID = this.cameraDetailForm.get('storeID').value;
+    this.cameraDetailForm.setValue({
+      'storeID': this.cameraDetailForm.get('storeID').value,
+      'areaID': '',
+      'cameraIP': '',
+      'cameraAccount': '',
+      'cameraPassword': '',
+    });
+    this.listArea = [];
+    this.listCamera = [];
+    this.areaService.getAllAreaInStore(this.storeID).subscribe((areas) => {
+      this.listArea = areas;
+    }, (error) => {
+      console.log(error);
+    });
+    this.lineChartData[0].data.length = 0;
+    this.lineChartLabels.length = 0;
+    this.chart.ngOnChanges({} as SimpleChanges);
+  }
+
+  chooseArea() {
+    this.areaID = this.cameraDetailForm.get('areaID').value;
+    this.cameraDetailForm.setValue({
+      'storeID': this.cameraDetailForm.get('storeID').value,
+      'areaID': this.cameraDetailForm.get('areaID').value,
+      'cameraIP': '',
+      'cameraAccount': '',
+      'cameraPassword': '',
+    });
+    this.listCamera = [];
+    this.cameraService.getAllCameraInArea(this.areaID).subscribe((cameras) => {
+      this.listCamera = cameras;
+    }, (error) => {
+      console.log(error);
+    });
+    this.lineChartData[0].data.length = 0;
+    this.lineChartLabels.length = 0;
+    this.chart.ngOnChanges({} as SimpleChanges);
+  }
+
+  chooseValueAfterChoose(idStore, idArea, ipCamera) {
+    this.storeID = idStore;
+    this.areaService.getAllAreaInStore(idStore).subscribe((areas) => {
+      this.listArea = areas;
+    }, (error) => {
+      console.log(error);
+    });
+    this.cameraService.getAllCameraInArea(idArea).subscribe((cameras) => {
+      this.listCamera = cameras;
+    }, (error) => {
+      console.log(error);
+    });
+    this.cameraService.getCameraByIP(ipCamera).subscribe((camera) => {
+      this.cameraDetail = camera;
+      this.cameraDetailForm.setValue({
+        'storeID': idStore,
+        'areaID': idArea,
+        'cameraIP': ipCamera,
+        'cameraAccount': camera.account,
+        'cameraPassword': camera.password,
+      });
+      if (this.selectedValue !== null) {
+        if (this.modeStatistic === 'month') {
+          this.getReportByMonth();
+        } else {
+          this.getReport();
+        }
+      }
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  getAllStoreOfAccount() {
+    const self = this;
+    this.storeService.getAllStoreByAccountID(+this.accountID).subscribe((stores) => {
+      this.listStore = stores;
+    }, (error) => {
+      console.log(error);
+    });
   }
 }

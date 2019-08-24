@@ -6,6 +6,7 @@ import { CameraService } from '../../services/camera.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
+
 @Component({
   selector: 'app-camera',
   templateUrl: './camera.component.html',

@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { Camera } from '../../models/camera.model';
 import { StreamService } from '../../services/stream.service';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
+
 
 @Component({
   selector: 'app-view-heatmap-dialog',
@@ -13,6 +15,8 @@ import { StreamService } from '../../services/stream.service';
 export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
 
   date: any;
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
   cameraDetail: Camera;
   cameraID: number;
   from: any;
@@ -24,6 +28,7 @@ export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
   constructor(
     private streamService: StreamService,
     private cameraDetailService: CameraDetailService,
+    private afStorage: AngularFireStorage,
     private dialogRef: MatDialogRef<ViewHeatmapDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     this.date = data.date;
@@ -47,10 +52,14 @@ export class ViewHeatmapDialogComponent implements OnInit, OnDestroy {
     // this.streamService.connect(this.cameraID);
   }
   getCameraByID(cameraID): void {
+    let userStorageRef;
     const self = this;
     this.cameraDetailService.getCameraByID(cameraID).subscribe((camera) => {
       self.cameraDetail = camera;
-      this.previewSrc = this.cameraDetail.imageUrl;
+      userStorageRef = this.afStorage.ref('' + this.cameraDetail.imageUrl);
+      userStorageRef.getDownloadURL().subscribe(url => {
+        this.previewSrc = url;
+      });
       this.getPreviewHeatmap();
 
     }, (error) => {

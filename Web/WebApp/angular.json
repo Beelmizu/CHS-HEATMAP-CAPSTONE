@@ -26,7 +26,8 @@
               "node_modules/simple-line-icons/css/simple-line-icons.css",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/scss/style.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["./node_modules"]

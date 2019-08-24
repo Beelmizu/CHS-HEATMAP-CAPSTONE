@@ -20,11 +20,12 @@
           [ngClass]="{'active show': choosedTab == 'stream'}">
           <div class="row">
             <div class="col-sm-9" id="divImgStream">
-              <img [src]="imageSrc" id="imgStream" />
-              <img [src]="heatmapSrc" id="imgHeatmap" [style.display]="chbHeatmap?'inherit':'none'" />
-              <img [src]="objectSrc" id="imgObject" [style.display]="chbObject?'inherit':'none'" />
+              <img src="../../../assets/img/background/disconneted.png" id="imageSrc" *ngIf="imageSrc == null"/>
+              <img [src]="imageSrc" id="imgStream" *ngIf="imageSrc != null" />
+              <img [src]="heatmapSrc" id="imgHeatmap" [style.display]="chbHeatmap?'inherit':'none'"  *ngIf="heatmapSrc != null" />
+              <img [src]="objectSrc" id="imgObject" [style.display]="chbObject?'inherit':'none'"   *ngIf="objectSrc != null"/>
             </div>
-            <div class="col-sm-3" >
+            <div class="col-sm-3">
               <div id="options">
                 <div class="row" id="switchButtonHeatmap">
                   <div class="col-md-9">
@@ -63,9 +64,9 @@
         <!-- Tab Preview of Camera -->
         <div class="tab-pane " id="previewHeatmap" role="tabpanel" [ngClass]="{'active show': choosedTab == 'preview'}">
           <div class="row" id="rowPreview">
-            <div class="col-sm-9"id="divImagePreview">
-              <img [src]="previewSrc" id="imgPreview" />
-              <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== undefined"/>
+            <div class="col-sm-9" id="divImagePreview">
+              <img [src]="previewSrc" id="imgPreview" *ngIf="previewSrc !== undefined" />
+              <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== undefined" />
             </div>
             <div class="col-sm-3" id="controlPreviewDiv">
               <div id="headerPreviewTime">

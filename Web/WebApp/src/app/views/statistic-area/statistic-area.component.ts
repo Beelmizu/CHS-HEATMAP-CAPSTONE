@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogAreaComponent } from '../view-heatmap-dialog-area/view-heatmap-dialog-area.component';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-statistic-area',
@@ -50,6 +51,12 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   listCamera: Camera[];
   accountID: string;
 
+  storeID: any;
+  areaID: any;
+
+  listArea2: any;
+  listStore: any;
+
   // Declare component of chart
   public lineChartData: ChartDataSets[] = [
     { data: [], label: '', yAxisID: 'y-axis-0' }
@@ -66,7 +73,8 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
           position: 'left',
           ticks: {
             suggestedMin: 0,
-            beginAtZero: true
+            beginAtZero: true,
+            stepSize: 1
           }
         }
       ]
@@ -88,10 +96,24 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
         },
       ],
     },
+    elements:
+    {
+      point:
+      {
+        radius: 3,
+        hitRadius: 10,
+        hoverRadius: 10,
+        hoverBorderWidth: 2,
+        borderWidth: 10,
+      },
+    },
+    events: ['mousemove', 'click'],
+    onHover: (event, chartElement) => {
+      (<HTMLInputElement>event.target).style.cursor = chartElement[0] ? 'pointer' : 'default';
+    }
   };
   public lineChartColors: Color[] = [
-    {
-      // blue
+    { // blue
       backgroundColor: 'rgba(99, 194, 222,0.2)',
       borderColor: 'rgba(99, 194, 222, 1)',
       pointBackgroundColor: 'rgba(148,159,177,1)',
@@ -130,6 +152,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     private areaService: AreaService,
     private cameraService: CameraService,
     private toastr: ToastrService,
+    private storeService: StoreService,
     private dialog: MatDialog
   ) { }
 
@@ -139,12 +162,15 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
     this.openDialog();
 
+    this.getAllStoreOfAccount();
+
     this.listTimeFrom = this.listTimeFromRoot;
     this.listTimeTo = this.listTimeToRoot;
 
     // declare Form
     this.areaDetailForm = this.fb.group({
-      'areaName': [''],
+      'storeID': [''],
+      'areaID': [''],
       'areaFloor': [''],
       'areaStore': [''],
       'areaStatus': [''],
@@ -157,7 +183,6 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     this.selectTimeForm.get('timeFrom').disable();
     this.selectTimeForm.get('timeTo').disable();
 
-    this.getAllAreaOfAccount(+this.accountID);
 
   }
 
@@ -176,38 +201,14 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
   chooseArea() {
     const self = this;
-    this.areaService.getAreaByID(this.areaDetailForm.get('areaName').value).subscribe((area) => {
+    this.areaService.getAreaByID(this.areaDetailForm.get('areaID').value).subscribe((area) => {
       this.areaDetail = area;
       this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
         this.listCamera = cameralist;
       });
       this.areaDetailForm.setValue({
-        'areaName': this.areaDetail.id,
-        'areaFloor': this.areaDetail.floor,
-        'areaStore': this.areaDetail.store.name,
-        'areaStatus': this.areaDetail.status
-      });
-      if (this.selectedValue !== null) {
-        if (this.modeStatistic === 'month') {
-          this.getReportByMonth();
-        } else {
-          this.getReport();
-        }
-      }
-    }, (error) => {
-      console.log(error);
-    });
-  }
-
-  chooseAreaAfterChoose(areaID: number) {
-    const self = this;
-    this.areaService.getAreaByID(areaID).subscribe((area) => {
-      this.areaDetail = area;
-      this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
-        this.listCamera = cameralist;
-      });
-      this.areaDetailForm.setValue({
-        'areaName': this.areaDetail.id,
+        'storeID': this.areaDetailForm.get('storeID').value,
+        'areaID': this.areaDetail.id,
         'areaFloor': this.areaDetail.floor,
         'areaStore': this.areaDetail.store.name,
         'areaStatus': this.areaDetail.status
@@ -261,7 +262,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Camera: ' + reports[i][0].cameraID,
+        label: '' + this.listCamera[i].name,
         yAxisID: 'y-axis-0'
       });
     }
@@ -302,7 +303,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: 'Camera: ' + reports[i][0].cameraID,
+        label: '' + this.listCamera[i].name,
         yAxisID: 'y-axis-0'
       });
     }
@@ -408,7 +409,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
 
-    if (active.length > 0 && this.modeStatistic === 'day') {
+    if (active.length > 0 && (this.modeStatistic === 'day' || this.modeStatistic === 'time')) {
       const from = this.lineChartLabels[active[0]['_index']];
       const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();
@@ -462,9 +463,72 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
       this.selectTimeForm.get('timeTo').enable();
       this.listTimeTo = this.listTimeToRoot;
       this.listTimeFrom = this.listTimeFromRoot;
-      this.chooseAreaAfterChoose(data.value);
+      this.chooseValueAfterChoose(data.idStore, data.idArea);
     }, (error) => {
       console.log(error);
     }));
+  }
+
+  getAllStoreOfAccount() {
+    const self = this;
+    this.storeService.getAllStoreByAccountID(+this.accountID).subscribe((stores) => {
+      this.listStore = stores;
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+
+
+  chooseStore() {
+    this.storeID = this.areaDetailForm.get('storeID').value;
+    this.areaDetailForm.setValue({
+      'storeID': this.areaDetailForm.get('storeID').value,
+      'areaID': '',
+      'areaFloor': '',
+      'areaStore': '',
+      'areaStatus': ''
+    });
+    this.listArea = [];
+    this.listCamera = [];
+    this.areaService.getAllAreaInStore(this.storeID).subscribe((areas) => {
+      this.listArea = areas;
+    }, (error) => {
+      console.log(error);
+    });
+    this.lineChartData[0].data.length = 0;
+    this.lineChartLabels.length = 0;
+    this.chart.ngOnChanges({} as SimpleChanges);
+  }
+
+  chooseValueAfterChoose(idStore, idArea) {
+    this.storeID = idStore;
+    this.areaService.getAllAreaInStore(idStore).subscribe((areas) => {
+      this.listArea = areas;
+    }, (error) => {
+      console.log(error);
+    });
+    this.areaService.getAreaByID(idArea).subscribe((area) => {
+      this.areaDetail = area;
+      this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
+        this.listCamera = cameralist;
+      });
+      this.areaDetailForm.setValue({
+        'storeID': idStore,
+        'areaID': idArea,
+        'areaFloor': area.floor,
+        'areaStore': area.store.name,
+        'areaStatus': area.status
+      });
+      if (this.selectedValue !== null) {
+        if (this.modeStatistic === 'month') {
+          this.getReportByMonth();
+        } else {
+          this.getReport();
+        }
+      }
+    }, (error) => {
+      console.log(error);
+    });
   }
 }

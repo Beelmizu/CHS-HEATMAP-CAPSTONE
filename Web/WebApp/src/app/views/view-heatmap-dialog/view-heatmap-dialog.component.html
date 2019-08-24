@@ -7,8 +7,10 @@
   </div>
   <mat-dialog-content>
     <div class="row" id="divImagePreview">
-      <img [src]="previewSrc" id="imgPreview" />
-      <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== ''" />
+      <img [src]="previewSrc" id="imgPreview"  *ngIf="previewSrc !== undefined"/>
+      <!-- <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap" *ngIf="previewHeatmapSrc !== undefined" /> -->
+      <img [src]="previewHeatmapSrc" id="imgPreviewHeatmap"  *ngIf="previewHeatmapSrc !== undefined" />
+
     </div>
 
   </mat-dialog-content>
