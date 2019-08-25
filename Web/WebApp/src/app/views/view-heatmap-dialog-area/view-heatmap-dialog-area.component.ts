@@ -49,6 +49,9 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.subPreview != null) {
+      this.subPreview.unsubscribe();
+    }
   }
 
   getCamera() {
@@ -72,40 +75,18 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
           this.listCameraDetail[i].imageUrl = url;
         });
       }
-      for (let i = 0; i < data.length; i++) {
-        window.alert(data[i].id);
-        this.subPreview = this.streamService.getPreviewHeatmap(data[i].id, this.date, this.from, this.to).subscribe((data) => {
-          this.listCameraDetail[i].imagePreview = `data:image/png;base64,${data}`;
-          return;
-        });
-        return () => {
-          // this.subPreview.unsubscribe();
-          // return;
-        };
-
-        // this.getPreviewHeatmap(data[i].id).subscribe(image => {
-        //   // window.alert(image);
-        //   window.alert(data[i].id + ' ---- ' + image);
-        //   this.listCameraDetail[i].imagePreview = `data:image/png;base64,${image}`;
-        // });
-        // img = this.getPreviewHeatmap(data[i].id);
-        // window.alert(data[i].id + ' --- ' + this.getPreviewHeatmap(data[i].id)window.);
-        // this.listCameraDetail[i].imagePreview = `data:image/png;base64,${img}`;
-      }
+      this.getPreviewHeatmap(data[0].id);
     });
   }
 
-  getPreviewHeatmap(id: number) {
-    return this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to);
+  onSlide(e) {
+    this.getPreviewHeatmap(this.listCameraDetail[e['current'].split('-')[2]].id);
   }
 
-  getPreview(id) {
-    return new Promise(resolve => {
-      this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to).subscribe(
-        preview => {
-          this.imgPreview = `data:image/png;base64,${preview}`;
-          resolve(this.imgPreview);
-        });
+  getPreviewHeatmap(id) {
+    const self = this;
+    this.subPreview = this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to).subscribe((preview) => {
+      this.previewHeatmapSrc = `data:image/png;base64,${preview}`;
     });
   }
 

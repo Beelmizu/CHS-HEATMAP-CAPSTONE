@@ -46,8 +46,10 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   modeStatistic: String;
 
   // List
-  listTimeFromRoot = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
-  listTimeToRoot = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+ // tslint:disable-next-line: max-line-length
+ listTimeFromRoot = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+ // tslint:disable-next-line: max-line-length
+ listTimeToRoot = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
 
   listTimeTo: String[];
   listTimeFrom: String[];
@@ -266,8 +268,8 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
       this.selectedValueDate = this.selectedValue;
       this.selectedValueMonth = null;
       this.selectTimeForm.setValue({
-        'timeFrom': '08:00',
-        'timeTo': '20:00'
+        'timeFrom': '00:00',
+        'timeTo': '23:00'
       });
       this.selectTimeForm.get('timeFrom').enable();
       this.selectTimeForm.get('timeTo').enable();
@@ -409,17 +411,19 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
 
     setTimeout(() => this.dialog.open(StatisticDialogComponent, dialogConfig).afterClosed().subscribe((data) => {
       this.modeStatistic = 'day';
-      this.selectedValue = data.date;
-      this.selectedValueDate = this.selectedValue;
-      this.selectTimeForm.setValue({
-        'timeFrom': '08:00',
-        'timeTo': '20:00'
-      });
-      this.selectTimeForm.get('timeFrom').enable();
-      this.selectTimeForm.get('timeTo').enable();
-      this.listTimeTo = this.listTimeToRoot;
-      this.listTimeFrom = this.listTimeFromRoot;
-      this.chooseValueAfterChoose(data.idStore, data.idArea, data.ipCamera);
+      if (data !== undefined) {
+        this.selectedValue = data.date;
+        this.selectedValueDate = this.selectedValue;
+        this.selectTimeForm.setValue({
+          'timeFrom': '00:00',
+          'timeTo': '23:00'
+        });
+        this.selectTimeForm.get('timeFrom').enable();
+        this.selectTimeForm.get('timeTo').enable();
+        this.listTimeTo = this.listTimeToRoot;
+        this.listTimeFrom = this.listTimeFromRoot;
+        this.chooseValueAfterChoose(data.idStore, data.idArea, data.ipCamera);
+      }
     }, (error) => {
       console.log(error);
     }));

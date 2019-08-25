@@ -75,7 +75,7 @@
               <div id="bodyPreviewTime">
                 <ul class="nav nav-pills">
                   <li class="nav-item">
-                    <a class="nav-link" *ngFor="let time of listTime" (click)="chooseTimeForPreview(time)"
+                    <a class="nav-link " *ngFor="let time of listTime" (click)="chooseTimeForPreview(time)"
                       [ngClass]="{'active': time == selectedTime}">{{time}}</a>
                   </li>
                 </ul>

@@ -61,14 +61,12 @@ export class EditProfileComponent implements OnInit {
   saveAccountDetail() {
     const self = this;
     if (this.valueIsChecked()) {
-      if (window.confirm('Do you want to change password ?')) {
         this.accountDetailService.updateAccountByID(self.accountDetail).subscribe((message) => {
           this.toastr.success('Save ' + self.accountDetail.username + ' successfully !', 'Success');
           this.router.navigate(['/stores']);
         }, (error) => {
           console.log(error);
         });
-      } else { return; }
     } else {
       this.toastr.warning('Form is not valid !', 'Warning');
     }

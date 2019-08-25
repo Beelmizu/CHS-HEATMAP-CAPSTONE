@@ -169,7 +169,7 @@ public class ReportServiceImpl implements ReportService {
         float count = 0;
         int id = 1;
         String time, min;
-        String nextElement;
+        String nextElement, timeNext;
         if (reports.size() != 0) {
             Collections.sort(reports, (o1, o2) -> {
                 if (o1.getTime() == null || o2.getTime() == null)
@@ -204,26 +204,41 @@ public class ReportServiceImpl implements ReportService {
             } else {
                 for (int i = 0; i < reports.size() - 1; i++) {
                     time = reports.get(i).getTime().split(" ")[1].split(":")[0];
+                    timeNext = reports.get(i + 1).getTime().split(" ")[1].split(":")[0];
                     min = String.valueOf(reports.get(i).getTime().split(" ")[1].split(":")[1].charAt(0));
                     nextElement = String.valueOf(reports.get(i + 1).getTime().split(" ")[1].split(":")[1].charAt(0));
-                    if (Integer.parseInt(min) == Integer.parseInt((nextElement))) {
-                        count++;
-                        sum += reports.get(i + 1).getCount();
-                        if (i == reports.size() - 2) {
+                    if (Integer.parseInt(time) == Integer.parseInt(timeNext)) {
+                        if (Integer.parseInt(min) == Integer.parseInt((nextElement))) {
+                            count++;
+                            sum += reports.get(i + 1).getCount();
+                            if (i == reports.size() - 2) {
+                                element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
+                                result.add(element);
+                            }
+                        } else {
                             element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
                             result.add(element);
+                            sum = reports.get(i + 1).getCount();
+                            count = 1;
+                            id++;
+                            if (i == reports.size() - 2) {
+                                element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, nextElement);
+                                result.add(element);
+                            }
                         }
                     } else {
+                        System.out.println(time + " --- " + timeNext);
                         element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, min);
                         result.add(element);
                         sum = reports.get(i + 1).getCount();
                         count = 1;
                         id++;
                         if (i == reports.size() - 2) {
-                            element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, time, nextElement);
+                            element = setElementForCameraReportWithMin(id, sum, count, cameraID, date, timeNext, nextElement);
                             result.add(element);
                         }
                     }
+
                 }
             }
         } else {

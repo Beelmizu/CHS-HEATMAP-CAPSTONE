@@ -64,6 +64,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   listTime: String[];
   myValue = 'Hello world!';
 
+  selectedValueDate = null;
+
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
     this.disconnectSocket();
     // event.returnValue = true;
@@ -84,7 +86,8 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const self = this;
-    this.listTime = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+    // tslint:disable-next-line: max-line-length
+    this.listTime = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
 
     // set value for stream
     this.choosedTab = 'stream';
@@ -215,7 +218,12 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
       this.heatmapList = heatmap;
       if (this.heatmapList.length === 0) {
         this.toastr.warning('No data for this date !', 'Warning');
-        this.selectedDate = 'noSelected';
+        this.selectedDate = 'nodata';
+        this.selectedTime = '';
+        this.previewHeatmapSrc = undefined;
+      } else {
+        this.selectedTime = '';
+        this.previewHeatmapSrc = undefined;
       }
     }, (error) => {
       console.log(error);
@@ -225,7 +233,11 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
   chooseTimeForPreview(time: String) {
     const self = this;
     let endTime;
-    if (this.selectedDate !== 'noSelected') {
+    if (this.selectedDate === 'noSelected') {
+      this.toastr.warning('Please choose date !', 'Warning');
+    } else if (this.selectedDate === 'nodata') {
+      this.toastr.warning('Please choose other date !', 'Warning');
+    } else {
       this.selectedTime = time;
       for (let index = 0; index < this.listTime.length - 1; index++) {
         if (this.selectedTime === this.listTime[index]) {
@@ -237,15 +249,17 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
         this.play = false;
         clearInterval(this.interval);
       }
-    } else {
-      this.toastr.warning('Please choose date !', 'Warning');
     }
   }
 
   playPreview() {
     let i = 0;
     let endTime;
-    if (this.selectedDate !== 'noSelected') {
+    if (this.selectedDate === 'noSelected') {
+      this.toastr.warning('Please choose date !', 'Warning');
+    } else if (this.selectedDate === 'nodata') {
+      this.toastr.warning('Please choose other date !', 'Warning');
+    } else {
       if (this.play === false) {
         this.play = true;
         for (let index = 0; index < this.listTime.length; index++) {
@@ -263,8 +277,6 @@ export class CameraDetailComponent implements OnInit, OnDestroy {
         this.play = false;
         clearInterval(this.interval);
       }
-    } else {
-      this.toastr.warning('Please choose date !', 'Warning');
     }
   }
 
