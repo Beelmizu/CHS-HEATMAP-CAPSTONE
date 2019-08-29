@@ -81,11 +81,23 @@ export class StreamService {
   // Get preview heatmap
   getPreviewHeatmap(cameraID: number, date: String, start: String, end: String): Observable<any> {
     this.socket.emit('preview_heatmap', cameraID + ';' + date + ' ' + start + ',' + date + ' ' + end);
+
+    this.createObservablePreview();
     this.socket.on('preview_heatmap', (object) => {
       this.observerPreview.next(object);
     });
     return this.createObservablePreview();
   }
+
+  // getPreviewHeatmap(cameraID: number, date: String, start: String, end: String): any {
+  //   let result: String;
+  //   this.socket.emit('preview_heatmap', cameraID + ';' + date + ' ' + start + ',' + date + ' ' + end);
+
+  //   this.socket.on('preview_heatmap', (object) => {
+  //    result = object;
+  //    return result;
+  //   });
+  // }
 
   createObservablePreview(): Observable<any> {
     return new Observable(observer => {
@@ -93,8 +105,8 @@ export class StreamService {
     });
   }
 
-   // get all Status
-   getAllStatus(): Observable<any> {
+  // get all Status
+  getAllStatus(): Observable<any> {
     this.socket.emit('get_all_camera_status', '');
     this.socket.on('get_all_camera_status', (stringStatus) => {
       this.obStatus.next(stringStatus);

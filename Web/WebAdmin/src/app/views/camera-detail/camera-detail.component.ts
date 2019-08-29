@@ -28,6 +28,7 @@ export class CameraDetailComponent implements OnInit {
   task: AngularFireUploadTask;
 
   eventUpload: any;
+  imgChange = false;
 
   cameraDetail = new Camera;
   cameraID: number;
@@ -154,7 +155,7 @@ export class CameraDetailComponent implements OnInit {
     this.task = this.ref.put(this.eventUpload.target.files[0]);
     this.uploadProgress = this.task.percentageChanges();
     console.log('Image uploaded!');
-   this.task.snapshotChanges().pipe(
+    this.task.snapshotChanges().pipe(
       finalize(() => {
         this.downloadURL = this.ref.getDownloadURL();
         console.log(this.downloadURL);
@@ -169,20 +170,37 @@ export class CameraDetailComponent implements OnInit {
     const self = this;
     const id = this.cameraID + '_camera';
     this.idImage = id;
-    this.ref = this.afStorage.ref('/camera/' + id);
-    this.task = this.ref.put(this.eventUpload.target.files[0]);
-    promises.push(this.task);
-    this.uploadProgress = this.task.percentageChanges();
-    console.log('Image uploaded!');
-    this.task.snapshotChanges().pipe(
-      finalize(() => {
-        this.downloadURL = this.ref.getDownloadURL();
-        console.log(this.downloadURL);
-        this.downloadURL.subscribe(url => (this.url = url));
-      })
-    )
-      .subscribe();
-    Promise.all(promises).then(tasks => {
+    if (this.imgChange) {
+      this.ref = this.afStorage.ref('/camera/' + id);
+      this.task = this.ref.put(this.eventUpload.target.files[0]);
+      promises.push(this.task);
+      this.uploadProgress = this.task.percentageChanges();
+      console.log('Image uploaded!');
+      this.task.snapshotChanges().pipe(
+        finalize(() => {
+          this.downloadURL = this.ref.getDownloadURL();
+          console.log(this.downloadURL);
+          this.downloadURL.subscribe(url => (this.url = url));
+        })
+      )
+        .subscribe();
+      Promise.all(promises).then(tasks => {
+        if (this.valueIsChecked()) {
+          this.cameraDetailService.updateCameraByID(this.cameraDetail).subscribe((message) => {
+            if (message) {
+              this.toastr.success('Update ' + this.cameraDetail.ip + ' successfully !', 'Success');
+              this.location.back();
+            } else {
+              this.toastr.error('Update ' + this.cameraDetail.ip + ' unsuccessfully !', 'Error');
+            }
+          }, (error) => {
+            console.log(error);
+          });
+        } else {
+          this.toastr.warning('Form is not valid', 'Warning');
+        }
+      });
+    } else {
       if (this.valueIsChecked()) {
         this.cameraDetailService.updateCameraByID(this.cameraDetail).subscribe((message) => {
           if (message) {
@@ -197,7 +215,8 @@ export class CameraDetailComponent implements OnInit {
       } else {
         this.toastr.warning('Form is not valid', 'Warning');
       }
-    });
+    }
+
   }
 
   addCamera() {
@@ -244,6 +263,7 @@ export class CameraDetailComponent implements OnInit {
     });
 
     reader.readAsDataURL(file);
+    this.imgChange = true;
     // const id = this.cameraID + '_camera';
     // this.idImage = id;
     // this.ref = this.afStorage.ref('/camera/' + id);

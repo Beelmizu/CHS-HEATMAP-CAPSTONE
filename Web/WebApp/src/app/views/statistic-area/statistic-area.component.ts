@@ -411,7 +411,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
 
-    if (active.length > 0 && (this.modeStatistic === 'day' || this.modeStatistic === 'time')) {
+    if (active.length > 0 && (this.modeStatistic === 'day')) {
       const from = this.lineChartLabels[active[0]['_index']];
       const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();

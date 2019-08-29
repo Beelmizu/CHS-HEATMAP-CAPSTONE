@@ -20,14 +20,14 @@ export class StoreComponent implements OnInit {
   ngOnInit() {
     const self = this;
     this.accountID  = localStorage.getItem('accountID');
-    self.getStoreByAccountID(+this.accountID);
+    this.getStoreByAccountID(+this.accountID);
   }
 
 
   getStoreByAccountID(accountID): void {
     const self = this;
     this.storeService.getAllStoreByAccountID(accountID).subscribe((storeList) => {
-      self.stores = storeList;
+      this.stores = storeList;
     }, (error) => {
       console.log(error);
     });

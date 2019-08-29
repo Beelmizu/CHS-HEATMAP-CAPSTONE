@@ -65,13 +65,14 @@ export class LoginComponent implements OnInit {
             this.decoded = jwt_decode(token);
             role = this.decoded['JWTAuthoritiesKey'];
             if (role === 'Manager') {
-              this.router.navigate([this.returnUrl]);
+
               localStorage.setItem('currentUser', JSON.stringify(token));
               username = this.decoded['sub'];
               this.accountService.getIDAccountByUsername(username).subscribe((id) => {
                 this.accountID = id;
                 localStorage.setItem('accountID', '' + this.accountID);
                 localStorage.setItem('accountUsername', '' + username);
+                this.router.navigate([this.returnUrl]);
               },
                 error => {
                   console.log(error);

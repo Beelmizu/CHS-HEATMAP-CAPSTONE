@@ -46,10 +46,10 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   modeStatistic: String;
 
   // List
- // tslint:disable-next-line: max-line-length
- listTimeFromRoot = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
- // tslint:disable-next-line: max-line-length
- listTimeToRoot = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+  // tslint:disable-next-line: max-line-length
+  listTimeFromRoot = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+  // tslint:disable-next-line: max-line-length
+  listTimeToRoot = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
 
   listTimeTo: String[];
   listTimeFrom: String[];
@@ -368,7 +368,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   // events Chart
 
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    if (active.length > 0 && (this.modeStatistic === 'day' || this.modeStatistic === 'time')) {
+    if (active.length > 0 && (this.modeStatistic === 'day')) {
       const from = this.lineChartLabels[active[0]['_index']];
       const to = (+this.lineChartLabels[active[0]['_index']].split(':')[0] + 1) + ':00';
       const dialogConfig = new MatDialogConfig();

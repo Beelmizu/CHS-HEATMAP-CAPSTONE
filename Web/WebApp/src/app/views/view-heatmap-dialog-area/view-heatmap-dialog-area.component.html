@@ -10,9 +10,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12 py-3">
-          <ngb-carousel *ngIf="listCameraDetail" (slide)="onSlide($event)">
+          <ngb-carousel *ngIf="listCameraDetail" (slide)="onSlide($event)" >
             
-            <ng-template ngbSlide *ngFor="let camera of listCameraDetail">
+            <ng-template ngbSlide *ngFor="let camera of listCameraDetail; let i = index" [id]="i" >
               
               <img [src]="camera.imageUrl" alt="Random slide" id="imgUrl"  *ngIf="camera.imageUrl !== undefined || camera.imagePreview != null">
               <img [src]="previewHeatmapSrc"  alt="Random slide" id="imgPreview"  *ngIf="previewHeatmapSrc !== undefined || previewHeatmapSrc != null ">

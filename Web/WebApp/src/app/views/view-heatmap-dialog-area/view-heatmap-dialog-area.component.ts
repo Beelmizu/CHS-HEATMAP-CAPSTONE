@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Input } from '@angular/core';
 import { Camera } from '../../models/camera.model';
 import { Subscription, Observable, Subject } from 'rxjs';
 import { StreamService } from '../../services/stream.service';
@@ -29,6 +29,7 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
   subPreview: Subscription;
   subCamera: Subscription;
   imgPreview: String;
+  activeID: number;
 
 
   constructor(
@@ -46,12 +47,13 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAllDetail();
+    this.activeID = 0;
   }
 
   ngOnDestroy(): void {
-    if (this.subPreview != null) {
-      this.subPreview.unsubscribe();
-    }
+    // if (this.subPreview != null) {
+    //   this.subPreview.unsubscribe();
+    // }
   }
 
   getCamera() {
@@ -80,13 +82,24 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
   }
 
   onSlide(e) {
-    this.getPreviewHeatmap(this.listCameraDetail[e['current'].split('-')[2]].id);
+    // this.getPreviewHeatmap(this.listCameraDetail[e['current']].id);
+    this.getPreviewHeatmap(this.listCameraDetail[e['current']].id).then((data: any) => {
+      this.previewHeatmapSrc = data;
+    });
   }
 
   getPreviewHeatmap(id) {
     const self = this;
-    this.subPreview = this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to).subscribe((preview) => {
-      this.previewHeatmapSrc = `data:image/png;base64,${preview}`;
+    // this.subPreview = this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to).subscribe((preview) => {
+    //   this.previewHeatmapSrc = `data:image/png;base64,${preview}`;
+    // });
+
+    return new Promise(resolve => {
+      this.streamService.getPreviewHeatmap(id, this.date, this.from, this.to)
+        .subscribe(data => {
+          this.previewHeatmapSrc = `data:image/png;base64,${data}`;
+          resolve(this.previewHeatmapSrc);
+        });
     });
   }
 
