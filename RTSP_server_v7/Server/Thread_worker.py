@@ -94,7 +94,8 @@ def detect_object(socketio, rd, id_camera):
 #     #Để 1 để lần đầu tiên chạy nó có thể chạy cái heatmap trước
     heatmap_time = datetime.datetime.now()
     heatmap_run_time = heatmap_time + datetime.timedelta(minutes=1)
-
+    # Khoaảng cách cần cách so với cửa ra vào
+    roi = 150
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -144,7 +145,7 @@ def detect_object(socketio, rd, id_camera):
                                     boxes = np.squeeze(boxes[indices])
                                     scores = np.squeeze(scores[indices])
                                     classes = np.squeeze(classes[indices])
-                                    counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array(1,
+                                    counter, csv_line, the_result = vis_util.visualize_boxes_and_labels_on_image_array_x_axis(1,
                                                                                                                     image,
                                                                                                                     1,
                                                                                                                     is_color_recognition_enabled,
@@ -155,6 +156,8 @@ def detect_object(socketio, rd, id_camera):
                                                                                                                     targeted_objects='person',
                                                                                                                     use_normalized_coordinates=True,
                                                                                                                     line_thickness=2,
+                                                                                                                    x_reference = roi,
+                                                                                                                    deviation = 1,
                                                                                                                     max_boxes_to_draw=None,
                                                                                                                     min_score_thresh=0.5)
                                     #record video
@@ -172,6 +175,11 @@ def detect_object(socketio, rd, id_camera):
                                         background_OD = Image.open(save_background_location)
 
                                     dr = ImageDraw.Draw(background_OD)
+                                    # dr.line([(width - roi, 0), (width - roi, height)], fill='red', width=2)
+                                    if counter == 1:
+                                        dr.line([(roi, 0), (roi, height)], fill='green', width=2)
+                                    else:
+                                        dr.line([(roi, 0), (roi, height)], fill='red', width=2)
                                     # Vẽ Ô vuông lên hình
                                     for i in range(len(box)):
                                         ymin = (int(box[i,0]*height))
