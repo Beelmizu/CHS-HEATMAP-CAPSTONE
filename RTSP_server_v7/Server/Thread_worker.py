@@ -185,7 +185,9 @@ def detect_object(socketio, rd, id_camera):
                                     else:
                                         dr.line([(roi, 0), (roi, height)], fill='red', width=1)
                                     # Vẽ Ô vuông lên hình
+                                    # Chứa trung tâm box
                                     centroids = []
+                                    
                                     orientation_vects = []
                                     for i in range(len(box)):
                                         ymin = (int(box[i,0]*height))
