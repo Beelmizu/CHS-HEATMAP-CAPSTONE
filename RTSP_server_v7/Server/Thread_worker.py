@@ -2,6 +2,7 @@ import socket
 import numpy as np
 import cv2
 import time
+import math
 from flask import Flask ,request
 from flask_socketio import SocketIO, send
 import base64
@@ -99,9 +100,12 @@ def detect_object(socketio, rd, id_camera):
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
+            last_centroids = []
+            ltr = 0
+            rtl = 0
             while True:
                 try:
-                    time.sleep(1.5)
+                    time.sleep(0.5)
                     # check xem camera co1 bi5 delete hay khong
                     check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
                     if int(check_avaiable.decode()) == 1:
@@ -157,7 +161,7 @@ def detect_object(socketio, rd, id_camera):
                                                                                                                     use_normalized_coordinates=True,
                                                                                                                     line_thickness=2,
                                                                                                                     x_reference = roi,
-                                                                                                                    deviation = 1,
+                                                                                                                    deviation = 20,
                                                                                                                     max_boxes_to_draw=None,
                                                                                                                     min_score_thresh=0.5)
                                     #record video
@@ -177,10 +181,12 @@ def detect_object(socketio, rd, id_camera):
                                     dr = ImageDraw.Draw(background_OD)
                                     # dr.line([(width - roi, 0), (width - roi, height)], fill='red', width=2)
                                     if counter == 1:
-                                        dr.line([(roi, 0), (roi, height)], fill='green', width=2)
+                                        dr.line([(roi, 0), (roi, height)], fill='green', width=1)
                                     else:
-                                        dr.line([(roi, 0), (roi, height)], fill='red', width=2)
+                                        dr.line([(roi, 0), (roi, height)], fill='red', width=1)
                                     # Vẽ Ô vuông lên hình
+                                    centroids = []
+                                    orientation_vects = []
                                     for i in range(len(box)):
                                         ymin = (int(box[i,0]*height))
                                         xmin = (int(box[i,1]*width))
@@ -190,7 +196,51 @@ def detect_object(socketio, rd, id_camera):
                                             break
                                         
                                         cor = (xmin, ymin, xmax, ymax)
+                                        centroid = ((xmax - xmin)/2 + xmin, (ymax - ymin)/2 + ymin)
+                                        centroids.append(centroid)
+                                        orientation_vect = (0, 0, 0, 0)
+                                        last_centroid_distance = float('inf')
+                                        for i in range(len(last_centroids)):
+                                            a = np.array(centroid)
+                                            b = np.array(last_centroids[i])
+                                            centroid_distance = np.linalg.norm(a - b)
+                                            if centroid_distance <= last_centroid_distance:
+                                                if centroid_distance > math.sqrt(width**2+height**2):
+                                                    continue
+                                                last_centroid_distance = centroid_distance
+                                                orientation_vect = (last_centroids[i][0], last_centroids[i][1], centroid[0], centroid [1])
+                                                centroid_inex = i
+
                                         dr.rectangle(cor, outline="green")
+                                        if sum(orientation_vect) != 0:
+                                            orientation_vects.append(orientation_vect)
+
+                                    last_centroids = centroids
+                                    for i in range(len(orientation_vects)):
+                                        for j in range(len(orientation_vects)):
+                                            if orientation_vects[i][0] == orientation_vects[j][0] and orientation_vects[i][1] == orientation_vects[j][1]:
+                                                if i == j:
+                                                    continue
+                                                a = np.array((orientation_vects[i][0], orientation_vects[i][1]))
+                                                b = np.array((orientation_vects[i][2], orientation_vects[i][3]))
+                                                c = np.array((orientation_vects[j][2], orientation_vects[j][3]))
+                                                b_dist = np.linalg.norm(b - a)
+                                                c_dist = np.linalg.norm(c - a)
+                                                if b_dist > c_dist:
+                                                    orientation_vects.pop(i)
+                                                    i+1
+                                                else:
+                                                    orientation_vects.pop(j)
+                                                    j+1
+                                    for i in range(len(orientation_vects)):
+                                        if orientation_vects[i][0] < width/2 and orientation_vects[i][2] > width/2:
+                                            ltr = ltr + 1
+                                        if orientation_vects[i][0] > width/2 and orientation_vects[i][2] < width/2:
+                                            rtl = rtl + 1
+
+
+                                    dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
+                                    dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)
 
                                     # Vẽ chữ count
                                     try:
@@ -199,14 +249,14 @@ def detect_object(socketio, rd, id_camera):
                                         count_number = 0
                                         pass
                                     #font chữ load ở bên trên
-                                    dr.text((250, 10),"Person: " + str(count_number),(0,255,0), font=font)
+                                    dr.text((200, 10),"Person: " + str(count_number),(0,255,0), font=font)
                                     # Lấy kết quả của nhận dạng gender vs age
                                     face_re = rd.get(str(id_camera) + "_FR")
                                     if face_re is None:
                                         face_re = "Loading..."
                                     else:
                                         face_re = face_re.decode()
-                                    dr.text((250, 30),face_re,(0,255,0), font=font_face_re)
+                                    dr.text((200, 30),face_re,(0,255,0), font=font_face_re)
                                     heatmap_time = datetime.datetime.now()
                                     # print(upload_time)
                                     if heatmap_time > heatmap_run_time:
