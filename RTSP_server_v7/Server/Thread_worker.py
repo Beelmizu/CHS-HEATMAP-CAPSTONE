@@ -34,6 +34,7 @@ import sys
 from Thread_upload_cloud import *
 from Thread_face import * 
 import redis
+import time
 
 import pymysql.cursors
 #%%
@@ -103,6 +104,7 @@ def detect_object(socketio, rd, id_camera):
             last_centroids = []
             ltr = 0
             rtl = 0
+            obj_feature_vectors = []
             while True:
                 try:
                     time.sleep(0.5)
@@ -187,7 +189,7 @@ def detect_object(socketio, rd, id_camera):
                                     # Vẽ Ô vuông lên hình
                                     # Chứa trung tâm box
                                     centroids = []
-                                    
+                                    # Để lưu hướng du chuyển
                                     orientation_vects = []
                                     for i in range(len(box)):
                                         ymin = (int(box[i,0]*height))
@@ -202,16 +204,16 @@ def detect_object(socketio, rd, id_camera):
                                         centroids.append(centroid)
                                         orientation_vect = (0, 0, 0, 0)
                                         last_centroid_distance = float('inf')
-                                        for i in range(len(last_centroids)):
+                                        for j in range(len(last_centroids)):
                                             a = np.array(centroid)
-                                            b = np.array(last_centroids[i])
+                                            b = np.array(last_centroids[j])
+                                            # tính distance
                                             centroid_distance = np.linalg.norm(a - b)
                                             if centroid_distance <= last_centroid_distance:
                                                 if centroid_distance > math.sqrt(width**2+height**2):
                                                     continue
                                                 last_centroid_distance = centroid_distance
-                                                orientation_vect = (last_centroids[i][0], last_centroids[i][1], centroid[0], centroid [1])
-                                                centroid_inex = i
+                                                orientation_vect = (last_centroids[j][0], last_centroids[j][1], centroid[0], centroid [1], xmin, ymin, xmax, ymax)
 
                                         dr.rectangle(cor, outline="green")
                                         if sum(orientation_vect) != 0:
@@ -230,19 +232,47 @@ def detect_object(socketio, rd, id_camera):
                                                 c_dist = np.linalg.norm(c - a)
                                                 if b_dist > c_dist:
                                                     orientation_vects.pop(i)
-                                                    i+1
+                                                    i=i+1
+                                                    j=j+1
                                                 else:
                                                     orientation_vects.pop(j)
-                                                    j+1
+                                                    i=i+1
+                                                    j=j+1
+                                    # tính hướng di chuyển
+                                    orb = cv2.ORB_create()
                                     for i in range(len(orientation_vects)):
                                         if orientation_vects[i][0] < width/2 and orientation_vects[i][2] > width/2:
                                             ltr = ltr + 1
+                                            extracted_out = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
+                                            kp_out, des_out = orb.detectAndCompute(extracted_out, None)
+                                            for j in range(len(obj_feature_vectors)):
+                                                bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+                                                matches = bf.match(obj_feature_vectors[i][0], des_out)
+                                                matches = sorted(matches, key = lambda x:x.distance)
+                                                dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
+
+                                                if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
+                                                    # print("orbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                                                    # print(len(obj_feature_vectors[j][0]))
+                                                    # print(len(des_out))
+                                                    # print(len(matches))
+                                                    shopping_time = time.time() - obj_feature_vectors[j][1]
+                                                    obj_feature_vectors.pop(j)
+                                                    j = j+1
+                                                    dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
+
                                         if orientation_vects[i][0] > width/2 and orientation_vects[i][2] < width/2:
                                             rtl = rtl + 1
+                                            extracted_in = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
+                                            kp_in, des_in = orb.detectAndCompute(extracted_in, None)
+                                            feature_vector = (des_in, time.time())
+                                            obj_feature_vectors.append(feature_vector)
+                                            
+
 
 
                                     dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
-                                    dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)
+                                    dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
 
                                     # Vẽ chữ count
                                     try:
