@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Area } from '../../models/area.model';
+import { Zone } from '../../models/zone.model';
 import { Store } from '../../models/store.model';
 import { Camera } from '../../models/camera.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReportService } from '../../services/report.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { StoreService } from '../../services/store.service';
 import { CameraService } from '../../services/camera.service';
 import { ChartType, ChartOptions } from 'chart.js';
@@ -19,7 +19,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 })
 export class StatisticGenderComponent implements OnInit {
 
-  areaDetail: Area;
+  zoneDetail: Zone;
   storeDetail: Store;
   cameraDetail: Camera;
 
@@ -37,7 +37,7 @@ export class StatisticGenderComponent implements OnInit {
   listTime: String[];
   listTimeFrom: String[];
   listTimeTo: String[];
-  listArea: Area[];
+  listZone: Zone[];
   listCamera: Camera[];
   listStore: Store[];
 
@@ -73,7 +73,7 @@ export class StatisticGenderComponent implements OnInit {
     private reportService: ReportService,
     private route: ActivatedRoute,
     private cameraDetailService: CameraDetailService,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private storeService: StoreService,
     private cameraService: CameraService
   ) { }
@@ -121,8 +121,8 @@ export class StatisticGenderComponent implements OnInit {
     const self = this;
     this.storeService.getStoreByID(this.storeDetailForm.get('storeName').value).subscribe((store) => {
       this.storeDetail = store;
-      this.areaService.getAllAreaInStore(this.storeDetail.id).subscribe((areaList) => {
-        this.listArea = areaList;
+      this.zoneService.getAllZoneInStore(this.storeDetail.id).subscribe((zoneList) => {
+        this.listZone = zoneList;
       });
       this.storeDetailForm.setValue({
         'storeName': this.storeDetail.id,

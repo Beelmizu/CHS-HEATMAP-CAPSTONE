@@ -11,28 +11,28 @@ import { ReportService } from '../../services/report.service';
 import { Camera } from '../../models/camera.model';
 import { CameraService } from '../../services/camera.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
-import { AreaService } from '../../services/area.service';
-import { Area } from '../../models/area.model';
+import { ZoneService } from '../../services/zone.service';
+import { Zone } from '../../models/zone.model';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
-import { ViewHeatmapDialogAreaComponent } from '../view-heatmap-dialog-area/view-heatmap-dialog-area.component';
+import { ViewHeatmapDialogZoneComponent } from '../view-heatmap-dialog-zone/view-heatmap-dialog-zone.component';
 import { StoreService } from '../../services/store.service';
 
 @Component({
-  selector: 'app-statistic-area',
-  templateUrl: './statistic-area.component.html',
-  styleUrls: ['./statistic-area.component.scss']
+  selector: 'app-statistic-zone',
+  templateUrl: './statistic-zone.component.html',
+  styleUrls: ['./statistic-zone.component.scss']
 })
-export class StatisticAreaComponent implements OnInit, OnDestroy {
+export class StatisticZoneComponent implements OnInit, OnDestroy {
 
 
-  areaDetail: Area;
+  zoneDetail: Zone;
   cameraDetail: Camera;
 
   // Form
   selectTimeForm: FormGroup;
-  areaDetailForm: FormGroup;
+  zoneDetailForm: FormGroup;
 
   // Chart
   selectedValue = null;
@@ -49,14 +49,14 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   listTimeToRoot = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
   listTimeFrom: String[];
   listTimeTo: String[];
-  listArea: Area[];
+  listZone: Zone[];
   listCamera: Camera[];
   accountID: string;
 
   storeID: any;
-  areaID: any;
+  zoneID: any;
 
-  listArea2: any;
+  listZone2: any;
   listStore: any;
 
   // Declare component of chart
@@ -151,7 +151,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     private reportService: ReportService,
     private route: ActivatedRoute,
     private cameraDetailService: CameraDetailService,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private cameraService: CameraService,
     private toastr: ToastrService,
     private storeService: StoreService,
@@ -170,12 +170,12 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     this.listTimeTo = this.listTimeToRoot;
 
     // declare Form
-    this.areaDetailForm = this.fb.group({
+    this.zoneDetailForm = this.fb.group({
       'storeID': [''],
-      'areaID': [''],
-      'areaFloor': [''],
-      'areaStore': [''],
-      // 'areaStatus': [''],
+      'zoneID': [''],
+      'zoneFloor': [''],
+      'zoneStore': [''],
+      // 'zoneStatus': [''],
     });
 
     this.selectTimeForm = this.fb.group({
@@ -192,28 +192,28 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     this.dialog.closeAll();
   }
 
-  getAllAreaOfAccount(accountID: number) {
+  getAllZoneOfAccount(accountID: number) {
     const self = this;
-    this.areaService.getAllAreaOfAccount(accountID).subscribe((area) => {
-      this.listArea = area;
+    this.zoneService.getAllZoneOfAccount(accountID).subscribe((zone) => {
+      this.listZone = zone;
     }, (error) => {
       console.log(error);
     });
   }
 
-  chooseArea() {
+  chooseZone() {
     const self = this;
-    this.areaService.getAreaByID(this.areaDetailForm.get('areaID').value).subscribe((area) => {
-      this.areaDetail = area;
-      this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
+    this.zoneService.getZoneByID(this.zoneDetailForm.get('zoneID').value).subscribe((zone) => {
+      this.zoneDetail = zone;
+      this.cameraService.getAllCameraInZone(this.zoneDetail.id).subscribe((cameralist) => {
         this.listCamera = cameralist;
       });
-      this.areaDetailForm.setValue({
-        'storeID': this.areaDetailForm.get('storeID').value,
-        'areaID': this.areaDetail.id,
-        'areaFloor': this.areaDetail.floor,
-        'areaStore': this.areaDetail.store.name,
-        // 'areaStatus': this.areaDetail.status
+      this.zoneDetailForm.setValue({
+        'storeID': this.zoneDetailForm.get('storeID').value,
+        'zoneID': this.zoneDetail.id,
+        'zoneFloor': this.zoneDetail.floor,
+        'zoneStore': this.zoneDetail.store.name,
+        // 'zoneStatus': this.zoneDetail.status
       });
       if (this.selectedValue !== null) {
         if (this.modeStatistic === 'month') {
@@ -312,8 +312,8 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   }
 
   catchDate(event) {
-    if (this.areaDetail == null) {
-      this.toastr.warning('Please choose area !', 'Warning');
+    if (this.zoneDetail == null) {
+      this.toastr.warning('Please choose zone !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM-DD');
       this.selectedValueDate = this.selectedValue;
@@ -331,8 +331,8 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
   }
 
   catchSelectedMonth(event) {
-    if (this.areaDetail == null) {
-      this.toastr.warning('Please choose area !', 'Warning');
+    if (this.zoneDetail == null) {
+      this.toastr.warning('Please choose zone !', 'Warning');
     } else {
       this.selectedValue = event.format('YYYY-MM');
       this.selectedValueMonth = this.selectedValue;
@@ -378,7 +378,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     this.lineChartLabels.length = 0;
     this.timeForm = this.selectTimeForm.get('timeFrom').value.split(':')[0];
     this.timeTo = this.selectTimeForm.get('timeTo').value.split(':')[0];
-    this.reportService.getReportAreaByTime(this.selectedValue, this.areaDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
+    this.reportService.getReportZoneByTime(this.selectedValue, this.zoneDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
@@ -395,7 +395,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     const self = this;
     this.lineChartData[0].data.length = 0;
     this.lineChartLabels.length = 0;
-    this.reportService.getReportAreaByMonth(this.selectedValue, this.areaDetail.id).subscribe((reports) => {
+    this.reportService.getReportZoneByMonth(this.selectedValue, this.zoneDetail.id).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
@@ -420,13 +420,13 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
       dialogConfig.autoFocus = true;
 
       dialogConfig.data = {
-        idArea: this.areaDetail.id,
+        idZone: this.zoneDetail.id,
         date: this.selectedValueDate,
         from: from,
         to: to
       };
 
-      const dialogRef = this.dialog.open(ViewHeatmapDialogAreaComponent, dialogConfig);
+      const dialogRef = this.dialog.open(ViewHeatmapDialogZoneComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe((data) => {
       }, (error) => {
@@ -450,7 +450,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
     dialogConfig.data = {
       id: this.accountID,
-      title: 'area'
+      title: 'zone'
     };
 
     setTimeout(() => this.dialog.open(StatisticDialogComponent, dialogConfig).afterClosed().subscribe((data) => {
@@ -466,7 +466,7 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
         this.selectTimeForm.get('timeTo').enable();
         this.listTimeTo = this.listTimeToRoot;
         this.listTimeFrom = this.listTimeFromRoot;
-        this.chooseValueAfterChoose(data.idStore, data.idArea);
+        this.chooseValueAfterChoose(data.idStore, data.idZone);
       }
     }, (error) => {
       console.log(error);
@@ -485,18 +485,18 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
 
 
   chooseStore() {
-    this.storeID = this.areaDetailForm.get('storeID').value;
-    this.areaDetailForm.setValue({
-      'storeID': this.areaDetailForm.get('storeID').value,
-      'areaID': '',
-      'areaFloor': '',
-      'areaStore': '',
-      // 'areaStatus': ''
+    this.storeID = this.zoneDetailForm.get('storeID').value;
+    this.zoneDetailForm.setValue({
+      'storeID': this.zoneDetailForm.get('storeID').value,
+      'zoneID': '',
+      'zoneFloor': '',
+      'zoneStore': '',
+      // 'zoneStatus': ''
     });
-    this.listArea = [];
+    this.listZone = [];
     this.listCamera = [];
-    this.areaService.getAllAreaInStore(this.storeID).subscribe((areas) => {
-      this.listArea = areas;
+    this.zoneService.getAllZoneInStore(this.storeID).subscribe((zones) => {
+      this.listZone = zones;
     }, (error) => {
       console.log(error);
     });
@@ -507,24 +507,24 @@ export class StatisticAreaComponent implements OnInit, OnDestroy {
     this.chart.ngOnChanges({} as SimpleChanges);
   }
 
-  chooseValueAfterChoose(idStore, idArea) {
+  chooseValueAfterChoose(idStore, idZone) {
     this.storeID = idStore;
-    this.areaService.getAllAreaInStore(idStore).subscribe((areas) => {
-      this.listArea = areas;
+    this.zoneService.getAllZoneInStore(idStore).subscribe((zones) => {
+      this.listZone = zones;
     }, (error) => {
       console.log(error);
     });
-    this.areaService.getAreaByID(idArea).subscribe((area) => {
-      this.areaDetail = area;
-      this.cameraService.getAllCameraInArea(this.areaDetail.id).subscribe((cameralist) => {
+    this.zoneService.getZoneByID(idZone).subscribe((zone) => {
+      this.zoneDetail = zone;
+      this.cameraService.getAllCameraInZone(this.zoneDetail.id).subscribe((cameralist) => {
         this.listCamera = cameralist;
       });
-      this.areaDetailForm.setValue({
+      this.zoneDetailForm.setValue({
         'storeID': idStore,
-        'areaID': idArea,
-        'areaFloor': area.floor,
-        'areaStore': area.store.name,
-        // 'areaStatus': area.status
+        'zoneID': idZone,
+        'zoneFloor': zone.floor,
+        'zoneStore': zone.store.name,
+        // 'zoneStatus': zone.status
       });
       if (this.selectedValue !== null) {
         if (this.modeStatistic === 'month') {

@@ -12,7 +12,7 @@ import { Report } from '../../models/report.model';
 import { Camera } from '../../models/camera.model';
 import { CameraService } from '../../services/camera.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
@@ -56,10 +56,10 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
   listCamera: Camera[];
 
   storeID: any;
-  areaID: any;
+  zoneID: any;
   cameraID: any;
 
-  listArea: any;
+  listZone: any;
   listStore: any;
 
   // Declare component of chart
@@ -154,7 +154,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     private reportService: ReportService,
     private route: ActivatedRoute,
     private cameraDetailService: CameraDetailService,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private cameraService: CameraService,
     private toastr: ToastrService,
     private storeService: StoreService,
@@ -176,7 +176,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     // declare Form
     this.cameraDetailForm = this.fb.group({
       'storeID': [''],
-      'areaID': [''],
+      'zoneID': [''],
       'cameraIP': [''],
       'cameraAccount': [''],
       'cameraPassword': [''],
@@ -210,7 +210,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
       this.cameraDetail = camera;
       this.cameraDetailForm.setValue({
         'storeID': this.cameraDetailForm.get('storeID').value,
-        'areaID': this.cameraDetailForm.get('areaID').value,
+        'zoneID': this.cameraDetailForm.get('zoneID').value,
         'cameraIP': this.cameraDetailForm.get('cameraIP').value,
         'cameraAccount': camera.account,
         'cameraPassword': camera.password,
@@ -422,7 +422,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
         this.selectTimeForm.get('timeTo').enable();
         this.listTimeTo = this.listTimeToRoot;
         this.listTimeFrom = this.listTimeFromRoot;
-        this.chooseValueAfterChoose(data.idStore, data.idArea, data.ipCamera);
+        this.chooseValueAfterChoose(data.idStore, data.idZone, data.ipCamera);
       }
     }, (error) => {
       console.log(error);
@@ -433,15 +433,15 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     this.storeID = this.cameraDetailForm.get('storeID').value;
     this.cameraDetailForm.setValue({
       'storeID': this.cameraDetailForm.get('storeID').value,
-      'areaID': '',
+      'zoneID': '',
       'cameraIP': '',
       'cameraAccount': '',
       'cameraPassword': '',
     });
-    this.listArea = [];
+    this.listZone = [];
     this.listCamera = [];
-    this.areaService.getAllAreaInStore(this.storeID).subscribe((areas) => {
-      this.listArea = areas;
+    this.zoneService.getAllZoneInStore(this.storeID).subscribe((zones) => {
+      this.listZone = zones;
     }, (error) => {
       console.log(error);
     });
@@ -450,17 +450,17 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     this.chart.ngOnChanges({} as SimpleChanges);
   }
 
-  chooseArea() {
-    this.areaID = this.cameraDetailForm.get('areaID').value;
+  chooseZone() {
+    this.zoneID = this.cameraDetailForm.get('zoneID').value;
     this.cameraDetailForm.setValue({
       'storeID': this.cameraDetailForm.get('storeID').value,
-      'areaID': this.cameraDetailForm.get('areaID').value,
+      'zoneID': this.cameraDetailForm.get('zoneID').value,
       'cameraIP': '',
       'cameraAccount': '',
       'cameraPassword': '',
     });
     this.listCamera = [];
-    this.cameraService.getAllCameraInArea(this.areaID).subscribe((cameras) => {
+    this.cameraService.getAllCameraInZone(this.zoneID).subscribe((cameras) => {
       this.listCamera = cameras;
     }, (error) => {
       console.log(error);
@@ -470,14 +470,14 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
     this.chart.ngOnChanges({} as SimpleChanges);
   }
 
-  chooseValueAfterChoose(idStore, idArea, ipCamera) {
+  chooseValueAfterChoose(idStore, idZone, ipCamera) {
     this.storeID = idStore;
-    this.areaService.getAllAreaInStore(idStore).subscribe((areas) => {
-      this.listArea = areas;
+    this.zoneService.getAllZoneInStore(idStore).subscribe((zones) => {
+      this.listZone = zones;
     }, (error) => {
       console.log(error);
     });
-    this.cameraService.getAllCameraInArea(idArea).subscribe((cameras) => {
+    this.cameraService.getAllCameraInZone(idZone).subscribe((cameras) => {
       this.listCamera = cameras;
     }, (error) => {
       console.log(error);
@@ -486,7 +486,7 @@ export class StatisticCameraComponent implements OnInit, OnDestroy {
       this.cameraDetail = camera;
       this.cameraDetailForm.setValue({
         'storeID': idStore,
-        'areaID': idArea,
+        'zoneID': idZone,
         'cameraIP': ipCamera,
         'cameraAccount': camera.account,
         'cameraPassword': camera.password,

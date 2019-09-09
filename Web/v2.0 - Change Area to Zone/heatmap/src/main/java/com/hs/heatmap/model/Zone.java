@@ -13,35 +13,35 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Area implements Serializable {
+public class Zone implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "area_id")
+    @Column(name = "zone_id")
     private int id;
 
     @Basic
-    @Column(name = "area_floor")
+    @Column(name = "zone_floor")
     private int floor;
 
     @Basic
-    @Column(name = "area_name")
+    @Column(name = "zone_name")
     private String name;
 
     @Basic
-    @Column(name = "area_date_created")
+    @Column(name = "zone_date_created")
     private String createdDate;
 
     @Basic
-    @Column(name = "area_date_updated")
+    @Column(name = "zone_date_updated")
     private String updatedDate;
 
     @Basic
-    @Column(name = "area_status")
+    @Column(name = "zone_status")
     private String status;
 
     @Basic
-    @Column(name = "area_updated_by")
+    @Column(name = "zone_updated_by")
     private String updatedBy;
 
     @Basic

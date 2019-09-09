@@ -15,8 +15,8 @@ import {
 } from '@angular/material';
 import { FulldatepickerComponent } from '../fulldatepicker/fulldatepicker.component';
 import { MonthyearpickerComponent } from '../monthyearpicker/monthyearpicker.component';
-import { StatisticAreaRoutingModule } from './statistic-area-routing.module';
-import { StatisticAreaComponent } from './statistic-area.component';
+import { StatisticZoneRoutingModule } from './statistic-zone-routing.module';
+import { StatisticZoneComponent } from './statistic-zone.component';
 
 
 const modules = [
@@ -29,7 +29,7 @@ const modules = [
 ];
 @NgModule({
   imports: [
-    StatisticAreaRoutingModule,
+    StatisticZoneRoutingModule,
     ChartsModule,
     CommonModule,
     NgxPaginationModule,
@@ -41,7 +41,7 @@ const modules = [
   exports: [
     modules
   ],
-  declarations: [ StatisticAreaComponent, MonthyearpickerComponent, FulldatepickerComponent],
+  declarations: [ StatisticZoneComponent, MonthyearpickerComponent, FulldatepickerComponent],
   providers: [  ]
 })
-export class StatisticAreaModule { }
+export class StatisticZoneModule { }

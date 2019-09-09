@@ -38,13 +38,13 @@ public class CameraController {
     }
 
     @GetMapping("/camera/search/{searchValue}/{id}")
-    public List<Camera> searchCamera(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int areaID) {
-        return cameraService.getCamerasByIp(searchValue, areaID);
+    public List<Camera> searchCamera(@PathVariable(value = "searchValue") String searchValue, @PathVariable(value = "id") int zoneID) {
+        return cameraService.getCamerasByIp(searchValue, zoneID);
     }
 
-    @GetMapping("/camera/getCameraInArea/{id}")
+    @GetMapping("/camera/getCameraInZone/{id}")
     public List<Camera> getStoreInCompany(@PathVariable(value = "id") int id) {
-        return cameraService.getCameraByArea(id);
+        return cameraService.getCameraByZone(id);
     }
 
     @PostMapping("/camera/inactive")
@@ -67,14 +67,14 @@ public class CameraController {
         return cameraService.createNewCamera(camera);
     }
 
-    @GetMapping("/camera/getActiveCameraByAreaID/{id}")
-    public List<Camera> getActiveCameraByAreaID(@PathVariable(value = "id") int id) {
-        return cameraService.getActiveCameraByArea(id);
+    @GetMapping("/camera/getActiveCameraByZoneID/{id}")
+    public List<Camera> getActiveCameraByZoneID(@PathVariable(value = "id") int id) {
+        return cameraService.getActiveCameraByZone(id);
     }
 
-    @GetMapping("/camera/getCameraByAreaID/{id}")
-    public List<Camera> getCameraByAreaID(@PathVariable(value = "id") int id) {
-        return cameraService.getCameraByArea(id);
+    @GetMapping("/camera/getCameraByZoneID/{id}")
+    public List<Camera> getCameraByZoneID(@PathVariable(value = "id") int id) {
+        return cameraService.getCameraByZone(id);
     }
 
     @GetMapping("/camera/getCameraByIP/{ip}")

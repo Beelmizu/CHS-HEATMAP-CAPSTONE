@@ -23,12 +23,12 @@ import { FulldatepickerComponent } from '../fulldatepicker/fulldatepicker.compon
 import { FulldatepickerModule } from '../fulldatepicker/fulldatepicker.module';
 import { StatisticCameraComponent } from '../statistic-camera/statistic-camera.component';
 import { StatisticStoreComponent } from '../statistic-store/statistic-store.component';
-import { StatisticAreaComponent } from '../statistic-area/statistic-area.component';
+import { StatisticZoneComponent } from '../statistic-zone/statistic-zone.component';
 import { StatisticAgeComponent } from '../statistic-age/statistic-age.component';
 import { StatisticGenderComponent } from '../statistic-gender/statistic-gender.component';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
-import { ViewHeatmapDialogAreaComponent } from '../view-heatmap-dialog-area/view-heatmap-dialog-area.component';
+import { ViewHeatmapDialogZoneComponent } from '../view-heatmap-dialog-zone/view-heatmap-dialog-zone.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -60,16 +60,16 @@ const modules = [
   declarations: [
     StatisticComponent,
     StatisticCameraComponent,
-    StatisticAreaComponent,
+    StatisticZoneComponent,
     StatisticStoreComponent,
     MonthyearpickerComponent,
     StatisticAgeComponent,
     StatisticGenderComponent,
     StatisticDialogComponent,
     ViewHeatmapDialogComponent,
-    ViewHeatmapDialogAreaComponent
+    ViewHeatmapDialogZoneComponent
   ],
   providers: [  ],
-  entryComponents: [StatisticDialogComponent, ViewHeatmapDialogComponent, ViewHeatmapDialogAreaComponent]
+  entryComponents: [StatisticDialogComponent, ViewHeatmapDialogComponent, ViewHeatmapDialogZoneComponent]
 })
 export class StatisticModule { }

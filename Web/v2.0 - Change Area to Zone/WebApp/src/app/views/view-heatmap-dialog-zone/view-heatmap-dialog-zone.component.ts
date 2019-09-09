@@ -9,11 +9,11 @@ import { first } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 
 @Component({
-  selector: 'app-view-heatmap-dialog-area',
-  templateUrl: './view-heatmap-dialog-area.component.html',
-  styleUrls: ['./view-heatmap-dialog-area.component.scss']
+  selector: 'app-view-heatmap-dialog-zone',
+  templateUrl: './view-heatmap-dialog-zone.component.html',
+  styleUrls: ['./view-heatmap-dialog-zone.component.scss']
 })
-export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
+export class ViewHeatmapDialogZoneComponent implements OnInit, OnDestroy {
 
   ref: AngularFireStorageReference;
   task: AngularFireUploadTask;
@@ -21,7 +21,7 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
   date: any;
   listCameraDetail: Camera[];
   cameraID: number;
-  areaID: number;
+  zoneID: number;
   from: any;
   to: any;
   previewSrc: any;
@@ -37,10 +37,10 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
     private cameraService: CameraService,
     private afStorage: AngularFireStorage,
     private cameraDetailService: CameraDetailService,
-    private dialogRef: MatDialogRef<ViewHeatmapDialogAreaComponent>,
+    private dialogRef: MatDialogRef<ViewHeatmapDialogZoneComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     this.date = data.date;
-    this.areaID = data.idArea;
+    this.zoneID = data.idZone;
     this.from = data.from;
     this.to = data.to;
   }
@@ -58,7 +58,7 @@ export class ViewHeatmapDialogAreaComponent implements OnInit, OnDestroy {
 
   getCamera() {
     return new Promise(resolve => {
-      this.cameraService.getAllCameraInArea(this.areaID)
+      this.cameraService.getAllCameraInZone(this.zoneID)
         .subscribe(data => {
           this.listCameraDetail = data;
           resolve(this.listCameraDetail);

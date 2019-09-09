@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { StatisticStoreComponent } from '../statistic-store/statistic-store.component';
-import { StatisticAreaComponent } from '../statistic-area/statistic-area.component';
+import { StatisticZoneComponent } from '../statistic-zone/statistic-zone.component';
 import { StatisticCameraComponent } from '../statistic-camera/statistic-camera.component';
 import { StatisticAgeComponent } from '../statistic-age/statistic-age.component';
 import { StatisticGenderComponent } from '../statistic-gender/statistic-gender.component';
@@ -22,10 +22,10 @@ const routes: Routes = [
         }
       },
       {
-        path: 'area',
-        component: StatisticAreaComponent,
+        path: 'zone',
+        component: StatisticZoneComponent,
         data: {
-          title: 'Area'
+          title: 'Zone'
         }
       },
       {

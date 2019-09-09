@@ -45,4 +45,4 @@ const modules = [
   declarations: [ StatisticStoreComponent, MonthyearpickerComponent, FulldatepickerComponent],
   providers: [  ]
 })
-export class StatisticAreaModule { }
+export class StatisticZoneModule { }

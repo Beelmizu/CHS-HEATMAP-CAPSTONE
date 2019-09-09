@@ -32,8 +32,8 @@ export const navItems = [
         icon: 'icon-home'
       },
       {
-        name: 'Area',
-        url: '/statistic/area',
+        name: 'Zone',
+        url: '/statistic/zone',
         icon: 'icon-film'
       },
       {

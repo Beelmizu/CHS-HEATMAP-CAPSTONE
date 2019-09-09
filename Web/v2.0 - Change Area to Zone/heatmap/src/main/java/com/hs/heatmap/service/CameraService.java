@@ -11,11 +11,11 @@ public interface CameraService {
 
     Camera getDetailCamera(int id);
 
-    List<Camera> getCameraByArea(int id);
+    List<Camera> getCameraByZone(int id);
 
-    List<Camera> getActiveCameraByArea(int id);
+    List<Camera> getActiveCameraByZone(int id);
 
-    List<Camera> getCamerasByIp(String searchValue, int areaID);
+    List<Camera> getCamerasByIp(String searchValue, int zoneID);
 
     boolean createNewCamera(Camera camera);
 

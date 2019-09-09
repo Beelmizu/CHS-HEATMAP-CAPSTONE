@@ -44,4 +44,4 @@ const modules = [
   declarations: [ StatisticAgeComponent, MonthyearpickerComponent, FulldatepickerComponent],
   providers: [  ]
 })
-export class StatisticAreaModule { }
+export class StatisticZoneModule { }

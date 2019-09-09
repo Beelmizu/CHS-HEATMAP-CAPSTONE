@@ -50,12 +50,12 @@ public class ReportController {
         return reportService.getReportAgeGenderByTime(selectedDate, cameraID, timeFrom, timeTo);
     }
 
-    @GetMapping("/report/getReportAreaByTime/{selectedDate}/{areaID}/{timeFrom}/{timeTo}")
-    public List getReportAreaByDate(@PathVariable(value = "selectedDate") String selectedDate,
-                                    @PathVariable(value = "areaID") int areaID,
+    @GetMapping("/report/getReportZoneByTime/{selectedDate}/{zoneID}/{timeFrom}/{timeTo}")
+    public List getReportZoneByDate(@PathVariable(value = "selectedDate") String selectedDate,
+                                    @PathVariable(value = "zoneID") int zoneID,
                                     @PathVariable(value = "timeFrom") String timeFrom,
                                     @PathVariable(value = "timeTo") String timeTo) {
-        return reportService.getReportAreaByTime(selectedDate, areaID, timeFrom, timeTo);
+        return reportService.getReportZoneByTime(selectedDate, zoneID, timeFrom, timeTo);
     }
 
     @GetMapping("/report/getReportStoreByTime/{selectedDate}/{storeID}/{timeFrom}/{timeTo}")
@@ -80,10 +80,10 @@ public class ReportController {
         return reportService.getReportCameraByMonth(selectedMonth, cameraID);
     }
 
-    @GetMapping("/report/getReportAreaByMonth/{selectedMonth}/{areaID}")
-    public List getReportAreaByMonth(@PathVariable(value = "selectedMonth") String selectedMonth,
-                                     @PathVariable(value = "areaID") int areaID) {
-        return reportService.getReportAreaByMonth(selectedMonth, areaID);
+    @GetMapping("/report/getReportZoneByMonth/{selectedMonth}/{zoneID}")
+    public List getReportZoneByMonth(@PathVariable(value = "selectedMonth") String selectedMonth,
+                                     @PathVariable(value = "zoneID") int zoneID) {
+        return reportService.getReportZoneByMonth(selectedMonth, zoneID);
     }
 
     @GetMapping("/report/getReportStoreByMonth/{selectedMonth}/{storeID}")

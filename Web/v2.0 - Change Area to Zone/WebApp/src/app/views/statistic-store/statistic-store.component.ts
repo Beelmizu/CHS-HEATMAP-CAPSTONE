@@ -11,8 +11,8 @@ import { ReportService } from '../../services/report.service';
 import { Camera } from '../../models/camera.model';
 import { CameraService } from '../../services/camera.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
-import { AreaService } from '../../services/area.service';
-import { Area } from '../../models/area.model';
+import { ZoneService } from '../../services/zone.service';
+import { Zone } from '../../models/zone.model';
 import { Store } from '../../models/store.model';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
@@ -27,7 +27,7 @@ import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.c
 export class StatisticStoreComponent implements OnInit, OnDestroy {
 
 
-  areaDetail: Area;
+  zoneDetail: Zone;
   storeDetail: Store;
   cameraDetail: Camera;
   accountID: string;
@@ -54,7 +54,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
   listTime: String[];
   listTimeFrom: String[];
   listTimeTo: String[];
-  listArea: Area[];
+  listZone: Zone[];
   listCamera: Camera[];
   listStore: Store[];
 
@@ -150,7 +150,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
     private reportService: ReportService,
     private route: ActivatedRoute,
     private cameraDetailService: CameraDetailService,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private storeService: StoreService,
     private cameraService: CameraService,
     private toastr: ToastrService,
@@ -202,8 +202,8 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
     const self = this;
     this.storeService.getStoreByID(this.storeDetailForm.get('storeName').value).subscribe((store) => {
       this.storeDetail = store;
-      this.areaService.getAllAreaInStore(this.storeDetail.id).subscribe((areaList) => {
-        this.listArea = areaList;
+      this.zoneService.getAllZoneInStore(this.storeDetail.id).subscribe((zoneList) => {
+        this.listZone = zoneList;
       });
       this.storeDetailForm.setValue({
         'storeName': this.storeDetail.id,
@@ -227,8 +227,8 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
     const self = this;
     this.storeService.getStoreByID(storeID).subscribe((store) => {
       this.storeDetail = store;
-      this.areaService.getAllAreaInStore(this.storeDetail.id).subscribe((areaList) => {
-        this.listArea = areaList;
+      this.zoneService.getAllZoneInStore(this.storeDetail.id).subscribe((zoneList) => {
+        this.listZone = zoneList;
       });
       this.storeDetailForm.setValue({
         'storeName': this.storeDetail.id,
@@ -283,7 +283,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: '' + this.listArea[i].name,
+        label: '' + this.listZone[i].name,
         yAxisID: 'y-axis-0'
       });
     }
@@ -325,7 +325,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
       }
       this.lineChartData.push({
         data: arr,
-        label: '' + this.listArea[i].name,
+        label: '' + this.listZone[i].name,
         yAxisID: 'y-axis-0'
       });
     }

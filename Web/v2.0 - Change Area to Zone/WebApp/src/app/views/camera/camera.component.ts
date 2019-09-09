@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 export class CameraComponent implements OnInit, OnDestroy {
 
   cameras: Camera[];
-  areaID: number;
+  zoneID: number;
 
   constructor(
     private router: Router,
@@ -30,9 +30,9 @@ export class CameraComponent implements OnInit, OnDestroy {
     const self = this;
 
     self.route.params.subscribe(params => {
-      self.areaID = params.areaID;
-      if (self.areaID != null) {
-        self.getCameraInArea(this.areaID);
+      self.zoneID = params.zoneID;
+      if (self.zoneID != null) {
+        self.getCameraInZone(this.zoneID);
       }
     });
   }
@@ -40,9 +40,9 @@ export class CameraComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
-  getCameraInArea(areaID): void {
+  getCameraInZone(zoneID): void {
     const self = this;
-    this.cameraService.getAllCameraInArea(areaID).subscribe((cameraList) => {
+    this.cameraService.getAllCameraInZone(zoneID).subscribe((cameraList) => {
       self.cameras = cameraList;
     }, (error) => {
       console.log(error);

@@ -59,11 +59,11 @@ public class Camera implements Serializable {
     private String updatedBy;
 
     @Basic
-    @Column(name = "cam_area_id")
-    private int areaID;
+    @Column(name = "cam_zone_id")
+    private int zoneID;
 
     @ManyToOne
-    @JoinColumn(name = "cam_area_id", insertable = false, updatable = false)
-    private Area area;
+    @JoinColumn(name = "cam_zone_id", insertable = false, updatable = false)
+    private Zone zone;
 
 }

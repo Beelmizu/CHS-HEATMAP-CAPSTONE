@@ -1,10 +1,10 @@
 package com.hs.heatmap.implService;
 
-import com.hs.heatmap.model.Area;
+import com.hs.heatmap.model.Zone;
 import com.hs.heatmap.model.Camera;
 import com.hs.heatmap.model.Report;
 import com.hs.heatmap.model.ReportAgeGender;
-import com.hs.heatmap.repository.AreaRepository;
+import com.hs.heatmap.repository.ZoneRepository;
 import com.hs.heatmap.repository.CameraRepository;
 import com.hs.heatmap.repository.ReportRepository;
 import com.hs.heatmap.service.ReportService;
@@ -25,7 +25,7 @@ public class ReportServiceImpl implements ReportService {
     private CameraRepository cameraRepository;
 
     @Autowired
-    private AreaRepository areaRepository;
+    private ZoneRepository zoneRepository;
 
     @Override
     public List<Report> getAllReport() {
@@ -86,8 +86,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List getReportAreaByMonth(String month, int areaID) {
-        List<Camera> cameras = cameraRepository.findActiveCameraByAreaID(areaID);
+    public List getReportZoneByMonth(String month, int zoneID) {
+        List<Camera> cameras = cameraRepository.findActiveCameraByZoneID(zoneID);
         List<Report> flag;
         List<List<Report>> result = new ArrayList<>();
         if (cameras != null) {
@@ -110,33 +110,33 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List getReportStoreByMonth(String month, int storeID) {
         List<List<Report>> result = new ArrayList<>();
-        List<List<Report>> reportArea;
+        List<List<Report>> reportZone;
         List<Report> flag = new ArrayList<>();
         Report reportDate;
-        List<Area> areas = areaRepository.findActiveAreaByStoID(storeID);
+        List<Zone> zones = zoneRepository.findActiveZoneByStoID(storeID);
         String time, comparedTime;
         int id = 1;
         float sum, count;
-        if (areas != null) {
-            for (int i = 0; i < areas.size(); i++) {
+        if (zones != null) {
+            for (int i = 0; i < zones.size(); i++) {
                 flag = new ArrayList<>();
                 id = 1;
-                reportArea = getReportAreaByMonth(month, areas.get(i).getId());
-                if (reportArea != null) {
-                    for (int j = 0; j < reportArea.get(0).size(); j++) {
-                        time = reportArea.get(0).get(j).getTime();
-                        sum = reportArea.get(0).get(j).getCount();
+                reportZone = getReportZoneByMonth(month, zones.get(i).getId());
+                if (reportZone != null) {
+                    for (int j = 0; j < reportZone.get(0).size(); j++) {
+                        time = reportZone.get(0).get(j).getTime();
+                        sum = reportZone.get(0).get(j).getCount();
                         count = 1;
-                        for (int k = 1; k < reportArea.size(); k++) {
-                            for (int l = 0; l < reportArea.get(k).size(); l++) {
-                                comparedTime = reportArea.get(k).get(l).getTime();
+                        for (int k = 1; k < reportZone.size(); k++) {
+                            for (int l = 0; l < reportZone.get(k).size(); l++) {
+                                comparedTime = reportZone.get(k).get(l).getTime();
                                 if (time.equals(comparedTime)) {
-                                    sum += reportArea.get(k).get(l).getCount();
+                                    sum += reportZone.get(k).get(l).getCount();
                                     count++;
                                 }
                             }
                         }
-                        reportDate = setElementForReportStoreByMonth(id, sum, count, areas.get(i).getId(), time);
+                        reportDate = setElementForReportStoreByMonth(id, sum, count, zones.get(i).getId(), time);
                         id++;
                         flag.add(reportDate);
                     }
@@ -250,8 +250,8 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Override
-    public List<List<Report>> getReportAreaByTime(String date, int areaID, String timeFrom, String timeTo) {
-        List<Camera> cameras = cameraRepository.findActiveCameraByAreaID(areaID);
+    public List<List<Report>> getReportZoneByTime(String date, int zoneID, String timeFrom, String timeTo) {
+        List<Camera> cameras = cameraRepository.findActiveCameraByZoneID(zoneID);
         List<List<Report>> result = new ArrayList<>();
         List<Report> flag;
         if (cameras != null) {
@@ -272,40 +272,40 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<List<ReportAgeGender>> getReportAgeGenderAreaByTime(String date, int areaID, String timeFrom, String timeTo) {
+    public List<List<ReportAgeGender>> getReportAgeGenderZoneByTime(String date, int zoneID, String timeFrom, String timeTo) {
         return null;
     }
 
     @Override
     public List getReportStoreByTime(String date, int storeID, String timeFrom, String timeTo) {
         List<List<Report>> result = new ArrayList<>();
-        List<List<Report>> reportArea;
+        List<List<Report>> reportZone;
         List<Report> flag;
         Report reportDate;
         int id = 1;
         float sum, count;
         String time, comparedTime;
-        List<Area> areas = areaRepository.findActiveAreaByStoID(storeID);
-        if (areas != null) {
-            for (int i = 0; i < areas.size(); i++) {
+        List<Zone> zones = zoneRepository.findActiveZoneByStoID(storeID);
+        if (zones != null) {
+            for (int i = 0; i < zones.size(); i++) {
                 flag = new ArrayList<>();
                 id = 1;
-                reportArea = getReportAreaByTime(date, areas.get(i).getId(), timeFrom, timeTo);
-                if (reportArea != null) {
-                    for (int j = 0; j < reportArea.get(0).size(); j++) {
-                        time = reportArea.get(0).get(j).getTime();
-                        sum = reportArea.get(0).get(j).getCount();
+                reportZone = getReportZoneByTime(date, zones.get(i).getId(), timeFrom, timeTo);
+                if (reportZone != null) {
+                    for (int j = 0; j < reportZone.get(0).size(); j++) {
+                        time = reportZone.get(0).get(j).getTime();
+                        sum = reportZone.get(0).get(j).getCount();
                         count = 1;
-                        for (int k = 1; k < reportArea.size(); k++) {
-                            for (int l = 0; l < reportArea.get(k).size(); l++) {
-                                comparedTime = reportArea.get(k).get(l).getTime();
+                        for (int k = 1; k < reportZone.size(); k++) {
+                            for (int l = 0; l < reportZone.get(k).size(); l++) {
+                                comparedTime = reportZone.get(k).get(l).getTime();
                                 if (time.equals(comparedTime)) {
-                                    sum += reportArea.get(k).get(l).getCount();
+                                    sum += reportZone.get(k).get(l).getCount();
                                     count++;
                                 }
                             }
                         }
-                        reportDate = setElementForReportStore(id, sum, count, areas.get(i).getId(), time);
+                        reportDate = setElementForReportStore(id, sum, count, zones.get(i).getId(), time);
                         id++;
                         flag.add(reportDate);
                     }
@@ -341,12 +341,12 @@ public class ReportServiceImpl implements ReportService {
         return null;
     }
 
-    private Report setElementForReportStore(int id, float sum, float count, int areaID, String time) {
+    private Report setElementForReportStore(int id, float sum, float count, int zoneID, String time) {
         Report element;
         element = new Report();
         element.setId(id);
         element.setCount(Math.round(sum / count));
-        element.setCameraID(areaID);
+        element.setCameraID(zoneID);
         element.setTime(time.split(" ")[1]);
         return element;
     }
@@ -383,13 +383,13 @@ public class ReportServiceImpl implements ReportService {
         return element;
     }
 
-    private Report setElementForReportStoreByMonth(int id, float sum, float count, int areaID, String date) {
+    private Report setElementForReportStoreByMonth(int id, float sum, float count, int zoneID, String date) {
         Report element;
         element = new Report();
         element.setId(id);
         element.setCount(Math.round(sum / count));
         element.setTime(date);
-        element.setCameraID(areaID);
+        element.setCameraID(zoneID);
         return element;
     }
 }

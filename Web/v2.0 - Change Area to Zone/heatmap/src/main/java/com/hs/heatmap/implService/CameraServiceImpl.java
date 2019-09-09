@@ -35,18 +35,18 @@ public class CameraServiceImpl implements CameraService {
     }
 
     @Override
-    public List<Camera> getCameraByArea(int id) {
-        return cameraRepository.findCameraByAreaID(id);
+    public List<Camera> getCameraByZone(int id) {
+        return cameraRepository.findCameraByZoneID(id);
     }
 
     @Override
-    public List<Camera> getActiveCameraByArea(int id) {
-        return cameraRepository.findActiveCameraByAreaID(id);
+    public List<Camera> getActiveCameraByZone(int id) {
+        return cameraRepository.findActiveCameraByZoneID(id);
     }
 
     @Override
-    public List<Camera> getCamerasByIp(String searchValue, int areaID) {
-        return cameraRepository.searchCamerasByIp(searchValue, areaID);
+    public List<Camera> getCamerasByIp(String searchValue, int zoneID) {
+        return cameraRepository.searchCamerasByIp(searchValue, zoneID);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class CameraServiceImpl implements CameraService {
         List<Camera> results = new ArrayList<>();
         for (int i = 0; i < stores.size(); i++) {
             for (int j = 0; j < cameras.size(); j++) {
-                if (stores.get(i).getId() == cameras.get(j).getArea().getStoID()) {
+                if (stores.get(i).getId() == cameras.get(j).getZone().getStoID()) {
                     results.add(cameras.get(j));
                 }
             }

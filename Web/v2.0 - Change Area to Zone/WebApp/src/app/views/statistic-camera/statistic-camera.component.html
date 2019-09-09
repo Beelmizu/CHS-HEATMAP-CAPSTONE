@@ -86,12 +86,12 @@
             </div>
 
             <div class="row" id="divSelectCamera">
-              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
+              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Zone: </label>
               <div class="col-md-8">
-                <select class="form-control" id="select1" name="select1" formControlName="areaID"
-                  placeholder="Select area name" (change)="chooseArea()">
-                  <option value="" disabled selected>Select area name</option>
-                  <option *ngFor="let area of listArea" value="{{area.id}}">{{area.name}}</option>
+                <select class="form-control" id="select1" name="select1" formControlName="zoneID"
+                  placeholder="Select zone name" (change)="chooseZone()">
+                  <option value="" disabled selected>Select zone name</option>
+                  <option *ngFor="let zone of listZone" value="{{zone.id}}">{{zone.name}}</option>
                 </select>
               </div>
             </div>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="card-body">
 
-                  <!-- Area -->
+                  <!-- Zone -->
                   <div class="form-group row">
                     <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Account: </label>
                     <div class="col-md-8">

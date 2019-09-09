@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap';
-import { AreaComponent } from './area.component';
-import { AreaService } from '../../services/area.service';
+import { ZoneComponent } from './zone.component';
+import { ZoneService } from '../../services/zone.service';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { AreaService } from '../../services/area.service';
     ReactiveFormsModule,
     BsDropdownModule.forRoot()
   ],
-  declarations: [ AreaComponent ],
-  providers: [ AreaService ]
+  declarations: [ ZoneComponent ],
+  providers: [ ZoneService ]
 })
-export class AreaModule { }
+export class ZoneModule { }

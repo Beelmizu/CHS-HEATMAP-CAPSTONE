@@ -15,13 +15,13 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="title === 'area' || title === 'camera'">
-      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
+    <div class="row" *ngIf="title === 'zone' || title === 'camera'">
+      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Zone: </label>
       <div class="col-md-8">
-        <select class="form-control" id="select1" name="select1" formControlName="valueArea" placeholder="Select area name"
-          (change)="chooseArea()">
-          <option value="" disabled selected>Select area name </option>
-          <option *ngFor="let area of listArea" value="{{area.id}}">{{area.name}}</option>
+        <select class="form-control" id="select1" name="select1" formControlName="valueZone" placeholder="Select zone name"
+          (change)="chooseZone()">
+          <option value="" disabled selected>Select zone name </option>
+          <option *ngFor="let zone of listZone" value="{{zone.id}}">{{zone.name}}</option>
         </select>
       </div>
     </div>

@@ -17,19 +17,19 @@ public interface CameraRepository extends JpaRepository<Camera, Integer>, Paging
     Camera findCameraById(Integer id);
 
     //Find Camera by ip
-    @Query("SELECT ca FROM Camera ca WHERE ca.ip like %:searchValue% and ca.areaID = :areaID and ca.status = null")
-    List<Camera> searchCamerasByIp(@Param("searchValue") String searchValue, @Param("areaID") int areaID);
+    @Query("SELECT ca FROM Camera ca WHERE ca.ip like %:searchValue% and ca.zoneID = :zoneID and ca.status = null")
+    List<Camera> searchCamerasByIp(@Param("searchValue") String searchValue, @Param("zoneID") int zoneID);
 
     Camera findCamerasByIp(String Ip);
 
-    @Query("SELECT c FROM Camera c WHERE c.areaID = :id")
-    List<Camera> getCameraByArea(@Param("id") int id);
+    @Query("SELECT c FROM Camera c WHERE c.zoneID = :id")
+    List<Camera> getCameraByZone(@Param("id") int id);
 
-    @Query("SELECT c FROM Camera c WHERE c.areaID = :id and c.status is null")
-    List<Camera> findActiveCameraByAreaID(@Param("id") int id);
+    @Query("SELECT c FROM Camera c WHERE c.zoneID = :id and c.status is null")
+    List<Camera> findActiveCameraByZoneID(@Param("id") int id);
 
-    @Query("SELECT c FROM Camera c WHERE c.areaID = :id and c.status is null")
-    List<Camera> findCameraByAreaID(@Param("id") int id);
+    @Query("SELECT c FROM Camera c WHERE c.zoneID = :id and c.status is null")
+    List<Camera> findCameraByZoneID(@Param("id") int id);
 
     @Query("SELECT c FROM Camera c WHERE c.status is null")
     List<Camera> findAllCamera();

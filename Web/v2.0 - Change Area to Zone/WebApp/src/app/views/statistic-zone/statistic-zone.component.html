@@ -6,7 +6,7 @@
           <h4 class="card-title mb-0">Number of people</h4>
           <div class="medium text-muted" id="txtMuted" *ngIf="selectedValue != null">Date - {{selectedValue}}</div>
         </div>
-        <div class="col-sm-7 d-none d-md-block" id="divSelectType" *ngIf="areaDetail != null">
+        <div class="col-sm-7 d-none d-md-block" id="divSelectType" *ngIf="zoneDetail != null">
           <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
             <label class="btn btn-outline-secondary " (click)="modeStatistic = 'month'">
               <input id="btnDay" type="radio" name="options" autocomplete="off" checked="true"> Month
@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <div class="row" id="divSelectValue" *ngIf="areaDetail != null">
+      <div class="row" id="divSelectValue" *ngIf="zoneDetail != null">
         <div class="col-sm-3">
         </div>
         <div class="col-sm-9 d-none d-md-block">
@@ -68,11 +68,11 @@
           </div>
         </div>
 
-        <!-- Area -->
+        <!-- Zone -->
         <div class="col-sm-3" id="divControl">
           <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
-            [formGroup]="areaDetailForm">
-            <div class="row" id="divSelectArea">
+            [formGroup]="zoneDetailForm">
+            <div class="row" id="divSelectZone">
                 <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Store: </label>
                 <div class="col-md-8">
                   <select class="form-control" id="select1" name="select1" formControlName="storeID"
@@ -83,20 +83,20 @@
                 </div>
               </div>
 
-            <div class="row" id="divSelectArea">
-              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Area: </label>
+            <div class="row" id="divSelectZone">
+              <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Zone: </label>
               <div class="col-md-8">
-                <select class="form-control" id="select1" name="select1" formControlName="areaID"
-                  placeholder="Select area name: " (change)="chooseArea()">
-                  <option value="" disabled selected>Select area: </option>
-                  <option *ngFor="let area of listArea" value="{{area.id}}">{{area.name}}</option>
+                <select class="form-control" id="select1" name="select1" formControlName="zoneID"
+                  placeholder="Select zone name: " (change)="chooseZone()">
+                  <option value="" disabled selected>Select zone: </option>
+                  <option *ngFor="let zone of listZone" value="{{zone.id}}">{{zone.name}}</option>
                 </select>
               </div>
             </div>
-            <div class="row" id="divCardInfoArea">
+            <div class="row" id="divCardInfoZone">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">Area Detail</h4>
+                  <h4 class="card-title">Zone Detail</h4>
                 </div>
                 <div class="card-body">
 
@@ -104,7 +104,7 @@
                   <div class="form-group row">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Floor: </label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" readonly=true formControlName="areaFloor">
+                      <input type="text" class="form-control" readonly=true formControlName="zoneFloor">
                     </div>
                   </div>
 
@@ -112,7 +112,7 @@
                   <div class="form-group row">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Store: </label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" readonly=true formControlName="areaStore">
+                      <input type="text" class="form-control" readonly=true formControlName="zoneStore">
                     </div>
                   </div>
 
@@ -120,7 +120,7 @@
                   <!-- <div class="form-group row">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Status: </label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" readonly=true formControlName="areaStatus">
+                      <input type="text" class="form-control" readonly=true formControlName="zoneStatus">
                     </div>
                   </div> -->
 

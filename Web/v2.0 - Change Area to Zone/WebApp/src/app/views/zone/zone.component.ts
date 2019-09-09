@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { Area } from '../../models/area.model';
+import { Zone } from '../../models/zone.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
 import { StoreService } from '../../services/store.service';
 import { Store } from '../../models/store.model';
 
 @Component({
-  selector: 'app-area',
-  templateUrl: './area.component.html',
-  styleUrls: ['./area.component.scss']
+  selector: 'app-zone',
+  templateUrl: './zone.component.html',
+  styleUrls: ['./zone.component.scss']
 })
-export class AreaComponent implements OnInit {
+export class ZoneComponent implements OnInit {
 
-  areas: Area[];
+  zones: Zone[];
   stoID: number;
   storeInfo: Store;
   showInfo = false;
 
   constructor(
     private router: Router,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private storeService: StoreService,
     private route: ActivatedRoute,
     private location: Location
@@ -34,15 +34,15 @@ export class AreaComponent implements OnInit {
       self.stoID = params.storeID;
       if (self.stoID != null) {
         // self.getInfoStore(this.stoID);
-        self.getAreaInStore(this.stoID);
+        self.getZoneInStore(this.stoID);
       }
     });
   }
 
-  getAreaInStore(storeID): void {
+  getZoneInStore(storeID): void {
     const self = this;
-    this.areaService.getAllAreaInStore(storeID).subscribe((areaList) => {
-      self.areas = areaList;
+    this.zoneService.getAllZoneInStore(storeID).subscribe((zoneList) => {
+      self.zones = zoneList;
     }, (error) => {
       console.log(error);
     });

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { StoreComponent } from './store.component';
-import { AreaComponent } from '../area/area.component';
+import { ZoneComponent } from '../zone/zone.component';
 import { CameraComponent } from '../camera/camera.component';
 import { CameraDetailComponent } from '../camera-detail/camera-detail.component';
 
@@ -15,21 +15,21 @@ const routes: Routes = [
     }
   },
   {
-    path: ':storeID/area',
-    component: AreaComponent,
+    path: ':storeID/zone',
+    component: ZoneComponent,
     data: {
-      title: 'Area'
+      title: 'Zone'
     }
   },
   {
-    path: ':storeID/area/:areaID/camera',
+    path: ':storeID/zone/:zoneID/camera',
     component: CameraComponent,
     data: {
       title: 'Camera'
     }
   },
   {
-    path: ':storeID/area/:areaID/camera/:cameraID/detail',
+    path: ':storeID/zone/:zoneID/camera/:cameraID/detail',
     component: CameraDetailComponent,
     data: {
       title: 'Camera Detail'

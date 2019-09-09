@@ -7,7 +7,7 @@ import { StoreComponent } from './store.component';
 import { StoreRoutingModule } from './store-routing.module';
 import { RouterModule } from '@angular/router';
 import { StoreService } from '../../services/store.service';
-import { AreaComponent } from '../area/area.component';
+import { ZoneComponent } from '../zone/zone.component';
 import { CameraComponent } from '../camera/camera.component';
 import { CameraDetailComponent } from '../camera-detail/camera-detail.component';
 
@@ -48,7 +48,7 @@ const modules = [
   ],
   declarations: [
     StoreComponent,
-    AreaComponent,
+    ZoneComponent,
     CameraComponent,
     CameraDetailComponent
   ],

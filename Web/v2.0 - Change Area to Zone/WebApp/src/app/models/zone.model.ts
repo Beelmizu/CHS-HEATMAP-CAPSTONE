@@ -1,6 +1,6 @@
 import { Store } from './store.model';
 
-export class Area  {
+export class Zone  {
     public id: number;
     public floor: number;
     public name: String;

@@ -33,8 +33,8 @@ export class ReportService {
                                                                        + timeTo + '/');
   }
 
-  getReportAreaByTime(selectedDate: String, araID: number, timeFrom: String, timeTo: String): Observable<any[]> {
-    return this.http.get<any[]>(this.reportUrl + 'getReportAreaByTime/' + selectedDate + '/'
+  getReportZoneByTime(selectedDate: String, araID: number, timeFrom: String, timeTo: String): Observable<any[]> {
+    return this.http.get<any[]>(this.reportUrl + 'getReportZoneByTime/' + selectedDate + '/'
                                                                        + araID + '/'
                                                                        + timeFrom + '/'
                                                                        + timeTo);
@@ -62,8 +62,8 @@ export class ReportService {
     return this.http.get<Report[]>(this.reportUrl + 'getHeatmapByDate/' + selectedDate + '/' + cameraID);
   }
 
-  getReportAreaByMonth(selectedMonth: String, areaID: number): Observable<any[]> {
-    return this.http.get<any[]>(this.reportUrl + 'getReportAreaByMonth/' + selectedMonth + '/' + areaID);
+  getReportZoneByMonth(selectedMonth: String, zoneID: number): Observable<any[]> {
+    return this.http.get<any[]>(this.reportUrl + 'getReportZoneByMonth/' + selectedMonth + '/' + zoneID);
   }
 
   getReportStoreByMonth(selectedMonth: String, storeID: number): Observable<any[]> {
