@@ -2551,7 +2551,7 @@
 											"top": 814.5,
 											"width": 84,
 											"height": 13,
-											"text": "Manage Area"
+											"text": "Manage Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -2750,7 +2750,7 @@
 											"top": 774.5,
 											"width": 81,
 											"height": 13,
-											"text": "Add Area"
+											"text": "Add Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -2949,7 +2949,7 @@
 											"top": 894.5,
 											"width": 69,
 											"height": 13,
-											"text": "Edit Area"
+											"text": "Edit Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -4124,7 +4124,7 @@
 											"top": 478,
 											"width": 81,
 											"height": 13,
-											"text": "View Area"
+											"text": "View Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -11482,7 +11482,7 @@
 											"top": 859.5,
 											"width": 78,
 											"height": 13,
-											"text": "Search Area"
+											"text": "Search Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -11515,7 +11515,7 @@
 									"font": "Arial;13;0",
 									"left": 394.5,
 									"top": 852.5,
-									"width": 88,
+									"width": 88.025390625,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFsW5A2Ofap8qU="
@@ -15593,7 +15593,7 @@
 											"top": 819.5,
 											"width": 74,
 											"height": 13,
-											"text": "Delete Area"
+											"text": "Delete Zone"
 										},
 										{
 											"_type": "LabelView",
@@ -17299,7 +17299,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Manage Area",
+					"name": "Manage Zone",
 					"ownedElements": [
 						{
 							"_type": "UMLExtend",
@@ -17442,7 +17442,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Add Area",
+					"name": "Add Zone",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -17478,7 +17478,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Edit Area",
+					"name": "Edit Zone",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18214,7 +18214,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "View Area",
+					"name": "View Zone",
 					"ownedElements": [
 						{
 							"_type": "UMLExtend",
@@ -19021,7 +19021,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Search Area",
+					"name": "Search Zone",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -19254,7 +19254,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFrf7to5KGx9t4="
 					},
-					"name": "Delete Area"
+					"name": "Delete Zone"
 				},
 				{
 					"_type": "UMLUseCase",
