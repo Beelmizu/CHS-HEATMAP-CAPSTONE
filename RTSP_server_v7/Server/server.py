@@ -154,9 +154,10 @@ def setup_app(app):
 	# port_camera = "rtsp://admin:Admin@123@14.187.178.200:10554"
 	cameras = thread_db.get_all_camera()
 	for camera in cameras:
-		# 0 là id, 1 là ip, 2 là account, 3 là password
+		# 0 là id, 1 là ip, 2 là account, 3 là password, 4 là zone id
 		port_camera ="rtsp://" + camera[2] + ":" + camera[3] + "@" + camera[1]
 		id_camera = str(camera[0])
+		id_zone = str(camera[4])
 		print(port_camera)
 		# print(camera[0])
 		if camera[2] == "admin":
@@ -166,7 +167,7 @@ def setup_app(app):
 			rd.set(str(id_camera)+"_AVAIABLE", 1)
 			thread_camera = threading.Thread(target=run_camera, args=(socketio, rd, id_camera, port_camera,))
 			thread_camera.start()
-			thread_worker = threading.Thread(target=detect_object, args=(socketio, rd, id_camera,))
+			thread_worker = threading.Thread(target=detect_object, args=(socketio, rd, id_camera, id_zone,))
 			thread_worker.start()
 			# thread_face = threading.Thread(target=detect_face_customer, args=(rd, id_camera,))
 			# thread_face.start()

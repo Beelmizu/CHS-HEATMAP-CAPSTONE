@@ -37,6 +37,31 @@ def add_report(string_matrix, id_camera, current_time, count_number, gender, age
             pass
     finally:
         connection.close()
+def add_traffic(get_in_time, get_out_time, id_zone):
+    try:
+        # now = datetime.datetime.now()            
+        #kết nối DB
+        connection = thread_db.get_connection()
+        # print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+        cursor = connection.cursor()
+        sql = "INSERT INTO traffic(tra_get_in_time, tra_get_out_time, tra_zone_id) values(%s, %s, %s)"
+        # print("Insert count: ", count_number)
+        cursor.execute(sql, (get_in_time, get_out_time, id_zone))
+        connection.commit()
+
+        # cursor = connection.cursor()
+        # sql = "INSERT INTO heatmap(htm_matrix, htm_time, htm_cam_id) values(%s, %s, %s)"
+        # print("Insert boxxxxxxxxxxx: ", string_matrix)
+        # cursor.execute(sql, (string_matrix, current_time, id_camera))
+        # connection.commit()
+    except Exception as e:
+        if hasattr(e, 'message'):
+            print(e.message)
+        else:
+            print(e)
+            pass
+    finally:
+        connection.close()
 
 def get_total_matrix(id_camera, current_date):
     matrix_heatmap = []
@@ -137,7 +162,7 @@ def get_all_camera():
         #kết nối DB
         connection = thread_db.get_connection()
         cursor = connection.cursor()
-        sql = "SELECT cam_id, cam_ip, cam_account, cam_password FROM heatmapsystem.camera Where cam_status is null"
+        sql = "SELECT cam_id, cam_ip, cam_account, cam_password, cam_zone_id FROM heatmapsystem.camera Where cam_status is null"
         cursor.execute(sql)
         records = cursor.fetchall()
         cursor.close()

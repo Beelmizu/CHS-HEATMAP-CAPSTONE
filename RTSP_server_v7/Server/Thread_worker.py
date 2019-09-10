@@ -80,7 +80,7 @@ category_index = label_map_util.create_category_index(categories)
 
 
 
-def detect_object(socketio, rd, id_camera):
+def detect_object(socketio, rd, id_camera, id_zone):
     
     current_time = datetime.datetime.now()
     current_date = current_time.strftime("%Y-%m-%d")
@@ -252,14 +252,31 @@ def detect_object(socketio, rd, id_camera):
                                                 dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
 
                                                 if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
-                                                    # print("orbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-                                                    # print(len(obj_feature_vectors[j][0]))
-                                                    # print(len(des_out))
-                                                    # print(len(matches))
-                                                    shopping_time = time.time() - obj_feature_vectors[j][1]
-                                                    obj_feature_vectors.pop(j)
-                                                    j = j+1
-                                                    dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
+                                                    try:
+
+                                                        # print("orbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                                                        # print(len(obj_feature_vectors[j][0]))
+                                                        # print(len(des_out))
+                                                        # print(len(matches))
+                                                        shopping_time = time.time() - obj_feature_vectors[j][1]
+                                                        get_out_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(time.time()))
+                                                        get_in_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
+                                                        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(time.time())))
+                                                        # print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(obj_feature_vectors[j][1])))
+                                                        # print("IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD: ", str(id_zone))
+                                                        thread_db.add_traffic(get_in_time, get_out_time, id_zone)
+                                                        # thread_db.add_traffic(datetime.datetime.fromtimestamp(int(str(get_in_time))).strftime('%c'), datetime.datetime.fromtimestamp(int(str(get_out_time))).strftime('%c'), id_zone)
+                                                        obj_feature_vectors.pop(j)
+                                                        j = j+1
+                                                        dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
+                                                    except Exception as e:
+                                                        if hasattr(e, 'message'):
+                                                            print(e.message)
+                                                        else:
+                                                            print(e)
+                                                            
+                                                        pass
+                                                    
 
                                         if orientation_vects[i][0] > width/2 and orientation_vects[i][2] < width/2:
                                             rtl = rtl + 1
