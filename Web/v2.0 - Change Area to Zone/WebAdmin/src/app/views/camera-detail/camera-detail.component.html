@@ -115,12 +115,12 @@
           </div>
         </div>
 
-        <!-- Show Area ID -->
+        <!-- Show Zone ID -->
         <div class="form-group row">
-          <label class="col-md-3 col-form-label" for="select1"> Area: </label>
+          <label class="col-md-3 col-form-label" for="select1"> Zone: </label>
           <div class="col-md-9">
-            <select class="form-control" id="select1" name="select1" formControlName="cameraArea" disabled="">
-              <option *ngFor="let area of areas" value="{{area.id}}">{{area.name}}</option>
+            <select class="form-control" id="select1" name="select1" formControlName="cameraZone" disabled="">
+              <option *ngFor="let zone of zones" value="{{zone.id}}">{{zone.name}}</option>
             </select>
           </div>
         </div>

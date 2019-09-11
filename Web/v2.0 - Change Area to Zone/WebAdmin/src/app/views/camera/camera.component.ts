@@ -16,7 +16,7 @@ export class CameraComponent implements OnInit {
 
   cameras: Camera[];
   cameraForm: FormGroup;
-  areaID: number;
+  zoneID: number;
 
   constructor(
     private router: Router,
@@ -35,16 +35,16 @@ export class CameraComponent implements OnInit {
     });
 
     this.route.params.subscribe(params => {
-      this.areaID = params.idArea;
-      if (this.areaID != null) {
-        this.getCameraInArea(this.areaID);
+      this.zoneID = params.idZone;
+      if (this.zoneID != null) {
+        this.getCameraInZone(this.zoneID);
       }
     });
   }
 
-  getCameraInArea(areaID): void {
+  getCameraInZone(zoneID): void {
     const self = this;
-    this.cameraService.getAllCameraInArea(areaID).subscribe((cameraList) => {
+    this.cameraService.getAllCameraInZone(zoneID).subscribe((cameraList) => {
       this.cameras = cameraList;
     }, (error) => {
       console.log(error);
@@ -54,9 +54,9 @@ export class CameraComponent implements OnInit {
   searchCameraByValue(searchValue: String): void {
     const self = this;
     if (searchValue === '') {
-      this.getCameraInArea(this.areaID);
+      this.getCameraInZone(this.zoneID);
     } else {
-      this.cameraService.getCameraByValue(searchValue, this.areaID).subscribe((cameraList) => {
+      this.cameraService.getCameraByValue(searchValue, this.zoneID).subscribe((cameraList) => {
         if (cameraList.length === 0) {
           this.toastr.warning('Cannot find camera by value!', 'Warning');
         } else {

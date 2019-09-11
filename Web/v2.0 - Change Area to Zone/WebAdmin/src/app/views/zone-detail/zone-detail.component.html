@@ -1,16 +1,16 @@
 <div class="animated fadeIn">
   <div class="card" id="cardContainer">
     <div class=card-header>
-      <strong>Area Detail </strong>
-      <small>{{areaDetail.id}}</small>
+      <strong>Zone Detail </strong>
+      <small>{{zoneDetail.id}}</small>
     </div>
     <div class="card-body">
-      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="areaDetailForm">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" [formGroup]="zoneDetailForm">
         <!-- Show ID -->
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="areaID">
+            <input type="text" class="form-control" readonly=true formControlName="zoneID">
           </div>
         </div>
 
@@ -18,13 +18,13 @@
         <div class="form-group row">
           <label class="col-md-3 col-form-label" for="text-input">Floor: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" formControlName="areaFloor"
-              [ngClass]="{'is-invalid': isInvalid('areaFloor'), 'is-valid' : isValid('areaFloor')}"
+            <input type="text" class="form-control" formControlName="zoneFloor"
+              [ngClass]="{'is-invalid': isInvalid('zoneFloor'), 'is-valid' : isValid('zoneFloor')}"
               pattern="([0-9]{1,2})">
-            <div class="invalid-feedback" *ngIf="areaDetailForm.hasError('required','areaFloor')">
+            <div class="invalid-feedback" *ngIf="zoneDetailForm.hasError('required','zoneFloor')">
               Floor is required !
             </div>
-            <div class="invalid-feedback" *ngIf="areaDetailForm.hasError('pattern','areaFloor')">
+            <div class="invalid-feedback" *ngIf="zoneDetailForm.hasError('pattern','zoneFloor')">
               Floor must be a number and not get over 100 !
             </div>
           </div>
@@ -34,12 +34,12 @@
         <div class="form-group row">
           <label class="col-md-3 col-form-label" for="text-input">Name: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" formControlName="areaName"
-              [ngClass]="{'is-invalid': isInvalid('areaName'), 'is-valid' : isValid('areaName')}">
-            <div class="invalid-feedback" *ngIf="areaDetailForm.hasError('required','areaName')">
+            <input type="text" class="form-control" formControlName="zoneName"
+              [ngClass]="{'is-invalid': isInvalid('zoneName'), 'is-valid' : isValid('zoneName')}">
+            <div class="invalid-feedback" *ngIf="zoneDetailForm.hasError('required','zoneName')">
               Name is required !
             </div>
-            <div class="invalid-feedback" *ngIf="areaDetailForm.hasError('maxlength','areaName')">
+            <div class="invalid-feedback" *ngIf="zoneDetailForm.hasError('maxlength','zoneName')">
               Max length &lt; 45
             </div>
           </div>
@@ -49,7 +49,7 @@
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="areaCreatedDate">
+            <input type="text" class="form-control" readonly=true formControlName="zoneCreatedDate">
           </div>
         </div>
 
@@ -57,7 +57,7 @@
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="areaUpdatedDate">
+            <input type="text" class="form-control" readonly=true formControlName="zoneUpdatedDate">
           </div>
         </div>
 
@@ -65,7 +65,7 @@
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="areaStatus">
+            <input type="text" class="form-control" readonly=true formControlName="zoneStatus">
           </div>
         </div>
 
@@ -73,7 +73,7 @@
         <div class="form-group row" *ngIf="mode == 'detail'">
           <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
           <div class="col-md-9">
-            <input type="text" class="form-control" readonly=true formControlName="areaUpdatedBy">
+            <input type="text" class="form-control" readonly=true formControlName="zoneUpdatedBy">
           </div>
         </div>
 
@@ -81,7 +81,7 @@
         <div class="form-group row">
           <label class="col-md-3 col-form-label" for="select1"> Store: </label>
           <div class="col-md-9">
-            <select class="form-control" id="select1" name="select1" formControlName="areaStore" disabled="">
+            <select class="form-control" id="select1" name="select1" formControlName="zoneStore" disabled="">
               <option *ngFor="let store of stores" value="{{store.id}}">{{store.name}}</option>
             </select>
           </div>
@@ -91,20 +91,20 @@
     <div class="card-footer" *ngIf="mode =='add'">
       <button class="btn btn-sm btn-primary" (click)="goBack()">
         <i class="icon-action-undo"></i> Back</button>
-      <button type="submit" class="btn btn-sm btn-warning" (click)="addArea()">
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addZone()">
         <i class="icon-book-open"></i> Add</button>
     </div>
     <div class="card-footer" *ngIf="mode == 'detail'">
       <button class="btn btn-sm btn-primary" (click)="goBack()">
         <i class="icon-action-undo"></i> Back</button>
-      <button type="submit" class="btn btn-sm btn-warning" (click)="updateAreaByID()"
-        *ngIf="areaDetail.status == 'active'">
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateZoneByID()"
+        *ngIf="zoneDetail.status == 'active'">
         <i class="icon-book-open"></i> Update</button>
-      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveAreaByID()"
-        *ngIf="areaDetail.status == 'active'">
+      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveZoneByID()"
+        *ngIf="zoneDetail.status == 'active'">
         <i class="icon-trash"></i> Inactive </button>
-      <button type="button" class="btn btn-sm btn-success" (click)="activeAreaByID()"
-        *ngIf="areaDetail.status == 'inactive'">
+      <button type="button" class="btn btn-sm btn-success" (click)="activeZoneByID()"
+        *ngIf="zoneDetail.status == 'inactive'">
         <i class="icon-check"></i> Active </button>
     </div>
   </div>

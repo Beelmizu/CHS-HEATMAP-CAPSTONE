@@ -10,8 +10,8 @@ import { CompanyService } from '../../services/company.service';
 import { CompanyDetailComponent } from '../company-detail/company-detail.component';
 import { StoreComponent } from '../store/store.component';
 import { StoreDetailComponent } from '../store-detail/store-detail.component';
-import { AreaComponent } from '../area/area.component';
-import { AreaDetailComponent } from '../area-detail/area-detail.component';
+import { ZoneComponent } from '../zone/zone.component';
+import { ZoneDetailComponent } from '../zone-detail/zone-detail.component';
 import { CameraComponent } from '../camera/camera.component';
 import { CameraDetailComponent } from '../camera-detail/camera-detail.component';
 import { AccountComponent } from '../account/account.component';
@@ -35,8 +35,8 @@ import { AccountDetailComponent } from '../account-detail/account-detail.compone
       AccountDetailComponent,
       StoreComponent,
       StoreDetailComponent,
-      AreaComponent,
-      AreaDetailComponent,
+      ZoneComponent,
+      ZoneDetailComponent,
       CameraComponent,
       CameraDetailComponent
   ],

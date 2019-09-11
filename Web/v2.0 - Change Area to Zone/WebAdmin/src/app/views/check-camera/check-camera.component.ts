@@ -29,7 +29,7 @@ export class CheckCameraComponent implements OnInit, PipeTransform, OnDestroy {
   selectedEntities: any[];
   from = 1;
   end = 5;
-  cameraFilter: any = { area: { store: { name: '' } } };
+  cameraFilter: any = { zone: { store: { name: '' } } };
 
   subStatus: Subscription;
 

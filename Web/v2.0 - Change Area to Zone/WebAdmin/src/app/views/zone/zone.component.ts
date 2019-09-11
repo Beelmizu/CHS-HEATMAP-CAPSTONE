@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Area } from '../../models/area.model';
+import { Zone } from '../../models/zone.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
-  selector: 'app-area',
-  templateUrl: './area.component.html',
-  styleUrls: ['./area.component.scss']
+  selector: 'app-zone',
+  templateUrl: './zone.component.html',
+  styleUrls: ['./zone.component.scss']
 })
-export class AreaComponent implements OnInit {
+export class ZoneComponent implements OnInit {
 
-  areas: Area[];
-  areaForm: FormGroup;
+  zones: Zone[];
+  zoneForm: FormGroup;
   storeID: number;
 
   constructor(
     private router: Router,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -30,38 +30,38 @@ export class AreaComponent implements OnInit {
   ngOnInit() {
     const self = this;
 
-    this.areaForm = this.fb.group({
+    this.zoneForm = this.fb.group({
       'searchValue': ''
     });
 
     this.route.params.subscribe(params => {
       this.storeID = params.idStore;
       if (self.storeID != null) {
-        this.getAreaInStore(this.storeID);
+        this.getZoneInStore(this.storeID);
       }
     });
   }
 
-  getAreaInStore(storeID): void {
+  getZoneInStore(storeID): void {
     const self = this;
-    this.areaService.getAllAreaInStore(storeID).subscribe((areaList) => {
-      this.areas = areaList;
+    this.zoneService.getAllZoneInStore(storeID).subscribe((zoneList) => {
+      this.zones = zoneList;
     }, (error) => {
       console.log(error);
     });
   }
 
 
-  searchAreaByValue(searchValue: String): void {
+  searchZoneByValue(searchValue: String): void {
     const self = this;
     if (searchValue === '') {
-      this.getAreaInStore(this.storeID);
+      this.getZoneInStore(this.storeID);
     } else {
-      this.areaService.getAreaByValue(searchValue, this.storeID).subscribe((areaList) => {
-        if (areaList.length === 0) {
-          this.toastr.warning('Cannot find area by value!', 'Warning');
+      this.zoneService.getZoneByValue(searchValue, this.storeID).subscribe((zoneList) => {
+        if (zoneList.length === 0) {
+          this.toastr.warning('Cannot find zone by value!', 'Warning');
         } else {
-          this.areas = areaList;
+          this.zones = zoneList;
         }
       }, (error) => {
         console.log(error);

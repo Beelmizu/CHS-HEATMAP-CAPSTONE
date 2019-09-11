@@ -27,12 +27,12 @@ export class CameraService {
     return this.http.get<Camera[]>(this.cameraUrl + 'getAll');
   }
 
-  getAllCameraInArea(areaID: number): Observable<Camera[]> {
-    return this.http.get<Camera[]>(this.cameraUrl + 'getCameraInArea/' + areaID);
+  getAllCameraInZone(zoneID: number): Observable<Camera[]> {
+    return this.http.get<Camera[]>(this.cameraUrl + 'getCameraInZone/' + zoneID);
   }
 
-  getCameraByValue(searchValue: String, areaID: number): Observable<Camera[]> {
-    return this.http.get<Camera[]>(this.cameraUrl + 'search/' + searchValue + '/' + areaID);
+  getCameraByValue(searchValue: String, zoneID: number): Observable<Camera[]> {
+    return this.http.get<Camera[]>(this.cameraUrl + 'search/' + searchValue + '/' + zoneID);
   }
 
   getAllCameraByPage(pageNumber: number): Observable<Page> {

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 // import { SocketConnectService } from '../../services/socket-connect.service';
 import { Camera } from '../../models/camera.model';
-import { Area } from '../../models/area.model';
+import { Zone } from '../../models/zone.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { SocketConnectService } from '../../services/socket-connect.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
 import { Location } from '@angular/common';
@@ -32,8 +32,8 @@ export class CameraDetailComponent implements OnInit {
 
   cameraDetail = new Camera;
   cameraID: number;
-  areaID: number;
-  areas: Area[];
+  zoneID: number;
+  zones: Zone[];
   cameraDetailForm: FormGroup;
   url: String = 'empty';
 
@@ -52,7 +52,7 @@ export class CameraDetailComponent implements OnInit {
     // private socketService: SocketConnectService,
     private socketService: SocketConnectService,
     private cameraDetailService: CameraDetailService,
-    private areaService: AreaService,
+    private zoneService: ZoneService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
@@ -63,12 +63,12 @@ export class CameraDetailComponent implements OnInit {
   ngOnInit() {
     const self = this;
 
-    this.getAllArea();
+    this.getAllZone();
 
     this.route.params.subscribe(params => {
       this.mode = params.mode;
       this.cameraID = params.idCamera;
-      this.areaID = params.idArea;
+      this.zoneID = params.idZone;
     });
 
     this.cameraDetailForm = this.fb.group({
@@ -80,7 +80,7 @@ export class CameraDetailComponent implements OnInit {
       'cameraCreatedDate': [''],
       'cameraUpdatedDate': [''],
       'cameraUpdatedBy': [''],
-      'cameraArea': [this.areaID]
+      'cameraZone': [this.zoneID]
     });
 
     if (this.cameraID != null) {
@@ -90,11 +90,11 @@ export class CameraDetailComponent implements OnInit {
 
   }
 
-  // Get all area
-  getAllArea() {
+  // Get all zone
+  getAllZone() {
     const self = this;
-    this.areaService.getAllArea().subscribe((areaList) => {
-      this.areas = areaList;
+    this.zoneService.getAllZone().subscribe((zoneList) => {
+      this.zones = zoneList;
     }, (error) => {
       console.log(error);
     });
@@ -117,7 +117,7 @@ export class CameraDetailComponent implements OnInit {
         'cameraCreatedDate': this.cameraDetail.createdDate,
         'cameraUpdatedDate': this.cameraDetail.updatedDate,
         'cameraUpdatedBy': this.cameraDetail.updatedBy,
-        'cameraArea': this.cameraDetail.areaID
+        'cameraZone': this.cameraDetail.zoneID
       });
       userStorageRef.getDownloadURL().subscribe(url => {
         this.url = url;
@@ -304,8 +304,8 @@ export class CameraDetailComponent implements OnInit {
         this.cameraDetail.updatedBy = localStorage.getItem('accountUsername');
       }
       this.cameraDetail.imageUrl = '/camera/' + this.cameraDetail.id + '_camera';
-      if (this.cameraDetailForm.get('cameraArea').value !== true) {
-        this.cameraDetail.areaID = this.cameraDetailForm.get('cameraArea').value;
+      if (this.cameraDetailForm.get('cameraZone').value !== true) {
+        this.cameraDetail.zoneID = this.cameraDetailForm.get('cameraZone').value;
       } else {
         return false;
       }

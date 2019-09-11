@@ -23,7 +23,7 @@
           <div id="DataTables_Table_0_filter" class="dataTables_filter">
             <label>Search:
               <input type="search" class="form-control form-control-sm" placeholder="" 
-                aria-controls="DataTables_Table_0" [(ngModel)]="cameraFilter.area.store.name" autocomplete="off"  placeholder="Search camera of store">
+                aria-controls="DataTables_Table_0" [(ngModel)]="cameraFilter.zone.store.name" autocomplete="off"  placeholder="Search camera of store">
             </label>
           </div>
         </div>
@@ -39,10 +39,10 @@
               <mfDefaultSorter by="account">Name</mfDefaultSorter>
             </th>
             <th style="width: 20%">
-              <mfDefaultSorter by="area.name">Area</mfDefaultSorter>
+              <mfDefaultSorter by="zone.name">Zone</mfDefaultSorter>
             </th>
             <th style="width: 20%">
-                <mfDefaultSorter by="area.store.name">Store</mfDefaultSorter>
+                <mfDefaultSorter by="zone.store.name">Store</mfDefaultSorter>
               </th>
             <th style="width: 20%">
               <mfDefaultSorter by="status">Status</mfDefaultSorter>
@@ -53,8 +53,8 @@
           <tr *ngFor="let camera of mf.data | filterBy: cameraFilter ">
             <td>{{camera.ip}}</td>
             <td>{{camera.name}}</td>
-            <td>{{camera.area.name}}</td>
-            <td>{{camera.area.store.name}}</td>
+            <td>{{camera.zone.name}}</td>
+            <td>{{camera.zone.store.name}}</td>
             <td *ngIf="camera.status == '1'" id="status">
               <span class="badge badge-success">Connected</span>
             </td>

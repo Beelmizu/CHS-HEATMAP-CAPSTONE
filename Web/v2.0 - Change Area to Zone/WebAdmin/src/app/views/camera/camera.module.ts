@@ -4,7 +4,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { NgModel } from '@angular/forms/src/directives/ng_model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap';
-import { AreaService } from '../../services/area.service';
+import { ZoneService } from '../../services/zone.service';
 import { CameraRoutingModule } from './camera-routing.module';
 import { CameraComponent } from './camera.component';
 import { CameraService } from '../../services/camera.service';

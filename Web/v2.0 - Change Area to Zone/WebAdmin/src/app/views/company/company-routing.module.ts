@@ -4,8 +4,8 @@ import { CompanyComponent } from './company.component';
 import { CompanyDetailComponent } from '../company-detail/company-detail.component';
 import { StoreComponent } from '../store/store.component';
 import { StoreDetailComponent } from '../store-detail/store-detail.component';
-import { AreaComponent } from '../area/area.component';
-import { AreaDetailComponent } from '../area-detail/area-detail.component';
+import { ZoneComponent } from '../zone/zone.component';
+import { ZoneDetailComponent } from '../zone-detail/zone-detail.component';
 import { CameraComponent } from '../camera/camera.component';
 import { CameraDetailComponent } from '../camera-detail/camera-detail.component';
 import { AccountComponent } from '../account/account.component';
@@ -77,10 +77,10 @@ const routes: Routes = [
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area',
-    component: AreaComponent,
+    path: ':idCompany/all/store/:idStore/all/zone',
+    component: ZoneComponent,
     data: {
-      title: 'Area'
+      title: 'Zone'
     }
   },
   {
@@ -105,35 +105,35 @@ const routes: Routes = [
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area/:mode/:idArea',
-    component: AreaDetailComponent,
+    path: ':idCompany/all/store/:idStore/all/zone/:mode/:idZone',
+    component: ZoneDetailComponent,
     data: {
-      title: 'Area Detail'
+      title: 'Zone Detail'
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area/:mode',
-    component: AreaDetailComponent,
+    path: ':idCompany/all/store/:idStore/all/zone/:mode',
+    component: ZoneDetailComponent,
     data: {
-      title: 'Add Area'
+      title: 'Add Zone'
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area/:idArea/all/camera',
+    path: ':idCompany/all/store/:idStore/all/zone/:idZone/all/camera',
     component: CameraComponent,
     data: {
       title: 'Camera'
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area/:idArea/all/camera/:mode/:idCamera',
+    path: ':idCompany/all/store/:idStore/all/zone/:idZone/all/camera/:mode/:idCamera',
     component: CameraDetailComponent,
     data: {
       title: 'Camera Detail'
     }
   },
   {
-    path: ':idCompany/all/store/:idStore/all/area/:idArea/all/camera/:mode',
+    path: ':idCompany/all/store/:idStore/all/zone/:idZone/all/camera/:mode',
     component: CameraDetailComponent,
     data: {
       title: 'Add Camera'
@@ -161,42 +161,42 @@ const routes: Routes = [
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area',
-    component: AreaComponent,
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone',
+    component: ZoneComponent,
     data: {
-      title: 'Area'
+      title: 'Zone'
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area/:mode/:idArea',
-    component: AreaDetailComponent,
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone/:mode/:idZone',
+    component: ZoneDetailComponent,
     data: {
-      title: 'Area Detail'
+      title: 'Zone Detail'
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area/:mode',
-    component: AreaDetailComponent,
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone/:mode',
+    component: ZoneDetailComponent,
     data: {
-      title: 'Add Area'
+      title: 'Add Zone'
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area/:idArea/all/camera',
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone/:idZone/all/camera',
     component: CameraComponent,
     data: {
       title: 'Camera'
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area/:idArea/all/camera/:mode/:idCamera',
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone/:idZone/all/camera/:mode/:idCamera',
     component: CameraDetailComponent,
     data: {
       title: 'Camera Detail'
     }
   },
   {
-    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/area/:idArea/all/camera/:mode',
+    path: ':idCompany/all/account/:idAccount/all/store/:idStore/all/zone/:idZone/all/camera/:mode',
     component: CameraDetailComponent,
     data: {
       title: 'Add Camera'

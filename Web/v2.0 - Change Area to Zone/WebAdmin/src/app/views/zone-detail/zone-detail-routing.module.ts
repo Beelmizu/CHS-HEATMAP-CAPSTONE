@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AreaDetailComponent } from './area-detail.component';
+import { ZoneDetailComponent } from './zone-detail.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: AreaDetailComponent,
+    component: ZoneDetailComponent,
     data: {
-      title: 'Area Detail'
+      title: 'Zone Detail'
     }
   }
 ];
@@ -17,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AreaDetailRoutingModule {}
+export class ZoneDetailRoutingModule {}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Area } from '../models/area.model';
+import { Zone } from '../models/zone.model';
 import { Camera } from '../models/camera.model';
 
 @Injectable({

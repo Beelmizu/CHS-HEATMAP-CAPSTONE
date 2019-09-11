@@ -1,4 +1,4 @@
-import { Area } from './area.model';
+import { Zone } from './zone.model';
 
 export class Camera  {
     public id: number;
@@ -11,6 +11,6 @@ export class Camera  {
     public status: String;
     public imageUrl: String;
     public updatedBy: String;
-    public areaID: number;
-    public area: Area;
+    public zoneID: number;
+    public zone: Zone;
 }

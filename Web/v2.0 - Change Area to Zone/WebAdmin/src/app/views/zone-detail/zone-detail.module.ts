@@ -4,21 +4,20 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { NgModel } from '@angular/forms/src/directives/ng_model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap';
-import { AreaRoutingModule } from './area-routing.module';
-import { AreaComponent } from './area.component';
-import { AreaService } from '../../services/area.service';
+import { StoreDetailService } from '../../services/store-detail.service';
+import { ZoneDetailComponent } from './zone-detail.component';
+import { ZoneDetailService } from '../../services/zone-detail.service';
 
 
 @NgModule({
   imports: [
-    AreaRoutingModule,
     CommonModule,
-    FormsModule,
     NgxPaginationModule,
+    FormsModule,
     ReactiveFormsModule,
     BsDropdownModule.forRoot()
   ],
-  declarations: [ AreaComponent ],
-  providers: [ AreaService ]
+  declarations: [ ZoneDetailComponent ],
+  providers: [ ZoneDetailService ]
 })
-export class AreaModule { }
+export class ZoneDetailModule { }

@@ -44,13 +44,13 @@
               <span class="badge badge-secondary">Inactive</span>
             </td>
             <td>
-              <button type="button" class="btn btn-success" id="btnArea" [routerLink]="[store.id, 'all', 'area']"
+              <button type="button" class="btn btn-success" id="btnZone" [routerLink]="[store.id, 'all', 'zone']"
                 routerLinkActive="active" *ngIf="store.status == 'active'">
-                View Area
+                View Zone
               </button>
-              <button type="button" class="btn btn-success" id="btnArea" [routerLink]="[store.id, 'all', 'area']"
+              <button type="button" class="btn btn-success" id="btnZone" [routerLink]="[store.id, 'all', 'zone']"
                 routerLinkActive="active" *ngIf="store.status == 'inactive'" disabled="true">
-                View Area
+                View Zone
               </button>
               <button type="button" class="btn btn-danger" id="btnDelete" (click)="deleteStoreOfAccount(store.id, store.name)"  *ngIf="accountID != null" >
                   Delete
