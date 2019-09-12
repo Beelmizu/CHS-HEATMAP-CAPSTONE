@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+  <div class="card" id="cardContainer">
+    <div class=card-header>
+      <i class="fa fa-align-justify"> Camera </i>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12 col-md-6">
+          <div class="dataTables_length" id="DataTables_Table_0_length">
+            <label>Show
+              <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"
+                class="custom-select custom-select-sm form-control form-control-sm" id="selectEntities" [(ngModel)]="selectedOption" >
+                <option value="5" >5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100" >100</option>
+              </select> entries
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <div id="DataTables_Table_0_filter" class="dataTables_filter">
+            <label>Search:
+              <input type="search" class="form-control form-control-sm" placeholder="" 
+                aria-controls="DataTables_Table_0" [(ngModel)]="cameraFilter.area.store.name" autocomplete="off"  placeholder="Search camera of store">
+            </label>
+          </div>
+        </div>
+      </div>
+      <table class="table table-responsive-sm  table-striped table-sm" [mfData]="cameras" #mf="mfDataTable"
+        [mfRowsOnPage]="selectedOption">
+        <thead>
+          <tr>
+            <th style="width: 20%">
+              <mfDefaultSorter by="ip">IP</mfDefaultSorter>
+            </th>
+            <th style="width: 20%">
+              <mfDefaultSorter by="account">Name</mfDefaultSorter>
+            </th>
+            <th style="width: 20%">
+              <mfDefaultSorter by="area.name">Area</mfDefaultSorter>
+            </th>
+            <th style="width: 20%">
+                <mfDefaultSorter by="area.store.name">Store</mfDefaultSorter>
+              </th>
+            <th style="width: 20%">
+              <mfDefaultSorter by="status">Status</mfDefaultSorter>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let camera of mf.data | filterBy: cameraFilter ">
+            <td>{{camera.ip}}</td>
+            <td>{{camera.name}}</td>
+            <td>{{camera.area.name}}</td>
+            <td>{{camera.area.store.name}}</td>
+            <td *ngIf="camera.status == '1'" id="status">
+              <span class="badge badge-success">Connected</span>
+            </td>
+            <td *ngIf="camera.status != '1'" id="status">
+              <span class="badge badge-danger">Disconnected</span>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <td colspan="5">
+            <mfBootstrapPaginator id="paging" ></mfBootstrapPaginator>
+          </td>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

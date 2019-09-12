@@ -1,0 +1,53 @@
+<div class="animated fadeIn" id="container">
+  <div class="row" id="divTitle">
+    <h2 mat-dialog-title id="title">Statistic by {{title}}</h2>
+  </div>
+  <mat-dialog-content [formGroup]="form">
+
+    <div class="row">
+      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Store: </label>
+      <div class="col-md-8">
+        <select class="form-control" id="select1" name="select1" formControlName="valueStore" placeholder="Select store name"
+          (change)="chooseStore()">
+          <option value="" disabled selected>Select store name </option>
+          <option *ngFor="let store of listStore" value="{{store.id}}">{{store.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="title === 'zone' || title === 'camera'">
+      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Zone: </label>
+      <div class="col-md-8">
+        <select class="form-control" id="select1" name="select1" formControlName="valueZone" placeholder="Select zone name"
+          (change)="chooseZone()">
+          <option value="" disabled selected>Select zone name </option>
+          <option *ngFor="let zone of listZone" value="{{zone.id}}">{{zone.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="title === 'camera'">
+      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Camera name: </label>
+      <div class="col-md-8">
+        <select class="form-control" id="select1" name="select1" formControlName="valueCamera"
+          placeholder="Select camera name" >
+          <option value="" disabled selected>Select camera name</option>
+          <option *ngFor="let cam of listCamera" value="{{cam.ip}}">{{cam.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-4 col-form-label" for="text-input" for="iputID"> Day: </label>
+      <div class="col-md-8">
+        <app-fulldatepicker [dateFromParentComponent]="selectedValueDate" (date)="catchDate($event)">
+        </app-fulldatepicker>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="submit" class="btn btn-info" id="btnShowStatistic" (click)="showStatistic()">
+      <i class="icon-graph"></i> Show Statistic</button>
+  </mat-dialog-actions>
+</div>

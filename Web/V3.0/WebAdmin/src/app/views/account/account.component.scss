@@ -1,0 +1,35 @@
+th {
+    text-align: center;
+}
+td {
+    text-align: center;
+}
+
+td button { 
+    margin: 0 auto ;
+    display: inline;
+    text-align: center;
+}
+
+#btnStore {
+   margin-right: 5px;
+}
+
+#btnDetail {
+    margin-left: 5px;
+}
+
+#btnDelete {
+    margin-right: 5px;
+}
+
+#thAction {
+    width: 20%;
+}
+#tdAction {
+    width: 20%;
+}
+
+#cardContainer {
+    margin-top: 30px;
+}
