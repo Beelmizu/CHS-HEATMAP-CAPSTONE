@@ -40,7 +40,13 @@ export const navItems = [
         name: 'Camera',
         url: '/statistic/camera',
         icon: 'icon-camera'
+      },
+      {
+        name: 'Traffic',
+        url: '/statistic/traffic',
+        icon: 'icon-camera'
       }
+
     ]
   },
   {

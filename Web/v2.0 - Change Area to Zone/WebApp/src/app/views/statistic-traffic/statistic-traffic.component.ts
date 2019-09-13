@@ -20,11 +20,11 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 
 @Component({
-  selector: 'app-statistic-store',
-  templateUrl: './statistic-store.component.html',
-  styleUrls: ['./statistic-store.component.scss']
+  selector: 'app-statistic-traffic',
+  templateUrl: './statistic-traffic.component.html',
+  styleUrls: ['./statistic-traffic.component.scss']
 })
-export class StatisticStoreComponent implements OnInit, OnDestroy {
+export class StatisticTrafficComponent implements OnInit, OnDestroy {
 
 
   zoneDetail: Zone;
@@ -249,7 +249,6 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
   }
 
   bindingChartForDate(reports: any[]) {
-    console.log(reports);
     let arr: any[];
     let haveValue = false;
     let allDate = [];
@@ -399,7 +398,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
     this.lineChartLabels.length = 0;
     this.timeForm = this.selectTimeForm.get('timeFrom').value.split(':')[0];
     this.timeTo = this.selectTimeForm.get('timeTo').value.split(':')[0];
-    this.reportService.getReportStoreByTime(this.selectedValue, this.storeDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
+    this.reportService.getReportTrafficByTime(this.selectedValue, this.storeDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
@@ -416,7 +415,7 @@ export class StatisticStoreComponent implements OnInit, OnDestroy {
     const self = this;
     this.lineChartData[0].data.length = 0;
     this.lineChartLabels.length = 0;
-    this.reportService.getReportStoreByMonth(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
+    this.reportService.getReportTrafficByMonth(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;

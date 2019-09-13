@@ -259,8 +259,8 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                                         # print(len(des_out))
                                                         # print(len(matches))
                                                         shopping_time = time.time() - obj_feature_vectors[j][1]
-                                                        get_out_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(time.time()))
-                                                        get_in_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
+                                                        get_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+                                                        get_in_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
                                                         # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(time.time())))
                                                         # print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(obj_feature_vectors[j][1])))
                                                         # print("IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD: ", str(id_zone))

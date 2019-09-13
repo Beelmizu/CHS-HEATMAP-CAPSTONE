@@ -72,6 +72,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "favicon.ico"
                 ).permitAll()
                 .anyRequest().authenticated()
+
                 .and()
                 .addFilter(authenticationFilter)
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

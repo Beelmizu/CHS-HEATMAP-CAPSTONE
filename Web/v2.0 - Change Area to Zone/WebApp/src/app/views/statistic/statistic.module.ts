@@ -24,7 +24,7 @@ import { FulldatepickerModule } from '../fulldatepicker/fulldatepicker.module';
 import { StatisticCameraComponent } from '../statistic-camera/statistic-camera.component';
 import { StatisticStoreComponent } from '../statistic-store/statistic-store.component';
 import { StatisticZoneComponent } from '../statistic-zone/statistic-zone.component';
-import { StatisticAgeComponent } from '../statistic-age/statistic-age.component';
+import { StatisticTrafficComponent } from '../statistic-traffic/statistic-traffic.component';
 import { StatisticGenderComponent } from '../statistic-gender/statistic-gender.component';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
 import { ViewHeatmapDialogComponent } from '../view-heatmap-dialog/view-heatmap-dialog.component';
@@ -63,7 +63,7 @@ const modules = [
     StatisticZoneComponent,
     StatisticStoreComponent,
     MonthyearpickerComponent,
-    StatisticAgeComponent,
+    StatisticTrafficComponent,
     StatisticGenderComponent,
     StatisticDialogComponent,
     ViewHeatmapDialogComponent,

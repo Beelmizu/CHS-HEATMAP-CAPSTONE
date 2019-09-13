@@ -73,5 +73,13 @@ export class ReportService {
   getReportAgeGenderStoreByMonth(selectedMonth: String, storeID: number): Observable<any[]> {
     return this.http.get<any[]>(this.reportUrl + 'getReportAgeGenderStoreByMonth/' + selectedMonth + '/' + storeID);
   }
-
+  getReportTrafficByTime(selectedDate: String, araID: number, timeFrom: String, timeTo: String): Observable<any[]> {
+    return this.http.get<any[]>(this.reportUrl + 'getReportZoneByTime/' + selectedDate + '/'
+                                                                       + araID + '/'
+                                                                       + timeFrom + '/'
+                                                                       + timeTo);
+  }
+  getReportTrafficByMonth(selectedMonth: String, storeID: number): Observable<any[]> {
+    return this.http.get<any[]>(this.reportUrl + 'getReportAgeGenderStoreByMonth/' + selectedMonth + '/' + storeID);
+  }
 }
