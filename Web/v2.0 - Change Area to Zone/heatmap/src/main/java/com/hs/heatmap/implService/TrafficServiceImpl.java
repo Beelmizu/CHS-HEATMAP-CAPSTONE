@@ -25,7 +25,7 @@ public class TrafficServiceImpl implements TrafficService {
     @Override
     public List<Traffic> getTrafficByZone(int id) {
         return trafficRepository.findTrafficByZoneId(id);
-        // rồi đó m check thử xem
+        
     }
 
 }
