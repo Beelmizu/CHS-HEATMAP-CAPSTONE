@@ -18,6 +18,7 @@ import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { StatisticDialogComponent } from '../statistic-dialog/statistic-dialog.component';
+import { TrafficService } from '../../services/traffic.service';
 
 @Component({
   selector: 'app-statistic-traffic',
@@ -154,6 +155,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     private storeService: StoreService,
     private cameraService: CameraService,
     private toastr: ToastrService,
+    private trafficService: TrafficService,
     private dialog: MatDialog
   ) { }
 
@@ -227,6 +229,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     const self = this;
     this.storeService.getStoreByID(storeID).subscribe((store) => {
       this.storeDetail = store;
+      // get all store and put it to the list box
       this.zoneService.getAllZoneInStore(this.storeDetail.id).subscribe((zoneList) => {
         this.listZone = zoneList;
       });
@@ -248,45 +251,66 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     });
   }
 
+  // bindingChartForDate(reports: any[]) {
+  //   let arr: any[];
+  //   let haveValue = false;
+  //   let allDate = [];
+  //   this.lineChartData.length = 0;
+  //   // tslint:disable-next-line: prefer-const
+  //   let dateOfReport = [];
+  //   for (let i = 0; i < reports.length; i++) {
+  //     for (let j = 0; j < reports[i].length; j++) {
+  //       dateOfReport.push(reports[i][j].time);
+  //     }
+  //   }
+  //   allDate = dateOfReport.filter(function (item, index) {
+  //     return dateOfReport.indexOf(item) >= index;
+  //   });
+  //   allDate.sort();
+  //   for (let j = 0; j < allDate.length; j++) {
+  //     this.lineChartLabels.push(allDate[j]);
+  //   }
+  //   for (let i = 0; i < reports.length; i++) {
+  //     arr = [];
+  //     for (let k = 0; k < allDate.length; k++) {
+  //       haveValue = false;
+  //       for (let j = 0; j < reports[i].length; j++) {
+  //         if (reports[i][j].time === allDate[k]) {
+  //           haveValue = true;
+  //           arr.push(reports[i][j].count);
+  //         }
+  //       }
+  //       if (!haveValue) {
+  //         arr.push(0);
+  //       }
+  //     }
+  //     this.lineChartData.push({
+  //       data: arr,
+  //       label: '' + this.listZone[i].name,
+  //       yAxisID: 'y-axis-0'
+  //     });
+  //   }
+  // }
+
   bindingChartForDate(reports: any[]) {
     let arr: any[];
-    let haveValue = false;
-    let allDate = [];
     this.lineChartData.length = 0;
-    // tslint:disable-next-line: prefer-const
-    let dateOfReport = [];
-    for (let i = 0; i < reports.length; i++) {
-      for (let j = 0; j < reports[i].length; j++) {
-        dateOfReport.push(reports[i][j].time);
-      }
-    }
-    allDate = dateOfReport.filter(function (item, index) {
-      return dateOfReport.indexOf(item) >= index;
-    });
-    allDate.sort();
-    for (let j = 0; j < allDate.length; j++) {
-      this.lineChartLabels.push(allDate[j]);
+    for (let j = 0; j < this.listTimeFromRoot.length; j++) {
+      this.lineChartLabels.push(this.listTimeFromRoot.indexOf[j]);
     }
     for (let i = 0; i < reports.length; i++) {
       arr = [];
-      for (let k = 0; k < allDate.length; k++) {
-        haveValue = false;
-        for (let j = 0; j < reports[i].length; j++) {
-          if (reports[i][j].time === allDate[k]) {
-            haveValue = true;
-            arr.push(reports[i][j].count);
-          }
-        }
-        if (!haveValue) {
-          arr.push(0);
-        }
+      for (let j = 0; j < reports[i].length; j++) {
+        arr.push(reports[i][j]);
       }
+     
       this.lineChartData.push({
         data: arr,
         label: '' + this.listZone[i].name,
         yAxisID: 'y-axis-0'
       });
     }
+   
   }
 
   bindingChartForMonth(reports: any[]) {
@@ -398,7 +422,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     this.lineChartLabels.length = 0;
     this.timeForm = this.selectTimeForm.get('timeFrom').value.split(':')[0];
     this.timeTo = this.selectTimeForm.get('timeTo').value.split(':')[0];
-    this.reportService.getReportTrafficByTime(this.selectedValue, this.storeDetail.id, this.timeForm, this.timeTo).subscribe((reports) => {
+    this.trafficService.getReportTrafficByTime(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;

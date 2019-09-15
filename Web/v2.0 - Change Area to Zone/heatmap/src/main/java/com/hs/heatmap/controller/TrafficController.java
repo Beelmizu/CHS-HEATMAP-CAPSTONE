@@ -21,4 +21,10 @@ public class TrafficController {
         return trafficService.getTrafficByZone(id);
     }
 
+    @GetMapping("/traffic/getReportTrafficByTime/{selectedDate}/{storeID}")
+    public List getReportTrafficByTime(@PathVariable(value = "selectedDate") String selectedDate,
+                                    @PathVariable(value = "storeID") int storeID) {
+        return trafficService.getReportTrafficByTime(selectedDate, storeID);
+    }
+
 }

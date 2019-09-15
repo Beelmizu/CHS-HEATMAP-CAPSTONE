@@ -29,6 +29,10 @@ public class Traffic implements Serializable {
     @Column(name = "tra_get_out_time")
     private String getOut;
 
+    @Basic
+    @Column(name = "tra_zone_id")
+    private int zoneID;
+
     @ManyToOne
     @JoinColumn(name = "tra_zone_id", insertable = false, updatable = false)
     private Zone zone;

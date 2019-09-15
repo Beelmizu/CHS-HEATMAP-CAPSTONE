@@ -8,4 +8,7 @@ import java.util.List;
 public interface TrafficService {
 
     List<Traffic> getTrafficByZone(int id);
+
+    List getReportTrafficByTime(String date, int storeID);
+
 }
