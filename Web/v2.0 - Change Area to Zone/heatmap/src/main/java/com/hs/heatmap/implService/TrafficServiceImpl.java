@@ -14,7 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -54,6 +56,38 @@ public class TrafficServiceImpl implements TrafficService {
         return result;
     }
 
+    @Override
+    public List getReportTrafficByMonth(String month, int storeID) {
+        List<Zone> listZoneInStore = zoneRepository.findActiveZoneByStoID(storeID);
+        List<Integer> listTrafficInZone = new ArrayList<>();
+        List result =  new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        int year = Integer.parseInt(month.split("-")[0]);
+        int mon = Integer.parseInt(month.split("-")[1]);
+        int date = 1;
+        String day = null;
+        System.out.println(year);
+        System.out.println(mon);
+        YearMonth yearMonthObject = YearMonth.of(year, mon);
+        int daysInMonth = yearMonthObject.lengthOfMonth();
+        System.out.println("" + daysInMonth);
+        for (int j = 0; j < listZoneInStore.size(); j++) {
+            for (int i = 1; i <= daysInMonth; i++) {
+                if (i < 10) {
+                    day = "0" + i;
+                }else{
+                    day = "" + i;
+                }
+                System.out.println(month + day);
+                listTrafficInZone.add(trafficRepository.countTrafficByZoneIdInTime(listZoneInStore.get(j).getId(), month + "-" + day));
+            }
+
+            result.add(listTrafficInZone);
+            listTrafficInZone = new ArrayList<>();
+        }
+
+        return result;
+    }
 
 
 }

@@ -26,5 +26,9 @@ public class TrafficController {
                                     @PathVariable(value = "storeID") int storeID) {
         return trafficService.getReportTrafficByTime(selectedDate, storeID);
     }
-
+    @GetMapping("/traffic/getReportTrafficByMonth/{selectedMonth}/{storeID}")
+    public List getReportTrafficByMonth(@PathVariable(value = "selectedMonth") String selectedMonth,
+                                       @PathVariable(value = "storeID") int storeID) {
+        return trafficService.getReportTrafficByMonth(selectedMonth, storeID);
+    }
 }

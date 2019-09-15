@@ -11,4 +11,5 @@ public interface TrafficService {
 
     List getReportTrafficByTime(String date, int storeID);
 
+    List getReportTrafficByMonth(String month, int storeID);
 }

@@ -296,7 +296,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     let arr: any[];
     this.lineChartData.length = 0;
     for (let j = 0; j < this.listTimeFromRoot.length; j++) {
-      this.lineChartLabels.push(this.listTimeFromRoot.indexOf[j]);
+      this.lineChartLabels.push(this.listTimeFromRoot[j]);
     }
     for (let i = 0; i < reports.length; i++) {
       arr = [];
@@ -316,37 +316,15 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
   bindingChartForMonth(reports: any[]) {
     let arr: any[];
     this.lineChartData.length = 0;
-    let haveValue = false;
-    let allDate = [];
-    this.lineChartData.length = 0;
-    // tslint:disable-next-line: prefer-const
-    let dateOfReport = [];
-    for (let i = 0; i < reports.length; i++) {
-      for (let j = 0; j < reports[i].length; j++) {
-        dateOfReport.push(reports[i][j].time);
-      }
-    }
-    allDate = dateOfReport.filter(function (item, index) {
-      return dateOfReport.indexOf(item) >= index;
-    });
-    allDate.sort();
-    for (let j = 0; j < allDate.length; j++) {
-      this.lineChartLabels.push(allDate[j].split('-')[2] + '-' + allDate[j].split('-')[1]);
+    for (let j = 1; j <= reports[0].length; j++) {
+      this.lineChartLabels.push(j);
     }
     for (let i = 0; i < reports.length; i++) {
       arr = [];
-      for (let k = 0; k < allDate.length; k++) {
-        haveValue = false;
-        for (let j = 0; j < reports[i].length; j++) {
-          if (reports[i][j].time === allDate[k]) {
-            haveValue = true;
-            arr.push(reports[i][j].count);
-          }
-        }
-        if (!haveValue) {
-          arr.push(0);
-        }
+      for (let j = 0; j < reports[i].length; j++) {
+        arr.push(reports[i][j]);
       }
+     
       this.lineChartData.push({
         data: arr,
         label: '' + this.listZone[i].name,
@@ -439,7 +417,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     const self = this;
     this.lineChartData[0].data.length = 0;
     this.lineChartLabels.length = 0;
-    this.reportService.getReportTrafficByMonth(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
+    this.trafficService.getReportTrafficByMonth(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
       if (reports == null) {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
