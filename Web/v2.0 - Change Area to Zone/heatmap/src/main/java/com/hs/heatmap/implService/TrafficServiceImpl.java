@@ -61,13 +61,13 @@ public class TrafficServiceImpl implements TrafficService {
         List<Zone> listZoneInStore = zoneRepository.findActiveZoneByStoID(storeID);
         List<Integer> listTrafficInZone = new ArrayList<>();
         List result =  new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar = Calendar.getInstance();
         int year = Integer.parseInt(month.split("-")[0]);
         int mon = Integer.parseInt(month.split("-")[1]);
-        int date = 1;
+//        int date = 1;
         String day = null;
-        System.out.println(year);
-        System.out.println(mon);
+//        System.out.println(year);
+//        System.out.println(mon);
         YearMonth yearMonthObject = YearMonth.of(year, mon);
         int daysInMonth = yearMonthObject.lengthOfMonth();
         System.out.println("" + daysInMonth);
@@ -78,7 +78,7 @@ public class TrafficServiceImpl implements TrafficService {
                 }else{
                     day = "" + i;
                 }
-                System.out.println(month + day);
+//                System.out.println(month + day);
                 listTrafficInZone.add(trafficRepository.countTrafficByZoneIdInTime(listZoneInStore.get(j).getId(), month + "-" + day));
             }
 
