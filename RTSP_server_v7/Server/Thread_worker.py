@@ -287,9 +287,9 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                             
 
 
-
-                                    dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
-                                    dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
+                                    dr.text((200, 50),"Get in People: " + str(ltr),(0,255,0), font=font)
+                                    # dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
+                                    # dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
 
                                     # Vẽ chữ count
                                     try:

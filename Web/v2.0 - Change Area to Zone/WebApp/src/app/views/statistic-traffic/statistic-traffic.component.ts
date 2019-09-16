@@ -47,9 +47,9 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
 
   // List
   // tslint:disable-next-line: max-line-length
-  listTimeFromRoot = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+  listTimeFromRoot = ['0h', '1h', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'];
   // tslint:disable-next-line: max-line-length
-  listTimeToRoot = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+  listTimeToRoot = ['1h', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'];
 
   // List
   listTime: String[];
@@ -116,7 +116,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
   };
   public lineChartColors: Color[] = [
     { // blue
-      backgroundColor: 'rgba(99, 194, 222,0.2)',
+      backgroundColor: 'rgba(99, 194, 222,0.8)',
       borderColor: 'rgba(99, 194, 222, 1)',
       pointBackgroundColor: 'rgba(148,159,177,1)',
       pointBorderColor: '#fff',
@@ -124,7 +124,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     },
     { // pink
-      backgroundColor: 'rgba(248, 108, 107,0.2)',
+      backgroundColor: 'rgba(248, 108, 107,0.8)',
       borderColor: 'rgba(248, 108, 107,1)',
       pointBackgroundColor: 'rgba(148,159,177,1)',
       pointBorderColor: '#fff',
@@ -132,7 +132,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     },
     { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
+      backgroundColor: 'rgba(77,83,96,0.8)',
       borderColor: 'rgba(77,83,96,1)',
       pointBackgroundColor: 'rgba(77,83,96,1)',
       pointBorderColor: '#fff',
@@ -141,7 +141,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     }
   ];
   public lineChartLegend = true;
-  public lineChartType = 'line';
+  public lineChartType = 'bar';
 
   @ViewChild(BaseChartDirective, {}) chart: BaseChartDirective;
 
@@ -341,8 +341,8 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
       this.selectedValueDate = this.selectedValue;
       this.selectedValueMonth = null;
       this.selectTimeForm.setValue({
-        'timeFrom': '00:00',
-        'timeTo': '23:00',
+        'timeFrom': '00h',
+        'timeTo': '23h',
       });
       this.selectTimeForm.get('timeFrom').enable();
       this.selectTimeForm.get('timeTo').enable();
@@ -458,8 +458,8 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
         this.selectedValue = data.date;
         this.selectedValueDate = this.selectedValue;
         this.selectTimeForm.setValue({
-          'timeFrom': '00:00',
-          'timeTo': '23:00'
+          'timeFrom': '00h',
+          'timeTo': '23h'
         });
         this.selectTimeForm.get('timeFrom').enable();
         this.selectTimeForm.get('timeTo').enable();
