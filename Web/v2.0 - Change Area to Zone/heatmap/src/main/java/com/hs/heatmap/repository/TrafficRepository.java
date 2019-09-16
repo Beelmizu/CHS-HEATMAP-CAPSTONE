@@ -17,5 +17,6 @@ public interface TrafficRepository extends JpaRepository<Traffic, Integer>, Pagi
 
     @Query("SELECT COUNT(t.getIn) FROM Traffic t WHERE t.zoneID = :zoneID and t.getIn like :timeGetIn%")
     Integer countTrafficByZoneIdInTime(@Param("zoneID") int zoneID, @Param("timeGetIn") String timeGetIn);
-
+    @Query("SELECT t FROM Traffic t WHERE t.zoneID = :zoneID and t.getIn like :timeGetIn%")
+    List<Traffic> getTrafficByZoneIdInTime(@Param("zoneID") int zoneID, @Param("timeGetIn") String timeGetIn);
 }

@@ -26,9 +26,16 @@ public class TrafficController {
                                     @PathVariable(value = "storeID") int storeID) {
         return trafficService.getReportTrafficByTime(selectedDate, storeID);
     }
+
     @GetMapping("/traffic/getReportTrafficByMonth/{selectedMonth}/{storeID}")
     public List getReportTrafficByMonth(@PathVariable(value = "selectedMonth") String selectedMonth,
                                        @PathVariable(value = "storeID") int storeID) {
         return trafficService.getReportTrafficByMonth(selectedMonth, storeID);
+    }
+
+    @GetMapping("/traffic/getAverageShoppingTimeTrafficByTime/{selectedDate}/{storeID}")
+    public List getAverageShoppingTimeTrafficByTime(@PathVariable(value = "selectedDate") String selectedDate,
+                                       @PathVariable(value = "storeID") int storeID) {
+        return trafficService.getAverageShoppingTimeTrafficByTime(selectedDate, storeID);
     }
 }
