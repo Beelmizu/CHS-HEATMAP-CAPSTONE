@@ -251,47 +251,6 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
     });
   }
 
-  // bindingChartForDate(reports: any[]) {
-  //   let arr: any[];
-  //   let haveValue = false;
-  //   let allDate = [];
-  //   this.lineChartData.length = 0;
-  //   // tslint:disable-next-line: prefer-const
-  //   let dateOfReport = [];
-  //   for (let i = 0; i < reports.length; i++) {
-  //     for (let j = 0; j < reports[i].length; j++) {
-  //       dateOfReport.push(reports[i][j].time);
-  //     }
-  //   }
-  //   allDate = dateOfReport.filter(function (item, index) {
-  //     return dateOfReport.indexOf(item) >= index;
-  //   });
-  //   allDate.sort();
-  //   for (let j = 0; j < allDate.length; j++) {
-  //     this.lineChartLabels.push(allDate[j]);
-  //   }
-  //   for (let i = 0; i < reports.length; i++) {
-  //     arr = [];
-  //     for (let k = 0; k < allDate.length; k++) {
-  //       haveValue = false;
-  //       for (let j = 0; j < reports[i].length; j++) {
-  //         if (reports[i][j].time === allDate[k]) {
-  //           haveValue = true;
-  //           arr.push(reports[i][j].count);
-  //         }
-  //       }
-  //       if (!haveValue) {
-  //         arr.push(0);
-  //       }
-  //     }
-  //     this.lineChartData.push({
-  //       data: arr,
-  //       label: '' + this.listZone[i].name,
-  //       yAxisID: 'y-axis-0'
-  //     });
-  //   }
-  // }
-
   bindingChartForDate(reports: any[]) {
     let arr: any[];
     this.lineChartData.length = 0;
@@ -405,6 +364,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
+        this.getAverageShoppingTimeTrafficByTime();
         this.bindingChartForDate(reports);
       }
       this.chart.ngOnChanges({} as SimpleChanges);
@@ -422,6 +382,7 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
         this.toastr.warning('No data', 'Warning');
         this.lineChartData.length = 1;
       } else {
+        this.getAverageShoppingTimeTrafficByTime();
         this.bindingChartForMonth(reports);
       }
       this.chart.ngOnChanges({} as SimpleChanges);
@@ -429,7 +390,17 @@ export class StatisticTrafficComponent implements OnInit, OnDestroy {
       console.log(error);
     });
   }
-
+  getAverageShoppingTimeTrafficByTime() {
+    this.trafficService.getAverageShoppingTimeTrafficByTime(this.selectedValue, this.storeDetail.id).subscribe((reports) => {
+      // console.log(reports);
+      for (let i = 0; i < this.listZone.length; i++) {
+        this.listZone[i].averageShoppingTime = reports[i];
+      }
+    }, (error) => {
+      console.log(error);
+    });
+    console.log(this.listZone);
+  }
   // events Chart
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);

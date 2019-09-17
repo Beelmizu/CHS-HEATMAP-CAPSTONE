@@ -10,4 +10,5 @@ export class Zone  {
     public updatedBy: String;
     public stoID: number;
     public store: Store;
+    public averageShoppingTime: String;
 }

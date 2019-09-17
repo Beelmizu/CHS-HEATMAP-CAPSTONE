@@ -24,6 +24,10 @@ export class TrafficService {
   getReportTrafficByMonth(selectedMonth: String, storeID: number): Observable<any[]> {
     return this.http.get<any[]>(this.trafficUrl + 'getReportTrafficByMonth/' + selectedMonth + '/' + storeID);
   }
-
+  
+  getAverageShoppingTimeTrafficByTime(selectedDate: String, storeID: number): Observable<any[]> {
+    return this.http.get<any[]>(this.trafficUrl + 'getAverageShoppingTimeTrafficByTime/' + selectedDate + '/'
+                                                                       + storeID);
+  }
   
 }

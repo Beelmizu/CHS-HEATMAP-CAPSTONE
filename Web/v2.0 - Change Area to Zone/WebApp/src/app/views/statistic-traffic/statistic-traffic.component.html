@@ -82,25 +82,25 @@
             <div class="row" id="divCardInfoStore">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">Store Detail</h4>
+                  <h4 class="card-title">Average Shopping Time</h4>
                 </div>
                 <div class="card-body">
 
                   <!-- Address -->
-                  <div class="form-group row">
+                  <!-- <div class="form-group row">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Address: </label>
                     <div class="col-md-7">
                       <input type="text" class="form-control" readonly=true formControlName="storeAddress">
                     </div>
-                  </div>
+                  </div> -->
 
                   <!-- Phone -->
-                  <div class="form-group row">
+                  <!-- <div class="form-group row">
                     <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Phone: </label>
                     <div class="col-md-7">
                       <input type="text" class="form-control" readonly=true formControlName="storePhone">
                     </div>
-                  </div>
+                  </div> -->
 
                   <!-- Status
                   <div class="form-group row">
@@ -112,9 +112,9 @@
 
                   <!-- Zone -->
                   <div class="form-group row" *ngFor="let zone of listZone">
-                    <label class="col-md-5 col-form-label" for="text-input" for="iputID"> Zone: </label>
+                    <label class="col-md-5 col-form-label" for="text-input" for="iputID"> {{zone.name}}: </label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" readonly=true value="{{zone.name}}">
+                      <input type="text" class="form-control" readonly=true value="{{zone.averageShoppingTime}}">
                     </div>
                   </div>
                 </div>
