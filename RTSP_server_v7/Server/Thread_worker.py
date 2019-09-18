@@ -103,7 +103,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
             ret = True
             last_centroids = []
             ltr = 0
-            rtl = 0
+            rtl = thread_db.get_traffic(id_zone, current_date,)
             obj_feature_vectors = []
             while True:
                 try:

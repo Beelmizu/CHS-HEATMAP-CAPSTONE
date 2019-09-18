@@ -161,7 +161,7 @@ def setup_app(app):
 		print(port_camera)
 		# print(camera[0])
 		if camera[2] == "admin":
-			port_camera = 0
+			# port_camera = 0
 			print("Start Camera: ", port_camera)
 			rd.set(str(id_camera)+"_RUN", 1)
 			rd.set(str(id_camera)+"_AVAIABLE", 1)

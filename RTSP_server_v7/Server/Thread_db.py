@@ -63,6 +63,35 @@ def add_traffic(get_in_time, get_out_time, id_zone):
     finally:
         connection.close()
 
+def get_traffic(id_zone, current_date):
+    matrix_heatmap = []
+    now = datetime.datetime.now()
+    try:                     
+        #kết nối DB
+        connection = thread_db.get_connection()
+        # print("Connect successful!") 
+        # print(current_date)
+        cursor = connection.cursor()
+        # sql = "SELECT * FROM heatmapsystem.heatmap WHERE htm_cam_id = %s and htm_time like '%s%'"
+        # cursor.execute(sql, (id_camera, current_date, ))
+        current_date ='%'+current_date+'%'
+        sql = "SELECT COUNT(tra_get_in_time) FROM Traffic WHERE tra_zone_id = %s and tra_get_in_time like %s"
+        cursor.execute(sql, (id_zone,current_date,))
+        records = cursor.fetchall()
+        # print("Total number of rows is: ", cursor.rowcount)
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",records[0][0])
+        cursor.close()
+        return int(records[0][0])
+    except Exception as e:
+        if hasattr(e, 'message'):
+            print(e.message)
+        else:
+            print(e)
+                        
+            pass
+    finally:
+        connection.close()
+
 def get_total_matrix(id_camera, current_date):
     matrix_heatmap = []
     now = datetime.datetime.now()
