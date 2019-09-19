@@ -97,7 +97,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
     heatmap_time = datetime.datetime.now()
     heatmap_run_time = heatmap_time + datetime.timedelta(minutes=1)
     # Khoaảng cách cần cách so với cửa ra vào
-    roi = 150
+    
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             ret = True
@@ -124,6 +124,8 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                 np_data = np.fromstring(decoded_data,np.uint8)
                                 image = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
                                 height, width, channel = image.shape
+                                # cái đường cách phân biệt người đi qua trái hay phải
+                                roi = width * 3 / 4
                                 # Địa chỉ lấy background
                                 save_background_location = "./Server_data/Background/"+ str(width) +"x" + str(height) + ".png"
                                 if image is not None:
