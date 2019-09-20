@@ -1,0 +1,45 @@
+<div class="animated fadeIn">
+    <div class="card"  id="cardContainer">
+      <div class=card-header>
+        <i class="fa fa-align-justify" > Camera </i>
+      </div>
+      <div class="card-body">
+        <div class="form-group" [formGroup]="cameraForm">
+          <div class="input-group">
+              <span class="input-group-prepend">
+                  <button type="button" class="btn btn-primary" [routerLink]="['add']" routerLinkActive="active">
+                      <i class="fa fa-user-plus"> Add </i>
+                  </button>
+              </span>
+            <input type="text" class="form-control" placeholder="Search by IP ..." formControlName="searchValue"/>
+            <span class="input-group-append">
+              <button type="button" class="btn btn-primary" (click)="searchCameraByValue(cameraForm.get('searchValue').value)">
+                <i class="fa fa-search"></i> Search </button>
+            </span> 
+          </div>
+        </div>
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Name</th>
+              <th>Account</th>
+              <th id="thAction">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let camera of cameras">
+              <td>{{camera.ip}}</td>
+              <td>{{camera.name}}</td>
+              <td>{{camera.account}}</td>
+              <td id="tdAction">
+                <button type="button" class="btn btn-info" id="btnDetail" [routerLink]="['detail', camera.id]" routerLinkActive="active">
+                  Detail
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

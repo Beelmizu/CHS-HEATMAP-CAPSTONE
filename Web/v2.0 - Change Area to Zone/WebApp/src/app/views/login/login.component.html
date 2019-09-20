@@ -1,0 +1,56 @@
+<div class="app-body" id="background">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card-group">
+            <div class="card p-4">
+              <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+                [formGroup]="loginForm">
+                <div class="card-body">
+                  <h1>Login</h1>
+                  <p class="text-muted">Sign In to your account</p>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-user"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="text" placeholder="Username" formControlName="username"
+                      [ngClass]="{'is-invalid': isInvalid('username')}">
+                    <div class="invalid-feedback" *ngIf="loginForm.hasError('required','username')">
+                      Username is required !
+                    </div>
+                  </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-lock"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="password" placeholder="Password" formControlName="password"
+                      ngModel passwordToggle [ngClass]="{'is-invalid': isInvalid('password')}">
+                    <div class="invalid-feedback" *ngIf="loginForm.hasError('required','password')">
+                      Password is required !
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <button class="btn btn-primary btn-lg px-4" type="button" id="btnLogin" (click)="login()"><i
+                          class="icon-login"></i> Login</button>
+                      <img *ngIf="loading" id="imgLoading"
+                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%" id="imgLogo">
+            </div>
+          </div>
+          <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
