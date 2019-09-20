@@ -1,0 +1,74 @@
+th {
+    text-align: center;
+}
+td {
+    text-align: center;
+}
+#cardContainer {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+#selectEntities {
+    display: inline-block;
+}
+
+.dataTables_length label{
+    font-weight: 400;
+    text-align: left;
+    white-space: nowrap;
+}
+
+
+.dataTables_length{
+    margin-bottom: 20px;
+}
+
+#DataTables_Table_0_filter {
+    display: block;
+    float: right;
+}
+
+#selectEntities {
+    width: auto;
+    display: inline-block;
+}
+
+#DataTables_Table_0_filter label{
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: left;
+    display: inline-block;
+}
+
+#DataTables_Table_0_filter {
+    margin-bottom: 10px;
+}
+
+#DataTables_Table_0_filter input{
+    margin-left: .5em;
+    display: inline-block;
+    width: auto;
+}
+#status {
+    margin: 0 auto ;  
+    display: block;
+}
+
+#statusEntity {
+    float: left;
+    margin-top: 20px;
+}
+
+#paging {
+    float: right;
+    margin-top: 20px;
+}
+
+table tbody {
+    border: 1px solid #c8ced3;
+}
+
+table thead {
+    border: 1px solid #c8ced3;
+}

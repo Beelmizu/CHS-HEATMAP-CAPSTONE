@@ -1,0 +1,108 @@
+<div class="animated fadeIn">
+  <div class="card" id="cardContainer">
+    <div class=card-header>
+      <strong>Company Detail </strong>
+      <small>{{companyDetail.id}}</small>
+    </div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+        [formGroup]="companyDetailForm">
+        <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="companyID">
+          </div>
+        </div>
+
+        <!-- Input Name -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Name: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="companyName"
+              [ngClass]="{'is-invalid': isInvalid('companyName') || isExisted == true, 'is-valid' : isValid('companyName')}"
+              pattern="^[a-zA-Z\s]+$">
+            <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('required','companyName')">
+              Name is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('maxlength','companyName')">
+              Max length &lt; 45
+            </div>
+            <div class="invalid-feedback" *ngIf="isExisted == true">
+              This company is existed !
+            </div>
+            <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('pattern','companyName')">
+              The name of company cannot have special character !
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Addresss -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Address: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="companyAddress"
+              [ngClass]="{'is-invalid': isInvalid('companyAddress'), 'is-valid' : isValid('companyAddress')}">
+            <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('required','companyAddress')" >
+              Address is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="companyDetailForm.hasError('maxlength','companyAddress')">
+              Max length &lt; 45
+            </div>
+          </div>
+        </div>
+
+        <!-- Show Created Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="companyCreatedDate">
+          </div>
+        </div>
+
+        <!-- Show Updated Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="companyUpdatedDate">
+          </div>
+        </div>
+
+        <!-- Show Status  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="companyStatus">
+          </div>
+        </div>
+
+        <!-- Show Updated By -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="companyUpdatedBy">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer" *ngIf="mode =='add'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addCompany()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'detail'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateCompanyByID()"
+        *ngIf="companyDetail.status == 'active'">
+        <i class="icon-book-open"></i> Update</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveCompany()"
+        *ngIf="companyDetail.status == 'active'">
+        <i class="icon-trash"></i> Inactive </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="activeCompany()"
+        *ngIf="companyDetail.status == 'inactive'">
+        <i class="icon-check"></i> Active </button>
+    </div>
+  </div>
+</div>
