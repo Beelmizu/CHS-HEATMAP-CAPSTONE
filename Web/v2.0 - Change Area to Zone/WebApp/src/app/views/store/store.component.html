@@ -1,0 +1,23 @@
+<div class="animated fadeIn">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-6 col-md-4" *ngFor="let store of stores" id="row">
+        <div class="card" id="body">
+          <div class="card-header" id="header">{{store.name}}
+
+          </div>
+          <div class="card-body">
+            <img src="../../../assets/img/background/store.jpg" id="imgStore" />
+            <tr><b>Address: </b> {{store.address}}</tr>
+            <tr><b>Phone: </b>{{store.phone}}</tr>
+          </div>
+          <div class="card-footer" id="footer">
+            <span id="spanView" id="btnViewZone">
+              <button class="btn btn-info" type="button" [routerLink]="[store.id,'zone']" routerLinkActive="active" id="btnView"> View </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

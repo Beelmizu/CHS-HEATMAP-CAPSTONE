@@ -1,0 +1,6 @@
+<mat-form-field>
+  <input matInput  [formControl]="selectedDate" [matDatepicker]="picker" placeholder="Choose a date" readonly=true (dateChange)="change($event)" >
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker touchUi>
+  </mat-datepicker>
+</mat-form-field>

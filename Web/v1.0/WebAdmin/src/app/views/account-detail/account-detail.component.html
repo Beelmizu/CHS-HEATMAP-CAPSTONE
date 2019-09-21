@@ -1,0 +1,389 @@
+<div class="animated fadeIn" *ngIf="mode != 'addAccountStore'">
+  <div class="card" id="cardContainer">
+    <div class=card-header>
+      <strong>Account Detail </strong>
+      <small>{{accountDetail.id}}</small>
+    </div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+        [formGroup]="accountDetailForm">
+        <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accID">
+          </div>
+        </div>
+
+        <!-- Input Name -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> Username: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accUsername">
+          </div>
+        </div>
+
+        <div class="form-group row" *ngIf="mode == 'add'">
+          <label class="col-md-3 col-form-label" for="text-input">Username: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accUsername" [ngClass]="{'is-invalid': isInvalid('accUsername') || isExisted == true,
+              'is-valid' : isValid('accUsername')}"  pattern="^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accUsername')">
+              Fullname is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accUsername')">
+              Max length &lt; 20
+            </div>
+            <div class="invalid-feedback" *ngIf="isExisted == true">
+              Username is existed !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('pattern','accUsername')">
+              Username is not valid !
+             </div>
+          </div>
+        </div>
+
+        <!-- Input Password -->
+        <div class="form-group row" *ngIf="mode == 'add'">
+          <label class="col-md-3 col-form-label" for="text-input">Password: </label>
+          <div class="col-md-9">
+            <input type="password" class="form-control" formControlName="accPassword" [ngClass]="{'is-invalid': isInvalid('accPassword'), 
+              'is-valid' : isValid('accPassword') }">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accPassword')">
+              Password is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('minlength','accPassword')">
+              Min length &lt; 6
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Change Password -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input">Password: </label>
+          <div class="col-md-7"> 
+            <input type="password" class="form-control" formControlName="accPassword" readonly>
+            <div [collapse]="isCollapsed" id="collapseDiv" >
+              <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+                [formGroup]="changePasswordForm">
+                <div class="card card-body">
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <label class=" col-form-label" for="text-input">Password: </label>
+                      <div>
+                        <input type="password" class="form-control" id="accPasswordChange"
+                          formControlName="accPasswordChange" [ngClass]="{'is-invalid': isInvalidChangePassword('accPasswordChange'), 
+                                  'is-valid' : isInvalidChangePassword('accPasswordChange') }">
+                        <div class="invalid-feedback"
+                          *ngIf="changePasswordForm.hasError('required','accPasswordChange')">
+                          Password is required !
+                        </div>
+                        <div class="invalid-feedback"
+                          *ngIf="changePasswordForm.hasError('minlength','accPasswordChange')">
+                          Min length &lt; 6
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Input Confirm Password -->
+                    <div class="form-group col-md-6">
+                      <label class="col-form-label" for="text-input">Confirm Password: </label>
+                      <div>
+                        <input type="password" class="form-control" id="accPasswordChangeConfirm"
+                          formControlName="accPasswordChangeConfirm" [ngClass]="{'is-invalid': isNotMatchChangePassword('accPasswordChangeConfirm'), 
+                                  'is-valid' : isMatchChangePassword('accPasswordChangeConfirm')}">
+                        <div class="invalid-feedback"
+                          *ngIf="changePasswordForm.hasError('notMatch','accPasswordChangeConfirm')">
+                          The passwords are not equal.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success col-md-6" id="btnChange" (click)="changePassword()"
+                    aria-controls="collapseExample">
+                    <i class="icon-note"></i> Change </button>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-info" id="btnChange" (click)="isCollapsed = !isCollapsed"
+              aria-controls="collapseExample">
+              <i class="icon-note"></i> Change Password</button>
+          </div>
+        </div>
+
+        <!-- Input Confirm Password -->
+        <div class="form-group row" *ngIf="mode == 'add'">
+          <label class="col-md-3 col-form-label" for="text-input">Confirm Password: </label>
+          <div class="col-md-9">
+            <input type="password" class="form-control" id="confirmPassword" formControlName="accConfirmPassword"
+              [ngClass]="{'is-invalid': isNotMatch('accConfirmPassword'), 
+                      'is-valid' : isMatch('accConfirmPassword') }">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('notMatch','accConfirmPassword')">
+              The passwords are not equal.
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accConfirmPassword')">
+              Confirm Password is required !
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Fullname -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Fullname: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accFullname" [ngClass]="{'is-invalid': isInvalid('accFullname'),
+              'is-valid' : isValid('accFullname')}"  pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accFullname')">
+              Fullname is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accFullname')">
+              Max length &lt; 45
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('pattern','accFullname')">
+              Name is not valid !
+             </div>
+          </div>
+        </div>
+
+        <!-- Input Email -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Email: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accEmail" [ngClass]="{'is-invalid': isInvalid('accEmail'), 
+              'is-valid' : isValid('accEmail') }">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accEmail')">
+              Email is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('email','accEmail')">
+              Email must be right format
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Phone -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accPhone" [ngClass]="{'is-invalid': isInvalid('accPhone'), 
+              'is-valid' : isValid('accPhone') }" pattern="^(0|84)([-. ]?[0-9]{1}){9,10}[-. ]?$">
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('required','accPhone')">
+              Phone is required !
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('maxlength','accPhone')">
+              Max length &lt; 11
+            </div>
+            <div class="invalid-feedback" *ngIf="accountDetailForm.hasError('pattern','accPhone')">
+              Phone must be number and with format (0xxxxxxxxx) or (84-9xxxxxxxx)
+            </div>
+          </div>
+        </div>
+
+        <!-- Radio Gender -->
+        <div class="form-group row" >
+          <label class="col-md-3 col-form-label" for="inline-radios">Gender: </label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=0>
+              <label class="form-check-label" for="radio1">Male
+                <i class="icon-symbol-male"></i>
+              </label>
+            </div>
+            <br />
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=1>
+              <label class="form-check-label" for="radio2">Female
+                <i class="icon-symbol-female"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radio Role -->
+        <div class="form-group row" *ngIf="companyID == 7">
+          <label class="col-md-3 col-form-label" for="text-input">Role: </label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accRole" value=true>
+              <label class="form-check-label" for="radio1">Administrator
+              </label>
+            </div>
+            <br />
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accRole" value=false>
+              <label class="form-check-label" for="radio2">Manager
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Show Created Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Created Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accCreatedDate">
+          </div>
+        </div>
+
+        <!-- Show Updated Date  -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated Date: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accUpdatedDate">
+          </div>
+        </div>
+
+        <!-- Show Status -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Status: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accStatus">
+          </div>
+        </div>
+
+        <!-- Show Updated By -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="inputSuccess1"> Updated By: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accUpdatedBy">
+          </div>
+        </div>
+
+        <!-- Show ComID -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Company: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="accCompany" disabled="true">
+              <option *ngFor="let com of companies" value="{{com.id}}">{{com.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'add'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addAccount()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'addAccountStore'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addAccount()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+    <div class="card-footer" *ngIf="mode == 'detail'">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="updateAccountByID()"
+        *ngIf="accountDetail.status == 'active'">
+        <i class="icon-book-open"></i> Update</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="inactiveAccountByID()"
+        *ngIf="accountDetail.status == 'active'">
+        <i class="icon-trash"></i> Inactive </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="activeAccountByID()"
+        *ngIf="accountDetail.status == 'inactive'">
+        <i class="icon-check"></i> Active </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Form add acount to store -->
+<div class="animated fadeIn" *ngIf="mode == 'addAccountStore'">
+  <div class="card" id="cardContainer">
+    <div class=card-header>
+      <strong>Account Detail </strong>
+      <small>{{accountDetail.id}}</small>
+    </div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+        [formGroup]="accountDetailToAddForm">
+        <!-- Show ID -->
+        <div class="form-group row" *ngIf="mode == 'detail'">
+          <label class="col-md-3 col-form-label" for="text-input" for="iputID"> ID: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" readonly=true formControlName="accID">
+          </div>
+        </div>
+
+        <!-- Input Name -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Username: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="accUsername"
+              (change)="getAccountDetailAfterChoose()">
+              <option value="" disabled selected>Select username </option>
+              <option *ngFor="let acc of accounts" value="{{acc.id}}">{{acc.username}}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Show Fullname -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Fullname: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accFullname" readonly=true>
+          </div>
+        </div>
+
+        <!-- Show Email -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Email: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accEmail" readonly=true>
+
+          </div>
+        </div>
+
+        <!-- Show Phone -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="text-input">Phone: </label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="accPhone" readonly=true>
+          </div>
+        </div>
+
+        <!-- Radio Gender -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="inline-radios">Gender: </label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=0 disabled=true>
+              <label class="form-check-label" for="radio1">Male
+                <i class="icon-symbol-male"></i>
+              </label>
+            </div>
+            <br />
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="accGender" value=1 disabled=true>
+              <label class="form-check-label" for="radio2">Female
+                <i class="icon-symbol-female"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Show StoID -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="select1"> Store: </label>
+          <div class="col-md-9">
+            <select class="form-control" id="select1" name="select1" formControlName="accStore" disabled="true">
+              <option *ngFor="let store of stores" value="{{store.id}}">{{store.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card-footer">
+      <button class="btn btn-sm btn-primary" (click)="goBack()">
+        <i class="icon-action-undo"></i> Back</button>
+      <button type="submit" class="btn btn-sm btn-warning" (click)="addAccountToStore()">
+        <i class="icon-book-open"></i> Add</button>
+    </div>
+  </div>
+</div>
