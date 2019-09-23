@@ -46,7 +46,8 @@ font = ImageFont.truetype("./font/arial.ttf", 18)
 font_face_re = ImageFont.truetype("./font/arial.ttf", 14)
 retake_heatmap_count = 200
 # What model to download.
-MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
+# MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
+MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
 DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 #VIDEO_NAME = 'a.mp4'
@@ -107,7 +108,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
             obj_feature_vectors = []
             while True:
                 try:
-                    time.sleep(0.3)
+                    time.sleep(0.15)
                     # check xem camera co1 bi5 delete hay khong
                     check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
                     if int(check_avaiable.decode()) == 1:
