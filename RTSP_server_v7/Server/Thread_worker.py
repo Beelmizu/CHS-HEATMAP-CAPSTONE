@@ -107,7 +107,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
             obj_feature_vectors = []
             while True:
                 try:
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     # check xem camera co1 bi5 delete hay khong
                     check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
                     if int(check_avaiable.decode()) == 1:
@@ -251,7 +251,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                                 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
                                                 matches = bf.match(obj_feature_vectors[i][0], des_out)
                                                 matches = sorted(matches, key = lambda x:x.distance)
-                                                dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
+                                                # dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
 
                                                 if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
                                                     try:
@@ -289,7 +289,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                             
 
 
-                                    dr.text((200, 50),"Get in People: " + str(rtl),(0,255,0), font=font)
+                                    dr.text((200, 30),"Get in: " + str(rtl),(0,255,0), font=font)
                                     # dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
                                     # dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
 
@@ -307,7 +307,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                         face_re = "Loading..."
                                     else:
                                         face_re = face_re.decode()
-                                    dr.text((200, 30),face_re,(0,255,0), font=font_face_re)
+                                    # dr.text((200, 30),face_re,(0,255,0), font=font_face_re)
                                     heatmap_time = datetime.datetime.now()
                                     # print(upload_time)
                                     if heatmap_time > heatmap_run_time:
