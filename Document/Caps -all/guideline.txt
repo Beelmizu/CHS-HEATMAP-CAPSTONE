@@ -1,3 +1,0 @@
-gi?i nén 2 file node_module c?a 2 web.
-vào gõ l?nh ng serve --o - 
-web th? 2 gõ l?nh ng serve -port=4201 --o
