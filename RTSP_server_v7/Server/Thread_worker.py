@@ -108,7 +108,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
             obj_feature_vectors = []
             while True:
                 try:
-                    time.sleep(0.15)
+                    time.sleep(0.5)
                     # check xem camera co1 bi5 delete hay khong
                     check_avaiable = rd.get(str(id_camera)+"_AVAIABLE")
                     if int(check_avaiable.decode()) == 1:
@@ -252,7 +252,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                                 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
                                                 matches = bf.match(obj_feature_vectors[i][0], des_out)
                                                 matches = sorted(matches, key = lambda x:x.distance)
-                                                # dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
+                                                dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
 
                                                 if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
                                                     try:
