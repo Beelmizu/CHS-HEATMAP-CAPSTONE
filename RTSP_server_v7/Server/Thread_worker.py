@@ -205,18 +205,26 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                         cor = (xmin, ymin, xmax, ymax)
                                         centroid = ((xmax - xmin)/2 + xmin, (ymax - ymin)/2 + ymin)
                                         centroids.append(centroid)
+                                        # print("centroids: ", centroids)
+                                        # Tạo 1 vector với giá trị rỗng
                                         orientation_vect = (0, 0, 0, 0)
+                                        # float('int') dùng để so sánh và lấy số nhỏ nhất
                                         last_centroid_distance = float('inf')
+                                        # print("last_centroid_distance: ", last_centroid_distance)
                                         for j in range(len(last_centroids)):
                                             a = np.array(centroid)
+                                            # print("a: ", a)
                                             b = np.array(last_centroids[j])
+                                            # print("b: ", b)
                                             # tính distance
                                             centroid_distance = np.linalg.norm(a - b)
+                                            # print("centroid_distance: ", centroid_distance)
                                             if centroid_distance <= last_centroid_distance:
                                                 if centroid_distance > math.sqrt(width**2+height**2):
                                                     continue
                                                 last_centroid_distance = centroid_distance
                                                 orientation_vect = (last_centroids[j][0], last_centroids[j][1], centroid[0], centroid [1], xmin, ymin, xmax, ymax)
+                                                # print("orientation_vect: ", orientation_vect)
 
                                         dr.rectangle(cor, outline="green")
                                         if sum(orientation_vect) != 0:
@@ -225,6 +233,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                     last_centroids = centroids
                                     for i in range(len(orientation_vects)):
                                         for j in range(len(orientation_vects)):
+                                            # Check last centroid
                                             if orientation_vects[i][0] == orientation_vects[j][0] and orientation_vects[i][1] == orientation_vects[j][1]:
                                                 if i == j:
                                                     continue
@@ -244,7 +253,8 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                     # tính hướng di chuyển
                                     orb = cv2.ORB_create()
                                     for i in range(len(orientation_vects)):
-                                        if orientation_vects[i][0] < width/2 and orientation_vects[i][2] > width/2:
+                                        # Check cái vạch được kẻ (roi ấy) với cái width trong vector trước và sau từng frame
+                                        if orientation_vects[i][0] < roi and orientation_vects[i][2] > roi:
                                             ltr = ltr + 1
                                             extracted_out = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
                                             kp_out, des_out = orb.detectAndCompute(extracted_out, None)
@@ -256,19 +266,10 @@ def detect_object(socketio, rd, id_camera, id_zone):
 
                                                 if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
                                                     try:
-
-                                                        # print("orbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-                                                        # print(len(obj_feature_vectors[j][0]))
-                                                        # print(len(des_out))
-                                                        # print(len(matches))
                                                         shopping_time = time.time() - obj_feature_vectors[j][1]
                                                         get_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
                                                         get_in_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
-                                                        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(time.time())))
-                                                        # print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: ", time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(obj_feature_vectors[j][1])))
-                                                        # print("IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD: ", str(id_zone))
                                                         thread_db.add_traffic(get_in_time, get_out_time, id_zone)
-                                                        # thread_db.add_traffic(datetime.datetime.fromtimestamp(int(str(get_in_time))).strftime('%c'), datetime.datetime.fromtimestamp(int(str(get_out_time))).strftime('%c'), id_zone)
                                                         obj_feature_vectors.pop(j)
                                                         j = j+1
                                                         dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
@@ -281,7 +282,7 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                                         pass
                                                     
 
-                                        if orientation_vects[i][0] > width/2 and orientation_vects[i][2] < width/2:
+                                        if orientation_vects[i][0] > roi and orientation_vects[i][2] < roi:
                                             rtl = rtl + 1
                                             extracted_in = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
                                             kp_in, des_in = orb.detectAndCompute(extracted_in, None)
