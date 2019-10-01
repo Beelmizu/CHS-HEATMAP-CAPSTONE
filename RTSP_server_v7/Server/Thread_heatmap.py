@@ -15,7 +15,7 @@ import threading
 import numpy as np
 heatmapper = Heatmapper(
     point_diameter=50,  # the size of each point to be drawn
-    point_strength=0.1,  # the strength, between 0 and 1, of each point to be drawn
+    point_strength=0.2,  # the strength, between 0 and 1, of each point to be drawn
     opacity=0.5,)
 def draw_heatmap(socketio, rd, id_camera, matrix_heatmap, box, width, height, current_time, count_number):
     try:
@@ -25,8 +25,8 @@ def draw_heatmap(socketio, rd, id_camera, matrix_heatmap, box, width, height, cu
         gender_list = ""
         age_list = ""
         # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
-        result["gender"] = ""
-        result["age"] = ""
+        # result["gender"] = ""
+        # result["age"] = ""
         # result = thread_fa.detect_face(rd, id_camera,)
         # face = threading.Thread(target=detect_face, args=(rd, id_camera, gender_list, age_list))
         # face.start()
@@ -44,8 +44,8 @@ def draw_heatmap(socketio, rd, id_camera, matrix_heatmap, box, width, height, cu
             x = (xmin+xmax)//2
             string_matrix = string_matrix + str(x)+"," + str(y) + ";"
             matrix_heatmap.append((x,y))
-            # print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
-            # print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
+            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: ", x)
+            print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ", y)
         try:
             background = Image.open(save_background_location)
         except:
@@ -64,7 +64,7 @@ def draw_heatmap(socketio, rd, id_camera, matrix_heatmap, box, width, height, cu
         # print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: ",result["gender"])
         # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ",result["age"])
         if count_number != 0:
-            db = threading.Thread(target=thread_db.add_report, args=(string_matrix, id_camera, current_time, count_number, result["gender"], result["age"]))
+            db = threading.Thread(target=thread_db.add_report, args=(string_matrix, id_camera, current_time, count_number, "", ""))
             db.start()
         # Garbage collection
         # gc.collect()

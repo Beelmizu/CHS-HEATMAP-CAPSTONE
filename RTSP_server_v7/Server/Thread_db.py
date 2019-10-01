@@ -17,7 +17,7 @@ def add_report(string_matrix, id_camera, current_time, count_number, gender, age
         # now = datetime.datetime.now()            
         #kết nối DB
         connection = thread_db.get_connection()
-        # print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+        print("Connect successful!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
         cursor = connection.cursor()
         sql = "INSERT INTO report(rep_time, rep_count, rep_heatmap, rep_cam_id, rep_people_gender, rep_people_age) values(%s, %s, %s, %s, %s, %s)"
         # print("Insert count: ", count_number)

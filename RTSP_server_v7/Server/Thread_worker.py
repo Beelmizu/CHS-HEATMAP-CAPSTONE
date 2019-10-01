@@ -194,108 +194,111 @@ def detect_object(socketio, rd, id_camera, id_zone):
                                     centroids = []
                                     # Để lưu hướng du chuyển
                                     orientation_vects = []
-                                    for i in range(len(box)):
-                                        ymin = (int(box[i,0]*height))
-                                        xmin = (int(box[i,1]*width))
-                                        ymax = (int(box[i,2]*height))
-                                        xmax = (int(box[i,3]*width))
-                                        if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
-                                            break
-                                        
-                                        cor = (xmin, ymin, xmax, ymax)
-                                        centroid = ((xmax - xmin)/2 + xmin, (ymax - ymin)/2 + ymin)
-                                        centroids.append(centroid)
-                                        # print("centroids: ", centroids)
-                                        # Tạo 1 vector với giá trị rỗng
-                                        orientation_vect = (0, 0, 0, 0)
-                                        # float('int') dùng để so sánh và lấy số nhỏ nhất
-                                        last_centroid_distance = float('inf')
-                                        # print("last_centroid_distance: ", last_centroid_distance)
-                                        for j in range(len(last_centroids)):
-                                            a = np.array(centroid)
-                                            # print("a: ", a)
-                                            b = np.array(last_centroids[j])
-                                            # print("b: ", b)
-                                            # tính distance
-                                            centroid_distance = np.linalg.norm(a - b)
-                                            # print("centroid_distance: ", centroid_distance)
-                                            if centroid_distance <= last_centroid_distance:
-                                                if centroid_distance > math.sqrt(width**2+height**2):
-                                                    continue
-                                                last_centroid_distance = centroid_distance
-                                                orientation_vect = (last_centroids[j][0], last_centroids[j][1], centroid[0], centroid [1], xmin, ymin, xmax, ymax)
-                                                # print("orientation_vect: ", orientation_vect)
-
-                                        dr.rectangle(cor, outline="green")
-                                        if sum(orientation_vect) != 0:
-                                            orientation_vects.append(orientation_vect)
-
-                                    last_centroids = centroids
-                                    for i in range(len(orientation_vects)):
-                                        for j in range(len(orientation_vects)):
-                                            # Check last centroid
-                                            if orientation_vects[i][0] == orientation_vects[j][0] and orientation_vects[i][1] == orientation_vects[j][1]:
-                                                if i == j:
-                                                    continue
-                                                a = np.array((orientation_vects[i][0], orientation_vects[i][1]))
-                                                b = np.array((orientation_vects[i][2], orientation_vects[i][3]))
-                                                c = np.array((orientation_vects[j][2], orientation_vects[j][3]))
-                                                b_dist = np.linalg.norm(b - a)
-                                                c_dist = np.linalg.norm(c - a)
-                                                if b_dist > c_dist:
-                                                    orientation_vects.pop(i)
-                                                    i=i+1
-                                                    j=j+1
-                                                else:
-                                                    orientation_vects.pop(j)
-                                                    i=i+1
-                                                    j=j+1
-                                    # tính hướng di chuyển
-                                    orb = cv2.ORB_create()
-                                    for i in range(len(orientation_vects)):
-                                        # Check cái vạch được kẻ (roi ấy) với cái width trong vector trước và sau từng frame
-                                        if orientation_vects[i][0] < roi and orientation_vects[i][2] > roi:
-                                            ltr = ltr + 1
-                                            extracted_out = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
-                                            kp_out, des_out = orb.detectAndCompute(extracted_out, None)
-                                            for j in range(len(obj_feature_vectors)):
-                                                bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-                                                matches = bf.match(obj_feature_vectors[i][0], des_out)
-                                                matches = sorted(matches, key = lambda x:x.distance)
-                                                dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
-
-                                                if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
-                                                    try:
-                                                        shopping_time = time.time() - obj_feature_vectors[j][1]
-                                                        get_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-                                                        get_in_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
-                                                        thread_db.add_traffic(get_in_time, get_out_time, id_zone)
-                                                        obj_feature_vectors.pop(j)
-                                                        j = j+1
-                                                        dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
-                                                    except Exception as e:
-                                                        if hasattr(e, 'message'):
-                                                            print(e.message)
-                                                        else:
-                                                            print(e)
-                                                            
-                                                        pass
-                                                    
-
-                                        if orientation_vects[i][0] > roi and orientation_vects[i][2] < roi:
-                                            rtl = rtl + 1
-                                            extracted_in = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
-                                            kp_in, des_in = orb.detectAndCompute(extracted_in, None)
-                                            feature_vector = (des_in, time.time())
-                                            obj_feature_vectors.append(feature_vector)
+                                    try:
+                                        for i in range(len(box)):
+                                            ymin = (int(box[i,0]*height))
+                                            xmin = (int(box[i,1]*width))
+                                            ymax = (int(box[i,2]*height))
+                                            xmax = (int(box[i,3]*width))
+                                            if(ymin == 0 and xmin == 0 and ymax == 0 and xmax == 0):
+                                                break
                                             
+                                            cor = (xmin, ymin, xmax, ymax)
+                                            centroid = ((xmax - xmin)/2 + xmin, (ymax - ymin)/2 + ymin)
+                                            centroids.append(centroid)
+                                            # print("centroids: ", centroids)
+                                            # Tạo 1 vector với giá trị rỗng
+                                            orientation_vect = (0, 0, 0, 0)
+                                            # float('int') dùng để so sánh và lấy số nhỏ nhất
+                                            last_centroid_distance = float('inf')
+                                            # print("last_centroid_distance: ", last_centroid_distance)
+                                            for j in range(len(last_centroids)):
+                                                a = np.array(centroid)
+                                                # print("a: ", a)
+                                                b = np.array(last_centroids[j])
+                                                # print("b: ", b)
+                                                # tính distance
+                                                centroid_distance = np.linalg.norm(a - b)
+                                                # print("centroid_distance: ", centroid_distance)
+                                                if centroid_distance <= last_centroid_distance:
+                                                    if centroid_distance > math.sqrt(width**2+height**2):
+                                                        continue
+                                                    last_centroid_distance = centroid_distance
+                                                    orientation_vect = (last_centroids[j][0], last_centroids[j][1], centroid[0], centroid [1], xmin, ymin, xmax, ymax)
+                                                    # print("orientation_vect: ", orientation_vect)
+
+                                            dr.rectangle(cor, outline="green")
+                                            if sum(orientation_vect) != 0:
+                                                orientation_vects.append(orientation_vect)
+
+                                        last_centroids = centroids
+                                        for i in range(len(orientation_vects)):
+                                            for j in range(len(orientation_vects)):
+                                                # Check last centroid
+                                                if orientation_vects[i][0] == orientation_vects[j][0] and orientation_vects[i][1] == orientation_vects[j][1]:
+                                                    if i == j:
+                                                        continue
+                                                    a = np.array((orientation_vects[i][0], orientation_vects[i][1]))
+                                                    b = np.array((orientation_vects[i][2], orientation_vects[i][3]))
+                                                    c = np.array((orientation_vects[j][2], orientation_vects[j][3]))
+                                                    b_dist = np.linalg.norm(b - a)
+                                                    c_dist = np.linalg.norm(c - a)
+                                                    if b_dist > c_dist:
+                                                        orientation_vects.pop(i)
+                                                        i=i+1
+                                                        j=j+1
+                                                    else:
+                                                        orientation_vects.pop(j)
+                                                        i=i+1
+                                                        j=j+1
+                                        # tính hướng di chuyển
+                                        orb = cv2.ORB_create()
+                                        for i in range(len(orientation_vects)):
+                                            # Check cái vạch được kẻ (roi ấy) với cái width trong vector trước và sau từng frame
+                                            if orientation_vects[i][0] < roi and orientation_vects[i][2] > roi:
+                                                ltr = ltr + 1
+                                                extracted_out = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
+                                                kp_out, des_out = orb.detectAndCompute(extracted_out, None)
+                                                for j in range(len(obj_feature_vectors)):
+                                                    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+                                                    matches = bf.match(obj_feature_vectors[i][0], des_out)
+                                                    matches = sorted(matches, key = lambda x:x.distance)
+                                                    dr.text((200, 110),"Matches: " + str(len(matches)/len(obj_feature_vectors[j][0])),(0,255,0), font=font)
+
+                                                    if len(matches)/len(obj_feature_vectors[j][0]) > 0.2:
+                                                        try:
+                                                            shopping_time = time.time() - obj_feature_vectors[j][1]
+                                                            get_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+                                                            get_in_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(obj_feature_vectors[j][1]))
+                                                            thread_db.add_traffic(get_in_time, get_out_time, id_zone)
+                                                            obj_feature_vectors.pop(j)
+                                                            j = j+1
+                                                            dr.text((200, 90),"Time: " + str(shopping_time),(0,255,0), font=font)
+                                                        except Exception as e:
+                                                            if hasattr(e, 'message'):
+                                                                print(e.message)
+                                                            else:
+                                                                print(e)
+                                                                
+                                                            pass
+                                                        
+
+                                            if orientation_vects[i][0] > roi and orientation_vects[i][2] < roi:
+                                                rtl = rtl + 1
+                                                extracted_in = image[orientation_vects[i][5]:orientation_vects[i][7],orientation_vects[i][4]:orientation_vects[i][6]]
+                                                kp_in, des_in = orb.detectAndCompute(extracted_in, None)
+                                                feature_vector = (des_in, time.time())
+                                                obj_feature_vectors.append(feature_vector)
+                                                
 
 
-                                    dr.text((200, 30),"Get in: " + str(rtl),(0,255,0), font=font)
-                                    # dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
-                                    # dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
-
+                                        
+                                        # dr.text((200, 50),"Left to right: " + str(ltr),(0,255,0), font=font)
+                                        # dr.text((200, 70),"Right to left: " + str(rtl),(0,255,0), font=font)           
+                                    except Exception as e:
+                                        pass
                                     # Vẽ chữ count
+                                    dr.text((200, 30),"Get in: " + str(rtl),(0,255,0), font=font)
                                     try:
                                         count_number = int(''.join(filter(str.isdigit, the_result)))
                                     except Exception as e:
